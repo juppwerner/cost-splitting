@@ -1,0 +1,37 @@
+#!/bin/sh
+usage() {
+    echo "usage: create-bundle bundle-dir [last-bundle-tag]"
+}
+
+# require at least the bundle-dir argument
+if [ $# -lt 1 ]; then
+	usage
+	exit 1
+fi
+
+# Test if bundle-dir exists 
+if ! [ -d $1 ]; then
+	echo "$1 is not a directory"
+	exit 1
+fi
+
+git checkout master
+LASTBUNDLETAG=lastbundle
+if [ $# -eq 2 ]; then
+    LASTBUNDLETAG=$2
+else
+    read -e -p "Enter the tag for the 'last bundle' [$LASTBUNDLETAG]: " INPUT
+    LASTBUNDLETAG=${INPUT:-$LASTBUNDLETAG}
+    
+fi
+
+. ./git-flow-version
+DIR=`pwd`
+DIRNAME=`basename $DIR`
+BUNDLEFILE=$1/$DIRNAME-$GITFLOW_VERSION.bundle
+echo "Current Version : $GITFLOW_VERSION"
+echo "Bundle File     : $BUNDLEFILE"
+echo "Last Bundle Tag : $LASTBUNDLETAG"
+
+git bundle create $BUNDLEFILE $LASTBUNDLETAG..master --branches --tags
+git tag -f lastbundle master

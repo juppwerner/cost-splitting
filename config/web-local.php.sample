@@ -1,0 +1,18 @@
+<?php
+/**
+ * Sample local configuration file
+ * This is merged with config/web.php, so thatconfig/web-local.php wins
+ */
+return [
+    'timeZone' => 'Europe/Berlin', //time zone affect the formatter datetime format
+    'language' => 'en',
+    'components' => [
+        'mailer' => [ // {{{ 
+            'class' => 'yii\swiftmailer\Mailer',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => true,
+        ], // }}} 
+    ]
+];

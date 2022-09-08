@@ -1,0 +1,56 @@
+# generic files to ignore
+# backup files (*~) and vim swap file (.swp), MacOS dir file (.DS_Store)
+*~
+*.lock
+*.DS_Store
+*.swp
+*.swo
+*.out
+*.un~
+DEBUG
+curl_result.txt
+/doc/about/CertManager_Infos.html
+/doc/about/about.html
+/doc/about/*.pdf
+/scripts/.remote-host
+/config/*-local.php
+vendor.bu
+vendor.zip
+composer.lock.bu
+/web/PfeA_Applications*
+
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+/vendor
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
+
+tests/_output/*
+tests/_support/_generated
+
+runtime/debug/*
+
+#vagrant folder
+/.vagrant

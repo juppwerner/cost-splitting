@@ -1,0 +1,27 @@
+Installation
+============
+
+Clone this repository from Bitbucket
+
+Create an empty database and a database user granting all priviledges on this database.
+
+In _config_, create copies of all _*-local.php_sample_ files.
+
+Enter the database name, database username and password into _config/db-local.php_
+
+Run database migrations:
+
+    $ ./yii migrate
+
+confirming to run all migrations.
+
+Create a first user:
+
+    $ ./yii user/create useremailaddress username userpassword admin
+
+by replaceing useremailaddress, username and userpassword with the desired values.
+
+Load sample data (1 cost project, 7 expenses):
+
+    $ ./yii load-sample-data
+

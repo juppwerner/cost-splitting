@@ -1,0 +1,45 @@
+<?php
+/**
+ * This is a sample parameters config file.
+ * To use it, copy it to config/params-local.php and edit to your needs.
+ */
+
+return [
+    // Bootswatch UI theme
+    // cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, 
+    // lux, materia, minty, pulse, sandstone, simplex, sketchy, 
+    // slate, solar, spacelab, superhero, united, yeti
+    // (see vendor/thomaspark/bootswatch directory names)
+    'theme' => 'cerulean', 
+
+    // Can be used to receive administrative emails (To:):
+    'adminEmail' => 'YOURADMIN@DOMAIN.TLD',
+
+    // *** Contact Form Settings ***
+    // Send contact form email using this email as sender (From:):
+    'contactForm.senderEmail'       => 'noreply@example.com',
+    // Send contact form email using this name as sender (From:):
+    'contactForm.senderName'        => 'Example.com mailer',
+    // Send contact form email to this email (To:):
+    'contactForm.recipientEmail'    => 'noreply@example.com',
+    
+    // Users Module: These users/netids are allowed to administer users:
+    'userAdmins' => [
+        // 'YOURADMINUSERNAMEHERE',
+        // 'ANOTHERADMINUSERNAMEHERE', 
+    ],
+    // {{{ Attachments Module
+    // List of allowed file extensions for upload as attachments to surveys:
+    'uploadAllowedFileExtensions' => [
+        'doc','docx','pdf','txt',
+        'ppt','pptx',
+        'tiff','jpg','jpeg','gif','png',
+        'csv','xls','xlsx',
+        'zip', '7z'
+    ],
+    // Maximum count of uploadable files:
+    'uploadMaxFileCount' => 10, 
+    // Maximum size per uploaded file / in Bytes:
+    'uploadSingleFileMaxSize' => 70*1024,
+    // }}} 
+];

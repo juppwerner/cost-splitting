@@ -1,0 +1,21 @@
+<?php
+
+return [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=YOURDATABASENAMEHERE',
+    'username' => 'YOURUSERNAMEHERE',
+    'password' => 'YOURPASSWORDHERE',
+
+    // The common prefix or suffix for table names, or empty:
+    //'tablePrefix' => 'tbl_',
+
+    // The charset used for database connection:
+    'charset' => 'utf8',
+
+    // Whether to enable schema caching:
+    'enableSchemaCache' => true,
+
+    // Number of seconds that table metadata can remain valid in cache
+    // 'schemaCacheDuration' => 3600,
+
+];

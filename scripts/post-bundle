@@ -1,0 +1,99 @@
+#!/bin/sh
+
+usage() {
+    echo ""
+    echo "usage: post-bundle bundle-dir"
+}
+
+usage2() {
+    echo ""
+    echo "requires a file .remote-host with this content:"
+    echo "REMOTE_HOST=..."
+    echo "REMOTE_USERNAME=..."
+    echo "REMOTE_PASSWORD=..."
+}
+
+# Default cURL options
+CURL_OPTS="-i -s -k"
+
+# Get dir to the script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Source credentials file
+if [ -f $DIR/.remote-host ]; then
+    source $DIR/.remote-host
+fi
+
+# Test if variables are set now
+if [ -z "${REMOTE_HOST+x}" ]; then
+    echo Error! Variable REMOTE_HOST is not set.
+    usage
+    usage2
+    exit 1
+fi
+if [ -z "${REMOTE_USERNAME+x}" ]; then
+    echo Error! Variable REMOTE_USERNAME is not set.
+    usage
+    usage2
+    exit 1
+fi
+if [ -z "${REMOTE_PASSWORD+x}" ]; then
+    echo Error! Variable REMOTE_PASSWORD is not set.
+    usage
+    usage2
+    exit 1
+fi
+
+CURL_URL="$REMOTE_HOST"
+ 
+# require at least the bundle-dir argument
+if [ $# -lt 1 ]; then
+    echo "Error! Option bundle-dir is required"
+	usage
+	exit 1
+fi
+
+# Test if bundle-dir exists?
+if ! [ -d $1 ]; then
+	echo "Error: $1 is not a directory"
+    usage
+	exit 1
+fi
+
+. ./git-flow-version
+DIR=`pwd`
+DIRNAME=`basename $DIR`
+BUNDLEFILE=$1/$DIRNAME-$GITFLOW_VERSION.bundle
+
+# Test if bundle file exists?
+if ! [ -f $BUNDLEFILE ]; then
+    echo "Error: Bundle file $BUNDLEFILE doesn't exist"
+    usage
+    exit 1
+fi
+
+echo "Current Version : $GITFLOW_VERSION"
+echo "Bundle File     : $BUNDLEFILE"
+echo "CURL_OPTS       : $CURL_OPTS"
+
+AUTH=$(echo -n "$REMOTE_USERNAME:$REMOTE_PASSWORD" | base64 -)
+
+# Finally run cURL upload command:
+curl $CURL_OPTS \
+    -H "Authorization: Basic $AUTH" \
+    --form "cmd=upload" \
+    --form "file=@$BUNDLEFILE" \
+    $CURL_URL \
+    > curl_result.txt
+
+RESULT=`grep -c cmd=upload,result=OK curl_result.txt`
+# rm curl_result.txt
+
+if [ $RESULT -eq 1 ]; then
+    echo "The bundle file $BUNDLEFILE was uploaded successfully."
+    exit 0
+else
+    echo "Error while uploading the bundle file $BUNDLEFILE."
+    exit 1
+fi
+
