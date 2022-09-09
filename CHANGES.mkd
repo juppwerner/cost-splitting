@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev.3
+
+2022-09-09
+
+* Added more information to [README](../../README.md) and [INSTALL](../../INSTALL.mkd) files
+
 ## Rev.1
 
 2022-09-04
