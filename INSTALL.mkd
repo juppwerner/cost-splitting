@@ -15,7 +15,7 @@ Run database migrations:
 
 confirming to run all migrations.
 
-Create a first user:
+Create a first user, and granting the role _admin_:
 
     $ ./yii user/create useremailaddress username userpassword admin
 
