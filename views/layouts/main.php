@@ -13,10 +13,10 @@ use app\assets\AppAsset;
 use app\widgets\Alert;
 
 // Create copyright text
-$copyrightFirstYear = Yii::$app->params['applicationFirstYear'];
-$cTxt = $copyrightFirstYear;
+$copyrightReleaseYear = Yii::$app->params['applicationReleaseYear'];
+$cTxt = $copyrightReleaseYear;
 $thisYear = date('Y');
-if($thisYear>$copyrightFirstYear)
+if($thisYear>$copyrightReleaseYear)
     $cTxt .= ' - '.$thisYear;
 
 // Select default bootswatch theme, as per app paramms

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    // Year this application was released
+    'applicationReleaseYear' => 2022,
     // Bootswatch UI theme
     // cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, 
     // lux, materia, minty, pulse, sandstone, simplex, sketchy, 
