@@ -21,6 +21,7 @@ $costitemsDataProvider = new ArrayDataProvider([
     'key' => 'id',
     'pagination' => false,
 ]);
+$splittingOptions = \app\models\Expense::getSplittingOptions();
 ?>
 <div class="expense-view">
 
@@ -41,6 +42,11 @@ $costitemsDataProvider = new ArrayDataProvider([
         'model' => $model,
         'attributes' => [
             [
+                'attribute'=>'title',
+                'format'=>'html',
+                'value'=>Html::tag('h4', $model->title),
+            ],
+            [
                 'attribute'=>'costprojectId',
                 'format'=>'html',
                 'value'=>Html::a($model->costproject->title, ['costproject/view', 'id'=>$model->costprojectId])
@@ -49,7 +55,6 @@ $costitemsDataProvider = new ArrayDataProvider([
                     . ' | '
                     . Html::a(Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->costprojectId]),
             ],
-            'title',
             'payedBy',
             [
                 'attribute'=>'itemDate',
@@ -59,7 +64,10 @@ $costitemsDataProvider = new ArrayDataProvider([
                 'attribute'=>'amount',
                 'value' => Yii::$app->formatter->asCurrency($model->amount, 'EUR'),
             ],
-            'splitting',
+            [
+                'attribute'=>'splitting',
+                'value'=>$splittingOptions[$model->splitting],
+            ],
             // 'id',
         ],
     ]) ?>
@@ -82,5 +90,17 @@ $costitemsDataProvider = new ArrayDataProvider([
             ],
         ],
     ]) ?>
+
+    <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            ['attribute'=>'created_at', 'format'=>'html', 'value'=>Yii::$app->formatter->asDateTime($model->created_at)],
+            ['attribute'=>'createUserName', 'format'=>'html'],
+            ['attribute'=>'updated_at', 'format'=>'html', 'value'=>Yii::$app->formatter->asDateTime($model->updated_at)],
+            ['attribute'=>'updateUserName', 'format'=>'html'],
+        ],
+        ])
+    ?><!-- }}} -->
 
 </div>

@@ -21,7 +21,7 @@ $expensesDataProvider = new ArrayDataProvider([
     'allModels' => $model->expenses,
     'key' => 'id',
     'pagination' => [
-        'pageSize' => 5,
+        'pageSize' => 10,
     ],
     'sort' => [
         'attributes' => [
@@ -56,13 +56,17 @@ $expensesDataProvider = new ArrayDataProvider([
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'title',
+            [
+                'attribute' => 'title',
+                'format' => 'html',
+                'value' => Html::tag('h4', $model->title),
+            ],
             [
                 'attribute' => 'participants',
                 'format' => 'html',
                 'value' => nl2br($model->participants),
             ],
-            'id',
+            // 'id',
         ],
     ]) ?>
 
@@ -108,7 +112,7 @@ $expensesDataProvider = new ArrayDataProvider([
         <?= Html::a(Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
     </p>
 
-    <h3><?= Yii::t('app', 'History') ?></h3>
+    <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -118,5 +122,5 @@ $expensesDataProvider = new ArrayDataProvider([
             ['attribute'=>'updateUserName', 'format'=>'html'],
         ],
         ])
-    ?>
+    ?><!-- }}} -->
 </div>

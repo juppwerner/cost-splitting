@@ -65,7 +65,7 @@ class Expense extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'costprojectId', 'splitting'], 'required'],
+            [['title', 'costprojectId', 'payedBy', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
             [['itemDate'], 'safe'],
             [['amount'], 'number'],
@@ -91,8 +91,10 @@ class Expense extends \yii\db\ActiveRecord
             'splitting' => Yii::t('app', 'Splitting'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
+            'createUserName' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'updated_by' => Yii::t('app', 'Updated By'),
+            'updateUserName' => Yii::t('app', 'Created By'),
         ];
     } // }}} 
     // {{{ getCostitems

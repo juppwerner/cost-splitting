@@ -47,12 +47,9 @@ $expensesDataProvider = new ArrayDataProvider([
 
     <h3><?= Yii::t('app', 'Cost Breakdown') ?></h3>
     <?php $breakdown = $model->getBreakdown(); ?>
-    <div style="display:none; border: 1px solid #eee; max-height:300px;overflow:auto">
-    <?php // \yii\helpers\VarDumper::dump($breakdown, 10, true); ?>
-    </div>
 
     <?php $participantSums = []; $sum = 0; $participants = array_values($model->participantsList); ?>
-    <table class="table table-striped table-bordered table-responsive table-hover" style="width:100%">
+    <table class="table table-striped table-responsive table-hover" style="width:100%">
         <thead>
             <tr>
                 <th><?= Yii::t('app', 'Title') ?></th>
@@ -194,7 +191,7 @@ foreach($participants as $iR=>$pR) {
 // DEBUG \yii\helpers\VarDumper::dump($matrix, 10, true);
 ?>
     <h3><?= Yii::t('app', 'Compensation Payments') ?></h3>
-    <table class="table table-striped table-sm">
+    <table class="table table-striped table-responsive table-hover table-sm">
         <tbody>
         <?php foreach($matrix as $pR=>$row) : ?>
         <?php foreach($row as $pSp=>$amount) : if($amount==0) continue; ?>

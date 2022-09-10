@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## Rev.4
+
+2022-09-10
+
+* [Ausgabe](../expense): Field _Payed By_ is now required
+* Tidied up html
+
 ## Rev.3
 
 2022-09-09
