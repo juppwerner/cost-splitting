@@ -108,7 +108,7 @@ $expensesDataProvider = new ArrayDataProvider([
         <?= Html::a(Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
     </p>
 
-    <h3><?= Yii::t('app', 'History') ?></h3>
+    <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -118,5 +118,5 @@ $expensesDataProvider = new ArrayDataProvider([
             ['attribute'=>'updateUserName', 'format'=>'html'],
         ],
         ])
-    ?>
+    ?><!-- }}} -->
 </div>
