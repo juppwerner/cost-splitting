@@ -44,7 +44,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
             [
                 'attribute'=>'title',
                 'format'=>'html',
-                'value'=>Html::tag('h3', $model->title),
+                'value'=>Html::tag('h4', $model->title),
             ],
             [
                 'attribute'=>'costprojectId',

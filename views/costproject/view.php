@@ -56,13 +56,17 @@ $expensesDataProvider = new ArrayDataProvider([
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'title',
+            [
+                'attribute' => 'title',
+                'format' => 'html',
+                'value' => Html::tag('h4', $model->title),
+            ],
             [
                 'attribute' => 'participants',
                 'format' => 'html',
                 'value' => nl2br($model->participants),
             ],
-            'id',
+            // 'id',
         ],
     ]) ?>
 
