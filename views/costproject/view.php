@@ -21,7 +21,7 @@ $expensesDataProvider = new ArrayDataProvider([
     'allModels' => $model->expenses,
     'key' => 'id',
     'pagination' => [
-        'pageSize' => 5,
+        'pageSize' => 10,
     ],
     'sort' => [
         'attributes' => [
