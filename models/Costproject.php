@@ -101,6 +101,7 @@ class Costproject extends \yii\db\ActiveRecord
             $result[$participant] = $participant;
         return $result;
     } // }}}
+    // {{{ getAllParticipants
     /**
      * Returns a list of all projects' participants
      *
@@ -114,8 +115,7 @@ class Costproject extends \yii\db\ActiveRecord
             $result = array_merge($result, $project->participantsList);
         asort($result);
         return $result;
-    }
-    
+    } // }}} 
     // {{{ find
     /**
      * {@inheritdoc}
