@@ -65,7 +65,7 @@ class Expense extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'costprojectId', 'splitting'], 'required'],
+            [['title', 'costprojectId', 'payedBy', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
             [['itemDate'], 'safe'],
             [['amount'], 'number'],
