@@ -91,7 +91,8 @@ class ExpenseController extends Controller
                 Yii::$app->session->setFlash(
                     'success',
                     Html::tag('h4', Yii::t('app', 'Create New Expense'))
-                    . Yii::t('app', 'The expense <em>{title}</em> has been created.', ['title'=>$model->title])
+                    . Yii::t('app', 'The expense <em>{title}</em> has been created.', ['title'=>$model->title]) . '<br>'
+                    . Html::a(Yii::t('app', 'View Expense'), ['view', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm'])
                 );
                 return $this->redirect(['create', 'Expense[costprojectId]' => $model->costprojectId]);
             }
