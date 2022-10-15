@@ -62,7 +62,17 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
             ],
             [
                 'attribute'=>'amount',
-                'value' => Yii::$app->formatter->asCurrency($model->amount, 'EUR'),
+                'value' => Yii::$app->formatter->asCurrency($model->amount, $model->currency),
+            ],
+             [
+                'attribute'=>'amount',
+                'value' => sprintf('%s (%0.5f %s/%s)',
+                    Yii::$app->formatter->asCurrency($model->amount * $model->exchangeRate, $model->costproject->currency),
+                    $model->exchangeRate,
+                    $model->costproject->currency,
+                    $model->currency
+                ),
+                'visible' => $model->currency !== $model->costproject->currency,
             ],
             [
                 'attribute'=>'splitting',
@@ -79,13 +89,26 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
         'columns' => [
             [
                 'attribute'=>'participant',
-                'contentOptions' => ['class'=>'text-center'],
             ],
             [
                 'attribute'=>'amount',
                 'contentOptions' => [ 'class' => 'text-right' ],
                 'value' => function($data) {
-                    return Yii::$app->formatter->asCurrency($data['amount'], 'EUR');
+                    return Yii::$app->formatter->asCurrency($data['amount'], $data->currency);
+                },
+            ],
+            [
+                'attribute' => 'exchangeRate',
+                'contentOptions' => [ 'class' => 'text-right' ],
+                'value' => function($data) use($model) {
+                    return sprintf('%0.6f %s/%s', $data->exchangeRate, $data->currency, $model->costproject->currency);
+                },
+            ],
+            [
+                'label' => Yii::t('app', 'Amount {currency}', ['currency'=>$model->costproject->currency]),
+                'contentOptions' => [ 'class' => 'text-right' ],
+                'value' => function($data) use($model) {
+                    return Yii::$app->formatter->asCurrency($data->amount * $data->exchangeRate, $model->costproject->currency);
                 },
             ],
         ],

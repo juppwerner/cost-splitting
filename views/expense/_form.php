@@ -4,9 +4,24 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+use kartik\select2\Select2;
+
+use app\dictionaries\CurrencyCodesDict;
 use app\models\Costproject;
 use app\models\Expense;
 
+$participants = null;
+if(!empty($model->costprojectId))
+    $participants = Costproject::findOne(['id' => $model->costprojectId])->getParticipantsList();
+
+
+if(!is_array($model->participants)) {
+    if(empty($model->participants))
+        $model->participants = array();
+    else
+        $model->participants = explode(';', $model->participants);
+}
+    
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
 /** @var yii\widgets\ActiveForm $form */
@@ -24,9 +39,40 @@ use app\models\Expense;
 
     <?= $form->field($model, 'amount')->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
 
+    <?= $form->field($model, 'currency')->widget(Select2::classname(), [
+        'data' => CurrencyCodesDict::all(),
+        // 'language' => 'de',
+        'options' => ['placeholder' => Yii::t('app', 'Select a currency ...')],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
+
+    <?= $form->field($model, 'exchangeRate')->textInput(['maxlength' => true])->input('number', ['step'=>'.000001'])->hint(Yii::t('app', 'Will be set when a currency is selected')) ?>
+
+    <?php if(is_null($participants)) : ?>
     <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true]) ?>
+    <?php else : ?>
+    <?= $form->field($model, 'payedBy')->widget(Select2::classname(), [
+        'data' => $participants,
+        'options' => ['placeholder' => 'Select a participant ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'splitting')->radioList(Expense::getSplittingOptions()) ?>
+
+    <?=$form->field($model, 'participants')->widget(Select2::classname(), [
+        'data' => $participants,
+        'options' => ['placeholder' => Yii::t('app', 'Select one or more participants ...'), 'multiple' => true],
+        'pluginOptions' => [
+            'tags' => true,
+            'tokenSeparators' => [',', ' '],
+            'maximumInputLength' => 10
+        ],
+    ]) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
@@ -35,3 +81,35 @@ use app\models\Expense;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php $this->registerJs("
+$('#expense-currency').on('change', function() {
+    var base = $('#expense-currency').val();
+    var symbol = 'EUR';
+    var date = $('#expense-itemdate').val() ;
+
+    if(base==symbol)
+        return;
+
+    // alert(date + ': ' + $(this).val() + ' ' + symbol);
+
+    var requestURL = 'https://api.exchangerate.host/';
+    var request = new XMLHttpRequest();
+    request.open('GET', requestURL + date + '?base=' + base + '&symbols=' + symbol);
+    request.responseType = 'json';
+    request.send();
+
+    request.onload = function() {
+        var response = request.response;
+        console.log(response);
+        if(!('rates' in response)) {
+            alert('No exchange rate available for currency: ' + base)
+        } else {
+            $('#expense-exchangerate').val(response.rates[symbol]);
+        }
+    }
+});
+    ",
+    yii\web\View::POS_READY,
+    'amount-change'
+); ?>

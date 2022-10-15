@@ -16,7 +16,10 @@ use yii\db\ActiveRecord;
  * @property string $payedBy
  * @property string|null $itemDate
  * @property float|null $amount
+ * @property string $currency
+ * @property string $exchangeRate
  * @property string $splitting
+ * @property string $participants
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -27,6 +30,7 @@ use yii\db\ActiveRecord;
 class Expense extends \yii\db\ActiveRecord
 {
     Const SPLITTING_EQUAL = 'EQUAL';
+    Const SPLITTING_SELECTED_PARTICIPANTS = 'SELECTED';
     // {{{ tableName
     /**
      * {@inheritdoc}
@@ -65,14 +69,20 @@ class Expense extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'costprojectId', 'payedBy', 'splitting'], 'required'],
+            [['title', 'costprojectId', 'payedBy', 'currency', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
-            [['itemDate'], 'safe'],
+            [['itemDate', 'participants'], 'safe'],
             [['amount'], 'number'],
+            [['currency'], 'string', 'min' => 3, 'max' => 3],
+            [['exchangeRate'], 'number', 'min' => 0.000001],
             [['title'], 'string', 'max' => 255],
             [['payedBy'], 'string', 'max' => 30],
             [['splitting'], 'safe'],
             [['costprojectId'], 'exist', 'skipOnError' => true, 'targetClass' => Costproject::class, 'targetAttribute' => ['costprojectId' => 'id']],
+            [['participants'], function ($attribute, $params, $validator) {
+                if(is_array($this->$attribute))
+                    $this->$attribute = join(';', $this->$attribute);
+            }],
         ];
     } // }}}
     // {{{ attributeLabels
@@ -88,7 +98,10 @@ class Expense extends \yii\db\ActiveRecord
             'costprojectId' => Yii::t('app', 'Cost Project'),
             'itemDate' => Yii::t('app', 'Item Date'),
             'amount' => Yii::t('app', 'Amount'),
+            'currency' => Yii::t('app', 'Currency'),
+            'exchangeRate' => Yii::t('app', 'Exchange Rate'),
             'splitting' => Yii::t('app', 'Splitting'),
+            'participants' => Yii::t('app', 'Participants'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'createUserName' => Yii::t('app', 'Created By'),
@@ -143,6 +156,8 @@ class Expense extends \yii\db\ActiveRecord
         $costitem->expenseId = $this->id;
         $costitem->participant = $this->payedBy;
         $costitem->amount = $this->amount;
+        $costitem->currency = $this->currency;
+        $costitem->exchangeRate = $this->exchangeRate;
         if(!$costitem->save())
             die(\yii\helpers\VarDumper::dumpAsString($costitem->errors, 10, true));
 
@@ -152,19 +167,33 @@ class Expense extends \yii\db\ActiveRecord
         {
         case self::SPLITTING_EQUAL:
             foreach($participants as $participant) {
-                $costitem = new Costitem;
-                $costitem->expenseId = $this->id;
-                $costitem->participant = $participant;
-                $costitem->amount = -$this->amount/count($participants);
+                $costitem               = new Costitem;
+                $costitem->expenseId    = $this->id;
+                $costitem->participant  = $participant;
+                $costitem->amount       = -$this->amount/count($participants);
+                $costitem->currency     = $this->currency;
+                $costitem->exchangeRate = $this->exchangeRate;
                 $costitem->save();
             }
             break;
+        case self::SPLITTING_SELECTED_PARTICIPANTS:
+            foreach(explode(';', $this->participants) as $participant) {
+                $costitem               = new Costitem;
+                $costitem->expenseId    = $this->id;
+                $costitem->participant  = $participant;
+                $costitem->amount       = -$this->amount/count(explode(';', $this->participants));
+                $costitem->currency     = $this->currency;
+                $costitem->exchangeRate = $this->exchangeRate;
+                $costitem->save();
+            }
+            breaK;
         }
     } // }}}
     // {{{ getSplittingOptions
     public static function getSplittingOptions()
     {
         return [
-            self::SPLITTING_EQUAL => Yii::t('app', 'Divided equally'),
+            self::SPLITTING_EQUAL                   => Yii::t('app', 'Divide equally betweeen all'),
+            self::SPLITTING_SELECTED_PARTICIPANTS   => Yii::t('app', 'Divide between selected participants only'),
         ];
     }} // }}}

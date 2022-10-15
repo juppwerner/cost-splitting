@@ -114,7 +114,8 @@ $menuItems = [];
 // $menuItems[] = ['label' => '<i class="fas fa-home"></i> '.Yii::t('app', 'Home'), 'url' => ['/site/index']]; // }}} 
 if ($isGuest) {
     // {{{ Login
-    $menuItems[] = ['label' => '<i class="fas fa-user-plus"></i> '.Yii::t('app', 'Register'), 'url' => ['/user/registration/register'], 'options'=>['id'=>'mnuRegister']]; 
+    if( Yii::$app->getModule('user')->enableRegistration)
+        $menuItems[] = ['label' => '<i class="fas fa-user-plus"></i> '.Yii::t('app', 'Register'), 'url' => ['/user/registration/register'], 'options'=>['id'=>'mnuRegister']]; 
     $menuItems[] = ['label' => '<i class="fas fa-sign-in-alt"></i> '.Yii::t('app', 'Login'), 'url' => ['/user/security/login'], 'options'=>['id'=>'mnuSignIn']]; // }}} 
 } else {
     // {{{ APP PAGES
