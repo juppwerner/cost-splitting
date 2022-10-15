@@ -1,11 +1,14 @@
 <?php
 
-use app\models\Costproject;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
+use app\dictionaries\CurrencyCodesDict;
+use app\models\Costproject;
+
 /** @var yii\web\View $this */
 /** @var app\models\search\CostprojectSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -50,6 +53,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($data) {
                     return join(', ', array_values($data->participantsList));
                 }
+            ],
+            [
+                'attribute' => 'currency',
+                'value' => function($data) {
+                    return CurrencyCodesDict::get($data->currency);
+                },
             ],
             [
                 'attribute'=>'created_at',

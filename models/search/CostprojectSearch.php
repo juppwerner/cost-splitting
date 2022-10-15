@@ -18,7 +18,7 @@ class CostprojectSearch extends Costproject
     {
         return [
             [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'participants'], 'safe'],
+            [['title', 'participants', 'currency'], 'safe'],
         ];
     }
 
@@ -67,6 +67,7 @@ class CostprojectSearch extends Costproject
 
         $query->andFilterWhere(['like', 'title', $this->title]);
         $query->andFilterWhere(['like', 'participants', $this->participants]);
+        $query->andFilterWhere(['like', 'currency', $this->currency]);
 
         return $dataProvider;
     }

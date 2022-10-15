@@ -12,7 +12,9 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string|null $title
- * @property string|null $participants
+ * @property string $participants
+ * @property boolean $useCurrency
+ * @property string $currency
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -59,8 +61,11 @@ class Costproject extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['title', 'participants', 'currency'], 'required'],
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'string', 'max' => 255],
+            [['useCurrency'], 'boolean'],
+            [['currency'], 'string', 'min'=>3, 'max' => 255],
             [['participants'], 'trim'],
             [['participants'], 'safe'],
         ];
@@ -75,6 +80,8 @@ class Costproject extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'title' => Yii::t('app', 'Title'),
             'participants' => Yii::t('app', 'Participants'),
+            'useCurrency' => Yii::t('app', 'Use Currency'),
+            'currency' => Yii::t('app', 'Currency'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'createUserName' => Yii::t('app', 'Created By'),
@@ -135,6 +142,14 @@ class Costproject extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Expense::class, ['costprojectId' => 'id']);
     } // }}} 
+    public function getTotalExpenses()
+    {
+        $total = 0;
+        foreach($this->expenses as $expense) {
+            $total += $expense->amount * $expense->exchangeRate;
+        }
+        return $total;
+    }
     // {{{ *** Blameable Methods ***
     // {{{ getCreateUser
     public function getCreateUser()
