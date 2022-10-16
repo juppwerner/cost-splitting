@@ -35,8 +35,8 @@ Optionally, you might load sample data (1 cost project, 7 expenses):
 
     $ ./yii load-sample-data
 
-User Account
-------------
+First User Account
+------------------
 
 Create a first user, and granting the role _admin_:
 
