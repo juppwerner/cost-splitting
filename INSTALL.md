@@ -1,7 +1,9 @@
 INSTALLATION
 ============
 
-Clone this repository from Github
+Clone this repository from Github/Bitbucket.
+
+For an installation using Docker, see [INSTALL-docker.md](INSTALL-docker.md).
 
 Using your favorite database manager like PhpMyAdmin or Adminer, create an empty database and a database user granting all priviledges on this database.
 
@@ -33,8 +35,8 @@ Optionally, you might load sample data (1 cost project, 7 expenses):
 
     $ ./yii load-sample-data
 
-User Account
-------------
+First User Account
+------------------
 
 Create a first user, and granting the role _admin_:
 

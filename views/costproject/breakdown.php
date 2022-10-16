@@ -42,6 +42,7 @@ $expensesDataProvider = new ArrayDataProvider([
                 'attribute' => 'participants',
                 'value' => str_replace("\n", ', ', $model->participants),
             ],
+            'currency',
         ],
     ]) ?>
 
@@ -52,11 +53,15 @@ $expensesDataProvider = new ArrayDataProvider([
     <table class="table table-striped table-responsive table-hover" style="width:100%">
         <thead>
             <tr>
-                <th><?= Yii::t('app', 'Title') ?></th>
-                <th><?= Yii::t('app', 'Amount') ?></th>
-                <th><?= Yii::t('app', 'By') ?></th>
                 <th><?= Yii::t('app', 'Date') ?></th>
-                <th><?= Yii::t('app', 'Created At') ?></th>
+                <th><?= Yii::t('app', 'Title') ?></th>
+                <th><?= Yii::t('app', 'By') ?></th>
+                <th><?= Yii::t('app', 'Participants') ?></th>
+                <th><?= Yii::t('app', 'Amount') ?></th>
+                <?php if($model->useCurrency) : ?>
+                <th><?= Yii::t('app', 'Amount {currency}', ['currency'=>$model->currency]) ?></th>
+                <?php endif; ?>
+                <!-- <th><?= Yii::t('app', 'Created At') ?></th>-->
                 <?php foreach($participants as $participant) : ?>
                 <?php if(!array_key_exists($participant, $participantSums)) $participantSums[$participant] = 0; ?>
                 <th colspan="2"><?= $participant ?></th>
@@ -66,30 +71,34 @@ $expensesDataProvider = new ArrayDataProvider([
         <tbody>
             <?php foreach($breakdown as $row) : ?>
             <tr>
-                <td><?= $row->title ?> <?= Html::a('.', ['/expense/update', 'id'=>$row->id], ['class'=>'d-print-none']) ?></td>
-                <td class="text-right"><?= Yii::$app->formatter->asCurrency($row->amount, 'EUR') ?></td>
-                <td class="text-center"><?= $row->payedBy ?></td>
                 <td class="text-center"><?= Yii::$app->formatter->asDate($row->itemDate, 'php:'.Yii::t('app', 'Y-m-d')) ?></td>
-                <td class="text-center"><?= Yii::$app->formatter->asDate($row->created_at, 'php:'.Yii::t('app', 'Y-m-d')) ?></td>
+                <td><?= $row->title ?> <?= Html::a('.', ['/expense/update', 'id'=>$row->id], ['class'=>'d-print-none']) ?></td>
+                <td class="text-center"><?= $row->payedBy ?></td>
+                <td class="text-center"><?= $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : $row->participants ?></td>
+                <td class="text-right"><?= Yii::$app->formatter->asCurrency($row->amount, $row->currency) ?></td>
+                <?php if($model->useCurrency) : ?>
+                <td class="text-right"><?= Yii::$app->formatter->asCurrency($row->amount * $row->exchangeRate, $model->currency) ?></td>
+                <?php endif; ?>
+                <!-- <td class="text-center"><?= Yii::$app->formatter->asDate($row->created_at, 'php:'.Yii::t('app', 'Y-m-d')) ?></td> -->
                 <?php foreach($participants as $participant) : ?>
                 <td style="color:lightgreen" class="text-right">
                     <?php if($participant==$row->payedBy) : ?>
-                    <?= $row->amount ?>
-                    <?php $participantSums[$participant] += $row->amount; endif; ?>
+                    <?= Yii::$app->formatter->asDecimal($row->amount  * $row->exchangeRate, 2) ?>
+                    <?php $participantSums[$participant] += $row->amount  * $row->exchangeRate; endif; ?>
                 </td>
                 <td style="color: red" class="text-right">
                     <?php foreach($row->costitems as $costitem) : ?>
                     <?php if($costitem->amount==$row->amount) continue; ?>
                     <?php if($costitem->participant==$participant) : ?>
-                    <?= $costitem->amount ?>
-                    <?php $participantSums[$participant] += $costitem->amount; endif; ?>
+                    <?= Yii::$app->formatter->asDecimal($costitem->amount * $costitem->exchangeRate, 2) ?>
+                    <?php $participantSums[$participant] += $costitem->amount * $costitem->exchangeRate; endif; ?>
                     <?php endforeach; ?>
                 </td>
                 <?php endforeach; ?>
             </tr>
             <?php endforeach; ?>
             <tr>
-                <td colspan="5">&nbsp;</td>
+                <td colspan="<?= 5 + (int)$model->useCurrency ?>">&nbsp;</td>
                 <?php foreach($participants as $participant) : ?>
                 <?php $sum += $participantSums[$participant]; ?>
                 <td colspan="2" class="text-right"><?= Yii::$app->formatter->asCurrency($participantSums[$participant], 'EUR') ?></td>
@@ -145,15 +154,19 @@ foreach($participants as $participant)
     $participantExpenses[$participant] = 0;
 
 foreach($breakdown as $expense) {
-    $participantExpenses[$expense->payedBy] += $expense->amount;
+    $participantExpenses[$expense->payedBy] += $expense->amount * $expense->exchangeRate;
 }
+\yii\helpers\VarDumper::dump($participantExpenses, 10, true);
+
 
 // Calculate average
 $average = array_sum(array_values($participantExpenses))/count(array_values($participantExpenses));
+echo 'Average: '.$average.'<br>';
 
 // Diff to average
 foreach($participants as $participant) 
     $participantDiffToAvg[$participant] = $participantExpenses[$participant] - $average;
+\yii\helpers\VarDumper::dump($participantDiffToAvg, 10, true);
 
 $matrix = [];
 foreach($participants as $iR=>$pR) {
@@ -197,7 +210,7 @@ foreach($participants as $iR=>$pR) {
         <?php foreach($row as $pSp=>$amount) : if($amount==0) continue; ?>
             <tr>
                 <td><?= Yii::t('app', '{participant} owes {creditor}:', ['participant'=>$pR, 'creditor'=>$pSp]) ?></td>
-                <td class="text-right"> <?= Yii::$app->formatter->asCurrency($amount, 'EUR') ?></td>
+                <td class="text-right"> <?= Yii::$app->formatter->asCurrency($amount, $model->currency) ?></td>
             </tr>
         <?php endforeach; ?>
         <?php endforeach; ?>

@@ -33,6 +33,8 @@ class Costitem extends \yii\db\ActiveRecord
             [['expenseId'], 'integer'],
             [['participant', 'amount'], 'required'],
             [['amount'], 'number'],
+            [['currency'], 'string', 'min' => 3, 'max' => 3],
+            [['exchangeRate'], 'number', 'min' => 0.000001],
             [['participant'], 'string', 'max' => 30],
             [['expenseId'], 'exist', 'skipOnError' => true, 'targetClass' => Expense::class, 'targetAttribute' => ['expenseId' => 'id']],
         ];
@@ -48,6 +50,8 @@ class Costitem extends \yii\db\ActiveRecord
             'expenseId' => Yii::t('app', 'Expense ID'),
             'participant' => Yii::t('app', 'Participant'),
             'amount' => Yii::t('app', 'Amount'),
+            'currency' => Yii::t('app', 'Currency'),
+            'exchangeRate' => Yii::t('app', 'Exchange Rate'),
         ];
     }
 

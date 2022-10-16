@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
+use app\dictionaries\CurrencyCodesDict;
 use app\models\Expense;
 use app\widgets\GridView;
 
@@ -66,6 +67,14 @@ $expensesDataProvider = new ArrayDataProvider([
                 'format' => 'html',
                 'value' => nl2br($model->participants),
             ],
+            [
+                'attribute' => 'useCurrency',
+                'format' => 'boolean',
+            ],
+            [
+                'attribute' => 'currency',
+                'value' => CurrencyCodesDict::get($model->currency),
+            ],
             // 'id',
         ],
     ]) ?>
@@ -95,18 +104,35 @@ $expensesDataProvider = new ArrayDataProvider([
             ],
             'title',
             [
-                'attribute'=>'amount',
-                'contentOptions' => [ 'class' => 'text-right' ],
-                'value' => function($data) {
-                    return Yii::$app->formatter->asCurrency($data['amount'], 'EUR');
-                },
-            ],
-            [
                 'attribute'=>'payedBy',
                 'contentOptions' => ['class'=>'text-center'],
             ],
+            [
+                'attribute'=>'amount',
+                'contentOptions' => [ 'class' => 'text-right' ],
+                'value' => function($data) {
+                    return Yii::$app->formatter->asCurrency($data['amount'], $data['currency']);
+                },
+            ],
+            [
+                'attribute' => 'exchangeRate',
+                'visible' => $model->useCurrency,
+                'contentOptions' => [ 'class' => 'text-right' ],
+                'value' => function($data) use($model) {
+                    return sprintf('%0.6f %s/%s', $data['exchangeRate'], $data['currency'], $model->currency);
+                },
+             ],
+             [
+                'label' => Yii::t('app', 'Amount {currency}', ['currency'=>$model->currency]),
+                'visible' => $model->useCurrency,
+                'contentOptions' => [ 'class' => 'text-right' ],
+                'value' => function($data) use($model) {
+                    return Yii::$app->formatter->asCurrency($data->amount * $data->exchangeRate, $model->currency);
+                },
+             ],
         ],
     ]) ?>
+    <div class="text-right"><strong><?= Yii::t('app', 'Total Expenses:') ?> <?= Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency) ?></strong>&nbsp;</div>
     <p>
         <?= Html::a(Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
         <?= Html::a(Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>

@@ -14,7 +14,7 @@ use app\models\Costproject;
 use app\models\Expense;
 
 /**
- * This command echoes the first argument that you have entered.
+ * This command allows to load sample data.
  *
  * This command is provided as an example for you to learn how to create console commands.
  *
@@ -23,8 +23,9 @@ use app\models\Expense;
 class LoadSampleDataController extends Controller
 {
     /**
-     * This command echoes what you have entered as the message.
-     * @bool $purged Wheter to purge exoisting data or not
+     * This command allows to load sample data.
+     *
+     * @param $purged Whether to purge exoisting data or not
      * @return int Exit code
      */
     public function actionIndex($purge=false)
@@ -42,18 +43,18 @@ class LoadSampleDataController extends Controller
         }
 
         $csvProjects = <<< EOL
-id;title;participants
-1;HartwigstraßenWG;"Anna__CR__Ben__CR__Clara"
+id;title;participants;useCurrency;currency
+1;HartwigstraßenWG;"Anna__CR__Ben__CR__Clara";0;EUR
 EOL;
         $csvExpenses = <<< EOL
-title;costprojectId;payedBy;itemDate;amount;splitting
-Internet XYZ 7/2022;1;Anna;2022-08-01;39.95;EQUAL
-Miete 8/2022;1;Ben;2022-08-03;"365.0";EQUAL
-Abschlag Stadtwerke 8/22;1;Clara;2022-08-04;"96.0";EQUAL
-Putzmittel;1;Anna;2022-08-11;13.79;EQUAL
-Obst und Gemüse (Markt);1;Clara;2022-08-13;"14.5";EQUAL
-Getränke Party;1;Ben;2022-08-13;"77.60";EQUAL
-Lebensmittel Rewe;1;Ben;2022-08-30;28.56;EQUAL
+title;costprojectId;payedBy;itemDate;amount;currency;splitting
+Internet XYZ 7/2022;1;Anna;2022-08-01;39.95;EUR;EQUAL
+Miete 8/2022;1;Ben;2022-08-03;"365.0";EUR;EQUAL
+Abschlag Stadtwerke 8/22;1;Clara;2022-08-04;"96.0";EUR;EQUAL
+Putzmittel;1;Anna;2022-08-11;13.79;EUR;EQUAL
+Obst und Gemüse (Markt);1;Clara;2022-08-13;"14.5";EUR;EQUAL
+Getränke Party;1;Ben;2022-08-13;"77.60";EUR;EQUAL
+Lebensmittel Rewe;1;Ben;2022-08-30;28.56;EUR;EQUAL
 EOL;
         $datasets = [
             ['name'=>'projects', 'label'=>'Cost Project', 'model'=>'Costproject'],
