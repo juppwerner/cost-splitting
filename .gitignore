@@ -9,15 +9,12 @@
 *.un~
 DEBUG
 curl_result.txt
-/doc/about/CertManager_Infos.html
-/doc/about/about.html
-/doc/about/*.pdf
 /scripts/.remote-host
 /config/*-local.php
 vendor.bu
 vendor.zip
 composer.lock.bu
-/web/PfeA_Applications*
+data/database.db
 
 # phpstorm project files
 .idea
