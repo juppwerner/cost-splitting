@@ -8,6 +8,9 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\captcha\Captcha;
 
+// Don't use fluid container
+$this->context->fluid = false;
+
 $this->title = 'Contact';
 $this->params['breadcrumbs'][] = $this->title;
 ?>

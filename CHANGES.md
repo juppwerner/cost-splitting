@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## Rev.5
+
+2022-10-16
+
+* Added currency to cost items
+* Added Docker [installation howto](../INSTALL-docker.md) 
+* Many small bug fixes
+
 ## Rev.4
 
 2022-09-10

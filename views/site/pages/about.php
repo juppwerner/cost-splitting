@@ -4,6 +4,9 @@
 
 use yii\helpers\Html;
 
+// Don't use fluid container
+$this->context->fluid = false;
+
 $this->title = Yii::t('app', 'About {appName}', ['appName'=>Yii::$app->name]);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
