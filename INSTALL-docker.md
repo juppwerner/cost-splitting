@@ -1,5 +1,5 @@
-Install with Docker
-===================
+Installation with Docker
+========================
 
 Clone this repository from Github/Bitbucket.
 
@@ -28,11 +28,17 @@ Start the application:
 
     docker-compose up -d
 
+Initialize the Database
+-----------------------
+
 Run the database migrations:
 
     docker-compose run --rm frontend yii migrate
 
 confirming to run all migrations.
+
+First User Account
+------------------
 
 Create a first user, and granting the role _admin_:
 
@@ -40,7 +46,14 @@ Create a first user, and granting the role _admin_:
 
 by replacing _USEREMAILADDRESS_, _USERNAME_ and _USERPASSWORD_ with your desired values.
 
+You may want to load some sample cost data:
+
+    docker-compose run --rm frontend yii load-sample-data
+
+Browse the Application
+----------------------
+
 Finally, access the application in your browser by opening:
 
 * Frontend: http://127.0.0.1:8080
-* Adminer Database Management: http://127.0.0.1:8081/?server=mysql&username=root&db=costsplitting
+* Adminer Database Management: http://127.0.0.1:8081/?server=mysql&username=costsplitting&db=costsplitting
