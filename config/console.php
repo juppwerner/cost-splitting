@@ -96,4 +96,13 @@ if (YII_ENV_DEV) {
     ];
 }
 
+
+// Load additional local config file?
+if(file_exists(__DIR__ . '/console-local.php')) {
+    $config = array_merge(
+        $config,
+        require(__DIR__ . '/console-local.php')
+    );
+}
+
 return $config;
