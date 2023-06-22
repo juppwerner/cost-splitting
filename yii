@@ -16,6 +16,14 @@ require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = require __DIR__ . '/config/console.php';
 
+// Load additional local config file?
+if(file_exists(__DIR__ . '/config/console-local.php')) {
+    $config = yii\helpers\ArrayHelper::merge(
+        require __DIR__ . '/config/console.php',
+        require __DIR__ . '/config/console-local.php'
+    );
+}
+
 $application = new yii\console\Application($config);
 $exitCode = $application->run();
 exit($exitCode);

@@ -1,9 +1,11 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 $params = require __DIR__ . '/params.php';
 // Additional Parameters:
 if(file_exists(__DIR__ . '/params-local.php')) {
-    $params = array_merge(
+    $params = yii\helpers\ArrayHelper::merge(
         require(__DIR__ . '/params.php'),
         require(__DIR__ . '/params-local.php')
     );
@@ -11,7 +13,7 @@ if(file_exists(__DIR__ . '/params-local.php')) {
 
 $db = require __DIR__ . '/db.php';
 if(file_exists(__DIR__ . '/db-local.php')) {
-    $db     = array_merge(
+    $db = yii\helpers\ArrayHelper::merge(
         require(__DIR__ . '/db.php'),
         require(__DIR__ . '/db-local.php')
     );
@@ -94,15 +96,6 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
     ];
-}
-
-
-// Load additional local config file?
-if(file_exists(__DIR__ . '/console-local.php')) {
-    $config = array_merge(
-        $config,
-        require(__DIR__ . '/console-local.php')
-    );
 }
 
 return $config;
