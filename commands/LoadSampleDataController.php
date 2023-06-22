@@ -25,7 +25,7 @@ class LoadSampleDataController extends Controller
     /**
      * This command allows to load sample data.
      *
-     * @param $purged Whether to purge exoisting data or not
+     * @param true|false Whether to purge exoisting data or not
      * @return int Exit code
      */
     public function actionIndex($purge=false)
@@ -60,11 +60,13 @@ EOL;
             ['name'=>'projects', 'label'=>'Cost Project', 'model'=>'Costproject'],
             ['name'=>'expenses', 'label'=>'Expense', 'model'=>'Expense'],
         ];
+
         foreach($datasets as $dataset) {
             $csvSet = 'csv'.ucfirst($dataset['name']);
             $lines = explode("\n", str_replace("\r\n", "\n", $$csvSet));
             $numCreated = 0;
             $numErrors = 0;
+
             foreach($lines as $n=>$line) {
                 $values = explode(';', $line);
                 if($n==0) {
@@ -89,7 +91,7 @@ EOL;
                     echo \yii\helpers\VarDumper::dumpAsString($model->errors).PHP_EOL;
                 } else {
                     $numCreated++;
-                    echo $dataset['label'] . ' created'.PHP_EOL;
+                    echo 'Record created: ' . $dataset['label'] . PHP_EOL;
                 }
             }
             echo $dataset['label'] . ' records created: '.$numCreated.', errors: '.$numErrors.PHP_EOL;
