@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 9
+
+2023-06-27
+
+* New expense: set default date to today
+
 ## Rev.6
 
 2022-10-16

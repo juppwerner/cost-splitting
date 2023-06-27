@@ -55,14 +55,14 @@ if(!is_array($model->participants)) {
     <?php else : ?>
     <?= $form->field($model, 'payedBy')->widget(Select2::classname(), [
         'data' => $participants,
-        'options' => ['placeholder' => 'Select a participant ...'],
+        'options' => ['placeholder' => Yii::t('app', 'Select a participant ...')],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]); ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'splitting')->radioList(Expense::getSplittingOptions()) ?>
+    <?= $form->field($model, 'splitting')->radioList(Expense::getSplittingOptions(), ['separator'=>'<br>']) ?>
 
     <?=$form->field($model, 'participants')->widget(Select2::classname(), [
         'data' => $participants,
@@ -109,6 +109,21 @@ $('#expense-currency').on('change', function() {
         }
     }
 });
+$('input[type=radio][name=\"Expense[splitting]\"]').change(function() {
+    if(this.value==='SELECTED') {
+        toggleFieldExpenseParticipants(true);
+    } else {
+        toggleFieldExpenseParticipants(false);
+    }
+});
+function toggleFieldExpenseParticipants(show=true) {
+    if(show===true) {
+        $('div.form-group.field-expense-participants').show();
+    } else {
+        $('div.form-group.field-expense-participants').hide();
+    }
+}
+toggleFieldExpenseParticipants(".($model->splitting==='SELECTED' ? 'true' : 'false').");
     ",
     yii\web\View::POS_READY,
     'amount-change'
