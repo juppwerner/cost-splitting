@@ -20,6 +20,11 @@ Adjust the components['db'] configuration in _config/db-local.php_ accordingly.
     'username' => 'costsplitting',
     'password' => 'costsplitting',
 
+Create a file _mysql_root.txt_, and put in the MySQL root password.
+
+Create a file _mysql_user.txt_, and put in the MySQL database user password (same as above).
+
+
 Docker networking creates a DNS entry for the host mysql available from your frontend container.
 
 For more information about Docker setup please visit the guide.
@@ -56,4 +61,4 @@ Browse the Application
 Finally, access the application in your browser by opening:
 
 * Frontend: http://127.0.0.1:8080
-* Adminer Database Management: http://127.0.0.1:8081/?server=mysql&username=costsplitting&db=costsplitting
+* Adminer Database Management: http://127.0.0.1:8081/?server=mysql&db=costsplitting

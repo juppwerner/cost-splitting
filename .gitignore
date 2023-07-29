@@ -15,6 +15,8 @@ vendor.bu
 vendor.zip
 composer.lock.bu
 data/database.db
+mysql_root.txt
+mysql_user.txt
 
 # phpstorm project files
 .idea

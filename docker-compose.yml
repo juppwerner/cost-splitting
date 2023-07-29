@@ -3,7 +3,7 @@ services:
   frontend:
     build: .
     ports:
-      - '8080:80'
+      - 8080:80
     volumes:
       # Re-use local composer cache via host-volume
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
@@ -12,11 +12,15 @@ services:
 
   mysql:
     image: mysql:5.7
+    secrets:
+      - mysql_root
+      - mysql_user
     environment:
-      - MYSQL_ROOT_PASSWORD=mysecret
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_root
       - MYSQL_DATABASE=costsplitting
       - MYSQL_USER=costsplitting
-      - MYSQL_PASSWORD=costsplitting
+      - MYSQL_PASSWORD_FILE=/run/secrets/mysql_user
+    
 
   adminer:
     image: adminer
@@ -26,3 +30,8 @@ services:
     environment:
       - ADMINER_DEFAULT_SERVER=mysql
 
+secrets:
+  mysql_root:
+    file: ./mysql_root.txt
+  mysql_user:
+    file: ./mysql_user.txt
