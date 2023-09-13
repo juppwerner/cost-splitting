@@ -35,3 +35,21 @@ use app\dictionaries\CurrencyCodesDict;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php $this->registerJs("
+var useCurrency = ".($model->useCurrency ? 'true' : 'false').";
+if(useCurrency==false)
+    $('.field-costproject-currency').hide();
+$('#costproject-usecurrency').on('change', function() {
+    alert($(this).is(':checked'));
+    if($(this).is(':checked')) {
+        $('.field-costproject-currency').show();
+    } else {
+        $('.field-costproject-currency').hide();
+    }
+
+});
+",
+    yii\web\View::POS_READY,
+    'usecurrency-change'
+); ?>
