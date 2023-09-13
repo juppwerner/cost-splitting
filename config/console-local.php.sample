@@ -1,0 +1,14 @@
+<?php 
+/**
+ * Local config settings for the console application
+ * 
+ * Copy this file to config/console-local.php, so that it gets included in config/console.php 
+ */
+
+return [
+    'components' => [
+        'urlManager' => [
+            'scriptUrl' => 'http://localhost:8080',
+        ],
+    ]
+];

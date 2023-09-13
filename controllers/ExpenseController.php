@@ -82,6 +82,7 @@ class ExpenseController extends Controller
     {
         $model = new Expense();
 
+        $model->itemDate = date('Y-m-d');
         $model->splitting = Expense::SPLITTING_EQUAL;
 
         $model->load($this->request->get());
@@ -92,7 +93,8 @@ class ExpenseController extends Controller
                     'success',
                     Html::tag('h4', Yii::t('app', 'Create New Expense'))
                     . Yii::t('app', 'The expense <em>{title}</em> has been created.', ['title'=>$model->title]) . '<br>'
-                    . Html::a(Yii::t('app', 'View Expense'), ['view', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm'])
+                    . Html::a(Yii::t('app', 'View Expense'), ['view', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm']) . ' '
+                    . Html::a(Yii::t('app', 'View Project'), ['costproject/view', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm'])
                 );
                 return $this->redirect(['create', 'Expense[costprojectId]' => $model->costprojectId]);
             }

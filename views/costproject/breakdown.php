@@ -156,17 +156,13 @@ foreach($participants as $participant)
 foreach($breakdown as $expense) {
     $participantExpenses[$expense->payedBy] += $expense->amount * $expense->exchangeRate;
 }
-\yii\helpers\VarDumper::dump($participantExpenses, 10, true);
-
 
 // Calculate average
 $average = array_sum(array_values($participantExpenses))/count(array_values($participantExpenses));
-echo 'Average: '.$average.'<br>';
 
 // Diff to average
 foreach($participants as $participant) 
     $participantDiffToAvg[$participant] = $participantExpenses[$participant] - $average;
-\yii\helpers\VarDumper::dump($participantDiffToAvg, 10, true);
 
 $matrix = [];
 foreach($participants as $iR=>$pR) {
