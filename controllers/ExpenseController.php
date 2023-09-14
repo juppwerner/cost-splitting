@@ -7,6 +7,7 @@ use app\models\search\ExpenseSearch;
 
 use Yii;
 use yii\bootstrap4\Html;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -124,7 +125,10 @@ class ExpenseController extends Controller
                 Html::tag('h4', Yii::t('app', 'Update Expense'))
                 . Yii::t('app', 'The expense <em>{title}</em> has been updated.', ['title'=>$model->title])
             );
-            return $this->redirect(['view', 'id' => $model->id]);
+            if(!empty(Yii::$app->session->get('cost-project'))) 
+                return $this->redirect(Url::previous('cost-project'));
+            else
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -149,7 +153,7 @@ class ExpenseController extends Controller
             . Yii::t('app', 'The expense <em>{title}</em> has been deleted.', ['title'=>$model->title])
         );
 
-        return $this->redirect(['index']);
+        return $this->redirect(['costproject/view', 'id'=>$model->costprojectId]);
     }
 
     /**
