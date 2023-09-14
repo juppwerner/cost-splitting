@@ -243,7 +243,9 @@ if(isset($this->params['breadcrumbs'])) {
             'links' => $breadcrumbs,
             'homeLink' => false,
             'encodeLabels' => false,
+            'navOptions' => ['aria-label' => 'breadcrumb', 'class'=>'d-print-none'],
         ]) ?>
+        <div class="d-none d-print-block float-right"><h3><?= Yii::$app->name ?></h3></div>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>

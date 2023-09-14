@@ -148,7 +148,7 @@ $defaultParticipantDetails = [
         </tbody>
     </table>
 
-    <div class="card border-primary mb-3" style="max-width: 18rem;">
+    <div class="card border-primary mb-3" style="max-width: 18rem;page-break-after: always;">
         <div class="card-header font-weight-bold"><?= Yii::t('app', 'Gesamtkosten des Projekts') ?></div>
         <div class="card-body text-primary">
             <h5 class="card-title text-center"><?= Yii::$app->formatter->asCurrency($totalProjectCost, $model->currency) ?></h5>
@@ -315,7 +315,8 @@ foreach($personenKonten as $person=>$saldo) {
                                 'Expense[payedBy]'=>$schlusszahlung['person'], 
                                 'Expense[splitting]'=>'SELECTED',
                                 'Expense[participants]'=>$empfaenger
-                            ], ['class'=>'btn btn-primary btn-sm']) ?>
+                            ], ['title' => Yii::t('app', 'Prepare this as a new expense'), 'class'=>'btn btn-primary btn-sm d-print-none']) ?>
+                            <?= Html::tag('span', Yii::t('app', 'Open payment'), ['class'=>'badge badge-info d-none d-print-inline']) ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
