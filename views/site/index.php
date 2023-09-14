@@ -14,6 +14,8 @@ ChartJSAsset::register($this);
 /** @var yii\web\View $this */
 
 $this->title = Yii::t('app', 'Home') . ' :: ' . Yii::$app->name;
+
+$this->context->fluid = false;
 ?>
 <div class="site-index">
 
@@ -27,23 +29,17 @@ $this->title = Yii::t('app', 'Home') . ' :: ' . Yii::$app->name;
     <div class="body-content">
 
         <div class="row"><!-- {{{ 1st row -->
-            <div class="col-lg-4">
+            <div class="col-lg-6 card pl-2 pt-2">
                 <h2><?= Yii::t('app', 'Cost Projects') ?></h2>
                 <p><?= Yii::t('app', 'Manage projects.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no projects} =1{is <b>one</b> project} other{are <b>#</b> projects}} in this system.', ['n' => \app\models\Costproject::find()->count()  ]); ?></p>
                 <p><?= Html::a( '<i class="fas fa-th-list"></i> '.Yii::t('app', 'List of Cost Projects').' '.'&raquo;', ['/costproject'], ['class'=>'btn btn-primary']) ?></p>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6 card">
                 <h2><?= Yii::t('app', 'Expenses') ?></h2>
                 <p><?= Yii::t('app', 'Manage expenses.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no expenses} =1{is <b>one</b> expense} other{are <b>#</b> expenses}} in this system.', ['n' => \app\models\Expense::find()->count()  ]); ?></p>
                 <p><?= Html::a( '<i class="fas fa-th-list"></i> '.Yii::t('app', 'List of Expenses') , ['/expense'], ['class'=>'btn btn-primary']) ?></p>
-            </div>
-            <div class="col-lg-4">
-            <h2><?= Yii::t('app', 'About') ?></h2>
-            <p><?= Yii::t('app', 'This project was inspired by the article about Haushaltsbuch apps in the c\'T magazine 19/2022.') ?>
-                <?= Yii::t('app', 'See <a href="{link}">here</a>', ['link'=>'https://www.heise.de/select/ct/2022/19/2217110544762309952']) ?>
-            </p>
             </div>
         </div><!-- }}} end 1st row -->
         <div class="row"><!-- {{{ 2nd row -->
