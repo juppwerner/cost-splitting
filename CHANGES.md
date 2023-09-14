@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## Rev. 10
+
+2023-09-14
+
+* [Cost Project](../costproject): Complete rewrite of cost breakdown
+* [Cost Project](../costproject): Cost Breakdown: Added messages about compensation payments between participants
+* [Cost Project](../costproject): Added initially showing/hiding currency dropdown depending on _Use currency_
+
 ## Rev. 9
 
 2023-06-27
