@@ -67,3 +67,30 @@ Browse the Application
 Finally, access the application in your browser by typing:
 
     $ ddev launch
+
+For database management, there is Adminer:
+
+    $ ddev launcha -a
+
+
+Enable the Debug Toolbar and gii
+--------------------------------
+
+In order to enable these tools, configure the _modules_ section in your `config/web-local.php` file:
+
+    <?php
+    return [
+        ...
+        'modules' => [
+            'debug' => [
+                'allowedHosts' => ['cost-splitting.ddev.site'],
+
+            ],
+            'gii' => [
+                'allowedIPs' => ['127.0.0.1', '::1', '172.19.0.8'],
+            ],
+        ],
+        ...
+
+where your hostname will be shown by the `ddev status`command, and the IP address will be the one as given by the `$_SERVER['REMOTE_ADDR']` variable.
+
