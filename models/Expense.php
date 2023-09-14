@@ -151,7 +151,10 @@ class Expense extends \yii\db\ActiveRecord
         foreach($this->costitems as $costitem) 
             $costitem->delete();
 
+        $participants = explode("\n", str_replace("\r\n", "\n", $this->costproject->participants));
+
         // Create cost item for payer with whole amount
+        /*
         $costitem = new Costitem;
         $costitem->expenseId = $this->id;
         $costitem->participant = $this->payedBy;
@@ -160,8 +163,7 @@ class Expense extends \yii\db\ActiveRecord
         $costitem->exchangeRate = $this->exchangeRate;
         if(!$costitem->save())
             die(\yii\helpers\VarDumper::dumpAsString($costitem->errors, 10, true));
-
-        $participants = explode("\n", str_replace("\r\n", "\n", $this->costproject->participants));
+        */
 
         switch($this->splitting)
         {
@@ -170,7 +172,7 @@ class Expense extends \yii\db\ActiveRecord
                 $costitem               = new Costitem;
                 $costitem->expenseId    = $this->id;
                 $costitem->participant  = $participant;
-                $costitem->amount       = -$this->amount/count($participants);
+                $costitem->amount       = $this->amount/count($participants);
                 $costitem->currency     = $this->currency;
                 $costitem->exchangeRate = $this->exchangeRate;
                 $costitem->save();
@@ -181,7 +183,7 @@ class Expense extends \yii\db\ActiveRecord
                 $costitem               = new Costitem;
                 $costitem->expenseId    = $this->id;
                 $costitem->participant  = $participant;
-                $costitem->amount       = -$this->amount/count(explode(';', $this->participants));
+                $costitem->amount       = $this->amount/count(explode(';', $this->participants));
                 $costitem->currency     = $this->currency;
                 $costitem->exchangeRate = $this->exchangeRate;
                 $costitem->save();

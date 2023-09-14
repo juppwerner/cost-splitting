@@ -55,7 +55,7 @@ $config = [
         'fixture' => [ // Fixture generation command line.
             'class' => 'yii\faker\FixtureController',
         ],
-        'migrate' => [
+        'migrate' => [ // {{{ 
             'class' => \yii\console\controllers\MigrateController::class,
             'migrationPath' => [
                 '@app/migrations',
@@ -66,7 +66,7 @@ $config = [
                 'Da\User\Migration',
                 'nemmo\attachments\migrations',
             ],
-        ],
+        ], // }}}
     ], // }}}
     'modules' => [ // {{{ 
         'attachments' => [ // {{{ 

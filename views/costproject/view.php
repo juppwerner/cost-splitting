@@ -15,6 +15,8 @@ use app\widgets\GridView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+\yii\helpers\Url::remember('', 'cost-project');
 \yii\web\YiiAsset::register($this);
 
 // Get expenses for grid
@@ -61,6 +63,7 @@ $expensesDataProvider = new ArrayDataProvider([
                 'attribute' => 'title',
                 'format' => 'html',
                 'value' => Html::tag('h4', $model->title),
+                'visible' => false,
             ],
             [
                 'attribute' => 'participants',
@@ -74,6 +77,7 @@ $expensesDataProvider = new ArrayDataProvider([
             [
                 'attribute' => 'currency',
                 'value' => CurrencyCodesDict::get($model->currency),
+                'visible' => $model->useCurrency,
             ],
             // 'id',
         ],
@@ -132,7 +136,7 @@ $expensesDataProvider = new ArrayDataProvider([
              ],
         ],
     ]) ?>
-    <div class="text-right"><strong><?= Yii::t('app', 'Total Expenses:') ?> <?= Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency) ?></strong>&nbsp;</div>
+    <!-- <div class="text-right"><strong><?= Yii::t('app', 'Total Expenses:') ?> <?= Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency) ?></strong>&nbsp;</div>-->
     <p>
         <?= Html::a(Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
         <?= Html::a(Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>

@@ -25,6 +25,11 @@ Adjust the components['db'] configuration in _config/db-local.php_ accordingly.
     'username' => 'costsplitting',
     'password' => 'costsplitting',
 
+Create a file _mysql_root.txt_, and put in the MySQL root password.
+
+Create a file _mysql_user.txt_, and put in the MySQL database user password (same as above).
+
+
 Docker networking creates a DNS entry for the host mysql available from your frontend container.
 
 In order to use console commands, e.g. to create new users (see below), configure the components > urlManager > scriptUrl in _config/console-local.php_.

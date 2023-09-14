@@ -15,6 +15,7 @@ use app\models\Costproject;
 
 $this->title = Yii::t('app', 'Cost Projects');
 $this->params['breadcrumbs'][] = $this->title;
+\yii\helpers\Url::remember('', 'cost-project');
 ?>
 <div class="costproject-index">
 
