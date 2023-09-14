@@ -120,7 +120,7 @@ return [
     'Save' => 'Speichern',
     'Save Filter Set' => 'Filter-Set speichern',
     'Search' => 'Suchen',
-    'See <a href="{link}">here</a>' => 'Siehe <a href="{link}">hier</a>',
+    'See <a href="{link}">here</a>.' => 'Siehe <a href="{link}">hier</a>.',
     'Select a participant ...' => 'Einen Teilnehmer auswählen ...',
     'Select one or more participants ...' => 'Einen oder mehrere Teilnehmer auswählen ...',
     'Select the cost project into which this expense falls' => 'Wählen Sie das Kostenprojekt aus, in welches die Ausgabe fällt',

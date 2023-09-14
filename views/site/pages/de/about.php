@@ -20,6 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
         Ausgaben werden den Personen zugeordnet, die bezahlt haben und denen, die profitiert haben.<br>
         Die Kostenaufteilung kann berechnen, welcher Teilnehmer dem anderen welche Beträge schuldet.
     </p>
+    <p>
+        <?= Yii::t('app', 'This project was inspired by the article about Haushaltsbuch apps in the c\'T magazine 19/2022.') ?>
+        <?= Yii::t('app', 'See <a href="{link}" target="_blank">here</a>.', ['link'=>'https://www.heise.de/select/ct/2022/19/2217110544762309952']) ?>
+    </p>
+
 </div>
 
 <?php // FOR TESTING ONLY: \yii\helpers\VarDumper::dump($_SERVER, 10, true); ?>
