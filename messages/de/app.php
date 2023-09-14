@@ -20,7 +20,7 @@ return [
     '(Select...)' => '(Auswählen)',
     '--- Select ---' => '--- Auswählen ---',
     'About' => 'Über',
-    'About {appName}' => 'Über {appName}',
+    'About <i>{appName}</i>' => 'Über <i>{appName}</i>',
     'Add Expense' => 'Ausgabe hinzufügen',
     'All Expenses' => 'Alle Ausgaben',
     'All Saved Filter Sets' => 'Alle gespeicherten Filter Sets',
