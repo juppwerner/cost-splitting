@@ -77,14 +77,24 @@ class ExpenseController extends Controller
     /**
      * Creates a new Expense model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param int $lastId ID of last created expense
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($lastId=null)
     {
         $model = new Expense();
 
         $model->itemDate = date('Y-m-d');
         $model->splitting = Expense::SPLITTING_EQUAL;
+
+        // Copy some default values from previous entry?
+        if(!empty($lastId)) {
+            $lastModel = $this->findModel(($lastId));
+            if(!empty($lastModel)) {
+                $model->itemDate = $lastModel->itemDate;
+                $model->payedBy = $lastModel->payedBy;    
+            }
+        }
 
         $model->load($this->request->get());
 
@@ -93,11 +103,12 @@ class ExpenseController extends Controller
                 Yii::$app->session->setFlash(
                     'success',
                     Html::tag('h4', Yii::t('app', 'Create New Expense'))
-                    . Yii::t('app', 'The expense <em>{title}</em> has been created.', ['title'=>$model->title]) . '<br>'
+                    . Html::tag('div', Yii::t('app', 'The expense <b>{title}</b> has been created.', ['title'=>$model->title])) . '<br>'
                     . Html::a(Yii::t('app', 'View Expense'), ['view', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm']) . ' '
-                    . Html::a(Yii::t('app', 'View Project'), ['costproject/view', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm'])
+                    . Html::a(Yii::t('app', 'View Project'), ['costproject/view', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm']) . ' '
+                    . Html::a(Yii::t('app', 'View Cost Breakdown'), ['costproject/breakdown', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm'])
                 );
-                return $this->redirect(['create', 'Expense[costprojectId]' => $model->costprojectId]);
+                return $this->redirect(['create', 'Expense[costprojectId]' => $model->costprojectId, 'lastId' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();

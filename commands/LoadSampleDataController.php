@@ -12,6 +12,7 @@ use yii\console\ExitCode;
 
 use app\models\Costproject;
 use app\models\Expense;
+use app\models\Costitem;
 
 /**
  * This command allows to load sample data.
@@ -33,9 +34,9 @@ class LoadSampleDataController extends Controller
         // Purge existing records?
         if($purge) {
             echo 'Purging data...'.PHP_EOL;
-            \app\models\Costproject::deleteAll();
-            \app\models\Expense::deleteAll();
-            \app\models\Costitem::deleteAll();
+            Costproject::deleteAll();
+            Expense::deleteAll();
+            Costitem::deleteAll();
             \Yii::$app->db->createCommand('ALTER TABLE `costproject` AUTO_INCREMENT=1;')->execute();
             \Yii::$app->db->createCommand('ALTER TABLE `expense` AUTO_INCREMENT=1;')->execute();
             \Yii::$app->db->createCommand('ALTER TABLE `costitem` AUTO_INCREMENT=1;')->execute();
@@ -47,14 +48,14 @@ id;title;participants;useCurrency;currency
 1;HartwigstraßenWG;"Anna__CR__Ben__CR__Clara";0;EUR
 EOL;
         $csvExpenses = <<< EOL
-title;costprojectId;payedBy;itemDate;amount;currency;splitting
-Internet XYZ 7/2022;1;Anna;2022-08-01;39.95;EUR;EQUAL
-Miete 8/2022;1;Ben;2022-08-03;"365.0";EUR;EQUAL
-Abschlag Stadtwerke 8/22;1;Clara;2022-08-04;"96.0";EUR;EQUAL
-Putzmittel;1;Anna;2022-08-11;13.79;EUR;EQUAL
-Obst und Gemüse (Markt);1;Clara;2022-08-13;"14.5";EUR;EQUAL
-Getränke Party;1;Ben;2022-08-13;"77.60";EUR;EQUAL
-Lebensmittel Rewe;1;Ben;2022-08-30;28.56;EUR;EQUAL
+title;costprojectId;payedBy;itemDate;amount;currency;exchangeRate;splitting
+Internet XYZ 7/2022;1;Anna;2022-08-01;39.95;EUR;1;EQUAL
+Miete 8/2022;1;Ben;2022-08-03;"365.0";EUR;1;EQUAL
+Abschlag Stadtwerke 8/22;1;Clara;2022-08-04;"96.0";EUR;1;EQUAL
+Putzmittel;1;Anna;2022-08-11;13.79;EUR;1;EQUAL
+Obst und Gemüse (Markt);1;Clara;2022-08-13;"14.5";EUR;1;EQUAL
+Getränke Party;1;Ben;2022-08-13;"77.60";EUR;1;EQUAL
+Lebensmittel Rewe;1;Ben;2022-08-30;28.56;EUR;1;EQUAL
 EOL;
         $datasets = [
             ['name'=>'projects', 'label'=>'Cost Project', 'model'=>'Costproject'],
