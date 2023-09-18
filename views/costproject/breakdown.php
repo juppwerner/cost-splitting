@@ -225,7 +225,7 @@ $amounts = array_values($personenKonten);
 // DEBUG VD::dump($personenKonten, 10, true);
 ?>
 
-    <h3><?= Yii::t('app', 'Participants') ?></h3>
+    <h3><?= Yii::t('app', 'Participants') ?></h3><!-- {{{ -->
     <div class="card-deck">
         <?php $persons = array_keys($personenKonten); sort($persons); ?>
         <?php foreach($persons as $person) : ?>
@@ -249,7 +249,7 @@ $amounts = array_values($personenKonten);
                     <?php if($personenKonten[$person]<0) : ?>
                         <?= Yii::t('app', '{person} hat nach Verrechnung aller Zahlungen und Geldübergaben noch Schulden in Höhe von {saldo}.', [
                             'person' => $person,
-                            'saldo' => Yii::$app->formatter->asCurrency($saldo, $model->currency)
+                            'saldo' => Yii::$app->formatter->asCurrency(abs($saldo), $model->currency)
                         ]) ?>
                     <?php else : ?>
                         <?= Yii::t('app', '{person} hat nach Verrechnung aller Zahlungen und Geldübergaben aktuell keine Schulden.', [
@@ -264,7 +264,7 @@ $amounts = array_values($personenKonten);
             </div>
         </div>
         <?php endforeach; ?>
-    </div>
+    </div><!-- }}} -->
 
     <h3><?= Yii::t('app', 'Compensation Payments') ?></h3>
 <?php
