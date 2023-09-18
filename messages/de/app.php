@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    '(Select)' => '(Auswählen)',
     '(Select...)' => '(Auswählen)',
     '--- Select ---' => '--- Auswählen ---',
     'About' => 'Über',
@@ -75,6 +76,8 @@ return [
     'Enter your username or your email' => 'Geben Sie Ihren Benutzernamen oder Ihre E-Mail ein',
     'Exchange Rate' => 'Wechselkurs',
     'Expense ID' => 'Ausgabe-ID',
+    'Expense' => 'Ausgabe',
+    'Expense Type' => 'Ausgabenart',
     'Expense: {title}' => 'Ausgabe: {title}',
     'Expenses' => 'Ausgaben',
     'Filter State' => 'Filter-Status',
@@ -97,6 +100,7 @@ return [
     'Manage costs and split them with your community.' => 'Verwalten Sie Kosten und teilen Sie sie in Ihrer Gemeinschaft auf.',
     'Manage expenses.' => 'Ausgaben verwalten.',
     'Manage projects.' => 'Projekte verwalten.',
+    'Money Transfer' => 'Ausgleichszahlung',
     'More...' => 'Mehr...',
     'Name' => 'Name',
     'New Cost Project' => 'Neues Kostenprojekt',

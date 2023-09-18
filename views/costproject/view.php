@@ -1,6 +1,7 @@
 <?php
 
 use yii\data\ArrayDataProvider;
+use yii\data\ActiveDataProvider;
 use app\components\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
@@ -20,9 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
 // Get expenses for grid
-$expensesDataProvider = new ArrayDataProvider([
-    'allModels' => $model->expenses,
-    'key' => 'id',
+$expensesDataProvider = new ActiveDataProvider([
+    //'allModels' => $model->expenses,
+    //'key' => 'id',
+    'query'=>$model->getExpenses(),
     'pagination' => [
         'pageSize' => 10,
     ],
@@ -106,10 +108,25 @@ $expensesDataProvider = new ArrayDataProvider([
                 },
                 'contentOptions' => ['class'=>'text-center'],
             ],
-            'title',
+            [
+                'attribute'=>'title',
+                'format' => 'html',
+                'value' => function($data) {
+                    $result = $data->title;
+                    if($data->expenseType===\app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER)
+                        $result .= ' <span class="badge badge-info">'.Yii::t('app', 'Money Transfer').'</span>';
+                    return $result;
+                },
+            ],
             [
                 'attribute'=>'payedBy',
                 'contentOptions' => ['class'=>'text-center'],
+            ],
+            [
+                'label' => Yii::t('app', 'Participants'),
+                'value' => function($data) {
+                    return join(', ', $data->getParticipants());
+                },
             ],
             [
                 'attribute'=>'amount',

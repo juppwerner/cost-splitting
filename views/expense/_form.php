@@ -36,6 +36,8 @@ if(!is_array($model->participants)) {
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
+<?= $form->field($model, 'expenseType')->dropdownList(\app\dictionaries\ExpenseTypesDict::all(), ['prompt'=>Yii::t('app', '(Select)')]) ?>
+
     <?= $form->field($model, 'itemDate')->input('date') ?>
 
     <?= $form->field($model, 'amount')->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
