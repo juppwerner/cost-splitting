@@ -35,7 +35,7 @@ $this->context->fluid = false;
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no projects} =1{is <b>one</b> project} other{are <b>#</b> projects}} in this system.', ['n' => \app\models\Costproject::find()->count()  ]); ?></p>
                 <p><?= Html::a( '<i class="fas fa-th-list"></i> '.Yii::t('app', 'List of Cost Projects').' '.'&raquo;', ['/costproject'], ['class'=>'btn btn-primary']) ?></p>
             </div>
-            <div class="col-lg-6 card">
+            <div class="col-lg-6 card pl-2 pt-2">
                 <h2><?= Yii::t('app', 'Expenses') ?></h2>
                 <p><?= Yii::t('app', 'Manage expenses.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no expenses} =1{is <b>one</b> expense} other{are <b>#</b> expenses}} in this system.', ['n' => \app\models\Expense::find()->count()  ]); ?></p>
