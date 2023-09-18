@@ -146,7 +146,7 @@ if ($isGuest) {
             ['label' => '<i class="fas fa-list"></i> '      .\Yii::t('app','Blog Admin'),       'url' => ['/blog/post/index'],      'visible'=>!$isGuest && $isAdmin],
             ['label' => '<i class="fas fa-user"></i> '      .\Yii::t('app','Users Admin'),      'url' => ['/user/admin', 'sort'=> '-last_login_at'], 'visible'=>!$isGuest && $isAdmin],
             ['label' => '<i class="fas fa-user"></i> '      .\Yii::t('app','Roles and Users'),  'url' => ['/user-management/roles-and-users']],
-            ['label' => '<i class="fas fa-search"></i> '    .\Yii::t('app','Lookups'),          'url' => ['/lookup'],               'visible'=>$isAdmin],
+            // DEACTIVATED: ['label' => '<i class="fas fa-search"></i> '    .\Yii::t('app','Lookups'),          'url' => ['/lookup'],               'visible'=>$isAdmin],
         ]; // }}} 
         // {{{ DEVELOPER
         if($isDev) {
