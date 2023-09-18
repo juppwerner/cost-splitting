@@ -151,7 +151,7 @@ $defaultParticipantDetails = [
     <div class="card border-primary mb-3" style="max-width: 18rem;page-break-after: always;">
         <div class="card-header font-weight-bold"><?= Yii::t('app', 'Gesamtkosten des Projekts') ?></div>
         <div class="card-body text-primary">
-            <h5 class="card-title text-center"><?= Yii::$app->formatter->asCurrency($totalProjectCost, $model->currency) ?></h5>
+            <h5 class="card-title text-center"><?= Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency) ?></h5>
         </div>
     </div>
 <?php
