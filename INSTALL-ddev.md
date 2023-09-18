@@ -34,7 +34,7 @@ Start the ddev docker containers:
     $ ddev start
 
     $ ddev composer install
-    $ ddev composer run-script post-create-project-command
+    $ ddev composer run-script post-create-project-cmd
 
 
 Initialize the Database
