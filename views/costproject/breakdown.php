@@ -108,7 +108,7 @@ $defaultParticipantDetails = [
                     <?php if($participant==$row->payedBy) : ?>
                     <?= Yii::$app->formatter->asDecimal($row->amount  * $row->exchangeRate, 2) ?>
                     <?php $participantSums[$participant] += $row->amount  * $row->exchangeRate; ?>
-                    <?php if($row->title!=='Ausgleichszahlung') : ?>
+                    <?php if($row->expenseType!==\app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER) : ?>
                         <?php $participantDetails[$participant]['sumExpenses'] += $row->amount  * $row->exchangeRate; $participantDetails[$participant]['countExpenses']++; ?>
                     <?php endif; ?>
                     <?php endif; ?>
@@ -119,7 +119,7 @@ $defaultParticipantDetails = [
                     <?php if($costitem->participant==$participant) : ?>
                         <?= Yii::$app->formatter->asDecimal($costitem->amount * $costitem->exchangeRate, 2) ?>
                         <?php $participantSums[$participant] -= $costitem->amount * $costitem->exchangeRate; ?>
-                        <?php if($row->title!=='Ausgleichszahlung') : ?>
+                        <?php if($row->expenseType!==\app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER) : ?>
                             <?php $totalProjectCost += $costitem->amount * $costitem->exchangeRate; ?>
                             <?php if($row->payedBy===$participant) : ?>
                                 <?php $participantDetails[$participant]['sumExpensesSelf'] += $costitem->amount * $costitem->exchangeRate; ?>
@@ -130,7 +130,7 @@ $defaultParticipantDetails = [
                             <?php $participantDetails[$participant]['totalProjectValue'] += $costitem->amount * $costitem->exchangeRate; ?>
                         <?php endif; ?>
                     <?php else : ?>
-                        <?php if($row->payedBy===$participant and $row->title!=='Ausgleichszahlung') : ?>
+                        <?php if($row->payedBy===$participant and $row->expenseType!==\app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER) : ?>
                             <?php $participantDetails[$row->payedBy]['sumExpensesOthers'] += $costitem->amount * $costitem->exchangeRate; ?>
                         <?php endif; ?>
                     <?php endif; ?>
@@ -309,12 +309,13 @@ foreach($personenKonten as $person=>$saldo) {
                             <?= str_replace('__empfaenger__', $empfaenger, $schlusszahlung['text']) ?>
                             <?= Html::a(Html::icon('refresh-cw') . Yii::t('app', 'Compensate'), [
                                 'expense/create', 
-                                'Expense[costprojectId]'=>$model->id, 
-                                'Expense[title]'=>'Ausgleichszahlung',
-                                'Expense[amount]'=>$schlusszahlung['amount'], 
-                                'Expense[payedBy]'=>$schlusszahlung['person'], 
-                                'Expense[splitting]'=>'SELECTED',
-                                'Expense[participants]'=>$empfaenger
+                                'Expense[costprojectId]'    =>$model->id, 
+                                'Expense[title]'            =>'Ausgleichszahlung',
+                                'Expense[expenseType]'      => \app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER,
+                                'Expense[amount]'           =>$schlusszahlung['amount'], 
+                                'Expense[payedBy]'          =>$schlusszahlung['person'], 
+                                'Expense[splitting]'        =>'SELECTED',
+                                'Expense[participants]'     =>$empfaenger
                             ], ['title' => Yii::t('app', 'Prepare this as a new expense'), 'class'=>'btn btn-primary btn-sm d-print-none']) ?>
                             <?= Html::tag('span', Yii::t('app', 'Open payment'), ['class'=>'badge badge-info d-none d-print-inline']) ?>
                             </li>
