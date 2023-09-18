@@ -18,3 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
+<?php if(!empty($model->costprojectId)) : ?>
+<?php $this->registerJs("
+    $('#expense-title').focus();
+",
+    yii\web\View::POS_READY,
+    'focus-title'
+); ?>
+
+<?php endif; ?>

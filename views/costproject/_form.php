@@ -1,11 +1,11 @@
 <?php
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 use kartik\select2\Select2;
 
+use app\components\Html;
 use app\dictionaries\CurrencyCodesDict;
 
 /** @var yii\web\View $this */
@@ -30,8 +30,8 @@ use app\dictionaries\CurrencyCodesDict;
     ]); ?>
     
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Cancel'), Url::previous('cost-project'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('x-square') . Yii::t('app', 'Cancel'), Url::previous('cost-project'), ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -43,11 +43,10 @@ var useCurrency = ".($model->useCurrency ? 'true' : 'false').";
 if(useCurrency==false)
     $('.field-costproject-currency').hide();
 $('#costproject-usecurrency').on('change', function() {
-    alert($(this).is(':checked'));
     if($(this).is(':checked')) {
-        $('.field-costproject-currency').show();
+        $('.field-costproject-currency').show('slow');
     } else {
-        $('.field-costproject-currency').hide();
+        $('.field-costproject-currency').hide('slow');
     }
 
 });

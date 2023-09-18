@@ -1,7 +1,7 @@
 <?php
 
 use yii\data\ArrayDataProvider;
-use yii\helpers\Html;
+use app\components\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -45,9 +45,9 @@ $expensesDataProvider = new ArrayDataProvider([
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Cost Breakdown'), ['breakdown', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Html::icon('file-text') . Yii::t('app', 'Cost Breakdown'), ['breakdown', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Html::icon('trash-2') . Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
@@ -84,7 +84,7 @@ $expensesDataProvider = new ArrayDataProvider([
     ]) ?>
 
     <h3><?= Yii::t('app', 'Expenses') ?></h3>
-    <p><?= Html::a(Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?></p>
+    <p><?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?></p>
     <?= GridView::widget([
         'id' => 'expenses-grid',
         'dataProvider' => $expensesDataProvider,
@@ -138,8 +138,8 @@ $expensesDataProvider = new ArrayDataProvider([
     ]) ?>
     <!-- <div class="text-right"><strong><?= Yii::t('app', 'Total Expenses:') ?> <?= Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency) ?></strong>&nbsp;</div>-->
     <p>
-        <?= Html::a(Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
-        <?= Html::a(Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Html::icon('list') . Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
     </p>
 
     <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->

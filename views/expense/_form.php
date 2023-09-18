@@ -1,11 +1,12 @@
 <?php
 
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 use kartik\select2\Select2;
 
+use app\components\Html;
 use app\dictionaries\CurrencyCodesDict;
 use app\models\Costproject;
 use app\models\Expense;
@@ -75,7 +76,8 @@ if(!is_array($model->participants)) {
     ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('x-square') . Yii::t('app', 'Cancel'), Url::previous('cost-project'), ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

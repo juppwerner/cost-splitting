@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use app\components\BaseActiveRecord;
 
 /**
  * This is the model class for table "{{%costproject}}".
@@ -22,8 +23,10 @@ use yii\db\ActiveRecord;
  *
  * @property Expense[] $expenses 
  */
-class Costproject extends \yii\db\ActiveRecord
+class Costproject extends BaseActiveRecord
 {
+    public $recordNameTemplate = '{title} (#{id})';
+
     // {{{ tableName
     /**
      * {@inheritdoc}
