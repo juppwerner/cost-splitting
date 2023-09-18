@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Costproject;
 use app\models\search\CostprojectSearch;
+use Yii;
+use yii\bootstrap4\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -94,6 +96,11 @@ class CostprojectController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                Yii::$app->session->addFlash('success', 
+                    Html::tag('h4', Yii::t('app', 'Create New Cost Project'))
+                    . Html::tag('p', Yii::t('app', 'The cost project {name} has been created.', ['name'=>$model->recordName]))
+                    . Html::a(Html::icon('plus-square') . Yii::t('app', 'Add a first expense'), ['expense/create', 'Expense[costprojectId]' => $model->id], ['class' => 'btn btn-primary btn-sm'])
+                );
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
