@@ -1,11 +1,11 @@
 <?php
 
 use yii\data\ArrayDataProvider;
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\VarDumper as VD;
 use yii\widgets\DetailView;
 
+use app\components\Html;
 use app\dictionaries\CurrencyCodesDict;
 use app\models\Expense;
 use app\widgets\GridView;
@@ -42,8 +42,8 @@ $defaultParticipantDetails = [
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'View'), ['view', 'id' => $model->id], ['class' => 'btn btn-primary d-print-none']) ?>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary d-print-none']) ?>
+        <?= Html::a(Html::icon('eye') . Yii::t('app', 'View'), ['view', 'id' => $model->id], ['class' => 'btn btn-primary d-print-none']) ?>
+        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary d-print-none']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -307,7 +307,7 @@ foreach($personenKonten as $person=>$saldo) {
                         <?php foreach($schlusszahlungen2 as $schlusszahlung) : ?>
                         <li>
                             <?= str_replace('__empfaenger__', $empfaenger, $schlusszahlung['text']) ?>
-                            <?= Html::a('Ausgleichen', [
+                            <?= Html::a(Html::icon('refresh-cw') . Yii::t('app', 'Compensate'), [
                                 'expense/create', 
                                 'Expense[costprojectId]'=>$model->id, 
                                 'Expense[title]'=>'Ausgleichszahlung',
