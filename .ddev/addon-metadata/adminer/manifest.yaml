@@ -1,7 +1,7 @@
 name: adminer
 repository: ddev/ddev-adminer
 version: v0.2.2
-install_date: "2023-09-14T11:12:13+02:00"
+install_date: "2023-09-18T20:23:35+02:00"
 project_files:
     - docker-compose.adminer.yaml
     - adminer
