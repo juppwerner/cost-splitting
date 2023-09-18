@@ -149,6 +149,8 @@ class Costproject extends BaseActiveRecord
     {
         $total = 0;
         foreach($this->expenses as $expense) {
+            if($expense->expenseType === \app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER)
+                continue;
             $total += $expense->amount * $expense->exchangeRate;
         }
         return $total;
