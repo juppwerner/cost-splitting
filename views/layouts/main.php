@@ -263,6 +263,7 @@ if(isset($this->params['breadcrumbs'])) {
 </footer>
 
 <?php $this->endBody() ?>
+<script>feather.replace();</script>
 </body>
 </html>
 <?php $this->endPage() ?>
