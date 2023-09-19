@@ -64,4 +64,9 @@ class User extends BaseUser
     public function getFull_name() {
         return $this->displayName;
     } // }}} 
+    public function getCostProjects()
+    {
+        return $this->hasMany(CostProject::class, ['id' => 'costprojectId'])
+            ->viaTable('{{%user_costproject}}', ['userId' => 'id']);
+    }
 }

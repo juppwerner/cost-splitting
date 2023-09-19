@@ -145,6 +145,7 @@ class Costproject extends BaseActiveRecord
     {
         return $this->hasMany(Expense::class, ['costprojectId' => 'id']);
     } // }}} 
+    // {{{ getTotalExpenses
     public function getTotalExpenses()
     {
         $total = 0;
@@ -154,6 +155,13 @@ class Costproject extends BaseActiveRecord
             $total += $expense->amount * $expense->exchangeRate;
         }
         return $total;
+    } // }}} 
+
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['id' => 'userId'])
+            ->viaTable('user_costproject', ['costprojectId' => 'id']);
+
     }
     // {{{ *** Blameable Methods ***
     // {{{ getCreateUser

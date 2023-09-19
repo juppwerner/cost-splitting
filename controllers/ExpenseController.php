@@ -92,6 +92,7 @@ class ExpenseController extends Controller
         if(!empty($lastId)) {
             $lastModel = $this->findModel(($lastId));
             if(!empty($lastModel)) {
+                $model->expenseType = $lastModel->expenseType;
                 $model->itemDate = $lastModel->itemDate;
                 $model->payedBy = $lastModel->payedBy;    
             }

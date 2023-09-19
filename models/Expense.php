@@ -72,6 +72,7 @@ class Expense extends \yii\db\ActiveRecord
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title', 'costprojectId', 'payedBy', 'currency', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
+            ['costprojectId', 'validateCostproject'],
             [['expenseType'], 'in', 'range' => ['expense', 'transfer']],
             [['itemDate', 'participants'], 'safe'],
             [['amount'], 'number'],
@@ -87,6 +88,22 @@ class Expense extends \yii\db\ActiveRecord
             }],
         ];
     } // }}}
+    // {{{ validateCostproject
+    /**
+     * Validates that costprojectId is one of teh user's assigned cost projects
+     */
+    public function validateCostproject($attribute, $params, $validator)
+    {
+        $validIds = Costproject::find()
+            ->select('costproject.id')
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->column();
+        if (!in_array($this->$attribute, $validIds)) {
+            $this->addError($attribute, Yii::t('app', 'The cost project must be one of your assigned cost projects.'));
+        }
+    } // }}} 
     // {{{ attributeLabels
     /**
      * {@inheritdoc}
