@@ -2,6 +2,21 @@
 
 This page lists changes for this application.
 
+## Rev. 11
+
+2023-09-20
+
+* Harmonized Gridview table styles
+* Added $ sign as brand icon
+* Changed jomepage card buttons to button group
+* Create new expense: added default expense type
+* Added User Costproject n:m
+* Expenses: Expense Title: Add badge if type is 'money transfer' Added showing participants
+* Expense: Added expense/expenseType
+* Added feather icons
+* New Cost Project created: added flash message with link to add new expense
+* Create next new expense: pass last ID to copy some values from previous expense
+
 ## Rev. 10
 
 2023-09-14
