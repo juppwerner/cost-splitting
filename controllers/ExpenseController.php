@@ -86,6 +86,7 @@ class ExpenseController extends Controller
         $model = new Expense();
 
         $model->itemDate = date('Y-m-d');
+        $model->expenseType = \app\dictionaries\ExpenseTypesDict::EXPENSETYPE_EXPENSE;
         $model->splitting = Expense::SPLITTING_EQUAL;
 
         // Copy some default values from previous entry?
