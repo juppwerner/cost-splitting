@@ -2,6 +2,7 @@
 
 namespace app\models\search;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Costproject;
@@ -40,8 +41,13 @@ class CostprojectSearch extends Costproject
      */
     public function search($params)
     {
-        $query = Costproject::find();
-
+        $query = Costproject::find()->with(['users' => function($query) {
+            $query->andWhere(['id' => Yii::$app->user->id]);
+        }]);
+        $query = Costproject::find()
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

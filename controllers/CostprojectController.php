@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Costproject;
 use app\models\search\CostprojectSearch;
+use Yii;
+use app\components\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -94,6 +96,16 @@ class CostprojectController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                // Save user <->costproject n:m relation
+                Yii::$app->db->createCommand()->insert('{{user_costproject}}', [
+                    'userId' => Yii::$app->user->id,
+                    'costprojectId' => $model->id,
+                ])->execute();
+                Yii::$app->session->addFlash('success', 
+                    Html::tag('h4', Yii::t('app', 'Create New Cost Project'))
+                    . Html::tag('p', Yii::t('app', 'The cost project {name} has been created.', ['name'=>$model->recordName]))
+                    . Html::a(Html::icon('plus-square') . Yii::t('app', 'Add a first expense'), ['expense/create', 'Expense[costprojectId]' => $model->id], ['class' => 'btn btn-primary btn-sm'])
+                );
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -134,7 +146,27 @@ class CostprojectController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = Costproject::find()
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id, 'costproject.id' => $id, 'created_by'=>Yii::$app->user->id])
+            ->one();
+        if(!empty($model)) {
+            if($model->delete()) {
+                Yii::$app->session->addFlash(
+                    'success', 
+                    Html::tag('h4', 'Delete Cost Project')
+                    . Yii::t('app', 'The cost project {name} has been deleted.', ['name'=>$model->recordName])
+                );
+            }
+        } else {
+                Yii::$app->session->addFlash(
+                    'warning', 
+                    Html::tag('h4', 'Delete Cost Project')
+                    . Yii::t('app', 'Error!').' '
+                    . Yii::t('app', 'Could not delete the cost project with ID #{id}.', ['id'=>$id])
+                );
+        }
 
         return $this->redirect(['index']);
     }
@@ -148,7 +180,11 @@ class CostprojectController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Costproject::findOne(['id' => $id])) !== null) {
+        if (($model = Costproject::find()
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id, 'costproject.id' => $id])
+            ->one()) !== null) {
             return $model;
         }
 

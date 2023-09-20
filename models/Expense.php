@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $title
  * @property int $costprojectId
+ * @property string $expenseType
  * @property string $payedBy
  * @property string|null $itemDate
  * @property float|null $amount
@@ -71,6 +72,8 @@ class Expense extends \yii\db\ActiveRecord
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title', 'costprojectId', 'payedBy', 'currency', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
+            ['costprojectId', 'validateCostproject'],
+            [['expenseType'], 'in', 'range' => ['expense', 'transfer']],
             [['itemDate', 'participants'], 'safe'],
             [['amount'], 'number'],
             [['currency'], 'string', 'min' => 3, 'max' => 3],
@@ -85,6 +88,22 @@ class Expense extends \yii\db\ActiveRecord
             }],
         ];
     } // }}}
+    // {{{ validateCostproject
+    /**
+     * Validates that costprojectId is one of teh user's assigned cost projects
+     */
+    public function validateCostproject($attribute, $params, $validator)
+    {
+        $validIds = Costproject::find()
+            ->select('costproject.id')
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->column();
+        if (!in_array($this->$attribute, $validIds)) {
+            $this->addError($attribute, Yii::t('app', 'The cost project must be one of your assigned cost projects.'));
+        }
+    } // }}} 
     // {{{ attributeLabels
     /**
      * {@inheritdoc}
@@ -96,6 +115,7 @@ class Expense extends \yii\db\ActiveRecord
             'title' => Yii::t('app', 'Title'),
             'payedBy' => Yii::t('app', 'Payed By'),
             'costprojectId' => Yii::t('app', 'Cost Project'),
+            'expenseType' => Yii::t('app', 'Expense Type'),
             'itemDate' => Yii::t('app', 'Item Date'),
             'amount' => Yii::t('app', 'Amount'),
             'currency' => Yii::t('app', 'Currency'),
@@ -120,6 +140,20 @@ class Expense extends \yii\db\ActiveRecord
     { 
         return $this->hasMany(Costitem::class, ['expenseId' => 'id']); 
     } // }}}
+    // {{{ getParticipants
+    /**
+     * Returns an array of participant names
+     *
+     * @return mixed
+     */
+    public function getParticipants()
+    {
+        $result = [];
+        foreach($this->costitems as $costitem)
+            $result[] = $costitem->participant;
+        sort($result);
+        return $result;
+    } // }}} 
     // {{{ getCostproject
     /**
      * Gets query for [[Costproject]].

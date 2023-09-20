@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use app\components\BaseActiveRecord;
 
 /**
  * This is the model class for table "{{%costproject}}".
@@ -22,8 +23,10 @@ use yii\db\ActiveRecord;
  *
  * @property Expense[] $expenses 
  */
-class Costproject extends \yii\db\ActiveRecord
+class Costproject extends BaseActiveRecord
 {
+    public $recordNameTemplate = '{title} (#{id})';
+
     // {{{ tableName
     /**
      * {@inheritdoc}
@@ -142,13 +145,23 @@ class Costproject extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Expense::class, ['costprojectId' => 'id']);
     } // }}} 
+    // {{{ getTotalExpenses
     public function getTotalExpenses()
     {
         $total = 0;
         foreach($this->expenses as $expense) {
+            if($expense->expenseType === \app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER)
+                continue;
             $total += $expense->amount * $expense->exchangeRate;
         }
         return $total;
+    } // }}} 
+
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['id' => 'userId'])
+            ->viaTable('user_costproject', ['costprojectId' => 'id']);
+
     }
     // {{{ *** Blameable Methods ***
     // {{{ getCreateUser

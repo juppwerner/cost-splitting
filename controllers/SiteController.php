@@ -67,7 +67,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $costprojects = \app\models\Costproject::find()
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->count();
+        return $this->render('index', ['costprojects'=>$costprojects]);
     }
 
     /**

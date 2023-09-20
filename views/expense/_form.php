@@ -1,37 +1,46 @@
 <?php
 
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 use kartik\select2\Select2;
 
+use app\components\Html;
 use app\dictionaries\CurrencyCodesDict;
 use app\models\Costproject;
 use app\models\Expense;
 
+/** @var yii\web\View $this */
+/** @var app\models\Expense $model */
+/** @var yii\widgets\ActiveForm $form */
+
+// Get a list of all user-assigned cost projects
+$costprojects = Costproject::find()
+    ->select(['costproject.*'])
+    ->innerJoinWith('users')
+    ->where(['user.id' => Yii::$app->user->id])
+    ->all();
+
+// Get a list of all participants, if a cost project is already selected
 $participants = null;
 if(!empty($model->costprojectId))
     $participants = Costproject::findOne(['id' => $model->costprojectId])->getParticipantsList();
-
-
 if(!is_array($model->participants)) {
     if(empty($model->participants))
         $model->participants = array();
     else
         $model->participants = explode(';', $model->participants);
 }
-    
-/** @var yii\web\View $this */
-/** @var app\models\Expense $model */
-/** @var yii\widgets\ActiveForm $form */
 ?>
 
 <div class="expense-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'costprojectId')->dropDownList(ArrayHelper::map(Costproject::find()->all(), 'id', 'title'), ['autofocus'=>'autofocus', 'prompt'=>Yii::t('app', '--- Select ---')])->hint(Yii::t('app','Select the cost project into which this expense falls')) ?>
+    <?= $form->field($model, 'costprojectId')->dropDownList(ArrayHelper::map($costprojects, 'id', 'title'), ['autofocus'=>'autofocus', 'prompt'=>Yii::t('app', '--- Select ---')])->hint(Yii::t('app','Select the cost project into which this expense falls')) ?>
+
+    <?= $form->field($model, 'expenseType')->dropdownList(\app\dictionaries\ExpenseTypesDict::all(), ['prompt'=>Yii::t('app', '(Select)')]) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
@@ -75,7 +84,8 @@ if(!is_array($model->participants)) {
     ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('x-square') . Yii::t('app', 'Cancel'), Url::previous('cost-project'), ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

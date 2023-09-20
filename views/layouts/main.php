@@ -4,12 +4,12 @@
 /** @var string $content */
 
 use yii\bootstrap4\Breadcrumbs;
-use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\helpers\Url;
 
 use app\assets\AppAsset;
+use app\components\Html;
 use app\widgets\Alert;
 
 // Create copyright text
@@ -146,7 +146,7 @@ if ($isGuest) {
             ['label' => '<i class="fas fa-list"></i> '      .\Yii::t('app','Blog Admin'),       'url' => ['/blog/post/index'],      'visible'=>!$isGuest && $isAdmin],
             ['label' => '<i class="fas fa-user"></i> '      .\Yii::t('app','Users Admin'),      'url' => ['/user/admin', 'sort'=> '-last_login_at'], 'visible'=>!$isGuest && $isAdmin],
             ['label' => '<i class="fas fa-user"></i> '      .\Yii::t('app','Roles and Users'),  'url' => ['/user-management/roles-and-users']],
-            ['label' => '<i class="fas fa-search"></i> '    .\Yii::t('app','Lookups'),          'url' => ['/lookup'],               'visible'=>$isAdmin],
+            // DEACTIVATED: ['label' => '<i class="fas fa-search"></i> '    .\Yii::t('app','Lookups'),          'url' => ['/lookup'],               'visible'=>$isAdmin],
         ]; // }}} 
         // {{{ DEVELOPER
         if($isDev) {
@@ -201,6 +201,7 @@ $menuItems[] = ['label' => '<i class="fas fa-language"></i> '.Yii::t('app', 'Lan
     <?php
     NavBar::begin([ // {{{ 
         'brandLabel' => /* Html::img('@web/img/stell-logo-white.svg', ['style'=>'height:25px']) . '&nbsp;&nbsp;' . ' - ' . */
+            Html::icon('dollar-sign') . '&nbsp;&nbsp;' .
             Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         // Make nav bar extend to ful width:
@@ -243,7 +244,9 @@ if(isset($this->params['breadcrumbs'])) {
             'links' => $breadcrumbs,
             'homeLink' => false,
             'encodeLabels' => false,
+            'navOptions' => ['aria-label' => 'breadcrumb', 'class'=>'d-print-none'],
         ]) ?>
+        <div class="d-none d-print-block float-right"><h3><?= Yii::$app->name ?></h3></div>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
@@ -261,6 +264,7 @@ if(isset($this->params['breadcrumbs'])) {
 </footer>
 
 <?php $this->endBody() ?>
+<script>feather.replace();</script>
 </body>
 </html>
 <?php $this->endPage() ?>

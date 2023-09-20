@@ -1,17 +1,19 @@
 <?php
 
 use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 use app\models\Costitem;
-use app\widgets\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Expenses'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['costproject/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->costproject->recordName, 'url' => ['costproject/view', 'id' => $model->costprojectId]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Expenses')];
 $this->params['breadcrumbs'][] = $model->title;
 \yii\web\YiiAsset::register($this);
 
@@ -41,11 +43,11 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            [
+            /* [
                 'attribute'=>'title',
                 'format'=>'html',
                 'value'=>Html::tag('h4', $model->title),
-            ],
+            ], */
             [
                 'attribute'=>'costprojectId',
                 'format'=>'html',
@@ -64,7 +66,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
                 'attribute'=>'amount',
                 'value' => Yii::$app->formatter->asCurrency($model->amount, $model->currency),
             ],
-             [
+            [
                 'attribute'=>'amount',
                 'value' => sprintf('%s (%0.5f %s/%s)',
                     Yii::$app->formatter->asCurrency($model->amount * $model->exchangeRate, $model->costproject->currency),
@@ -86,6 +88,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= GridView::widget([
         'id' => 'expenses-grid',
         'dataProvider' => $costitemsDataProvider,
+        'tableOptions' => ['class' => 'table table-striped table-responsive table-hover'],
         'columns' => [
             [
                 'attribute'=>'participant',
@@ -103,6 +106,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
                 'value' => function($data) use($model) {
                     return sprintf('%0.6f %s/%s', $data->exchangeRate, $data->currency, $model->costproject->currency);
                 },
+                'visible' => $model->costproject->useCurrency,
             ],
             [
                 'label' => Yii::t('app', 'Amount {currency}', ['currency'=>$model->costproject->currency]),
@@ -110,6 +114,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
                 'value' => function($data) use($model) {
                     return Yii::$app->formatter->asCurrency($data->amount * $data->exchangeRate, $model->costproject->currency);
                 },
+                'visible' => $model->costproject->useCurrency,
             ],
         ],
     ]) ?>
@@ -117,6 +122,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,
+        'options' => ['class' => 'table table-striped table-responsive table-hover'],
         'attributes' => [
             ['attribute'=>'created_at', 'format'=>'html', 'value'=>Yii::$app->formatter->asDateTime($model->created_at)],
             ['attribute'=>'createUserName', 'format'=>'html'],
