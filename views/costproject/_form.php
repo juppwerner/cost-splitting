@@ -19,7 +19,6 @@ use app\dictionaries\CurrencyCodesDict;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus'=>'autofocus']) ?>
     <?= $form->field($model, 'participants')->textArea(['rows' => 4])->hint(Yii::t('app', 'Enter one participant per line')) ?>
-    <?= $form->field($model, 'useCurrency')->checkbox() ?>
     <?= $form->field($model, 'currency')->widget(Select2::classname(), [
         'data' => CurrencyCodesDict::all(),
         // 'language' => 'de',
@@ -27,7 +26,8 @@ use app\dictionaries\CurrencyCodesDict;
         'pluginOptions' => [
             'allowClear' => true
         ],
-    ]); ?>
+    ])->hint(Yii::t('app', 'Select the project currency')); ?>
+    <?= $form->field($model, 'useCurrency')->checkbox()->hint(Yii::t('app', 'Check to capture expenses using foreign currencies')) ?>
     
     <div class="form-group">
         <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
@@ -40,8 +40,9 @@ use app\dictionaries\CurrencyCodesDict;
 
 <?php $this->registerJs("
 var useCurrency = ".($model->useCurrency ? 'true' : 'false').";
-if(useCurrency==false)
-    $('.field-costproject-currency').hide();
+// if(useCurrency==false)
+//    $('.field-costproject-currency').hide();
+/*
 $('#costproject-usecurrency').on('change', function() {
     if($(this).is(':checked')) {
         $('.field-costproject-currency').show('slow');
@@ -50,6 +51,7 @@ $('#costproject-usecurrency').on('change', function() {
     }
 
 });
+*/
 ",
     yii\web\View::POS_READY,
     'usecurrency-change'

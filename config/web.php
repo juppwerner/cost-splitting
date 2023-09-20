@@ -49,6 +49,11 @@ $config = [
         'errorHandler' => [ // {{{ 
             'errorAction' => 'site/error',
         ], // }}} 
+        'formatter' => [ // {{{ 
+            // Use own formatter for e.g. asCheckbox
+            'class' => '\app\components\Formatter',
+            //'timeZone' => !empty(\Yii::$app->user) && \Yii::$app->user->isGuest ? 'UTC' : \Yii::$app->user->identity->profile->timezone,
+        ], // }}} 
         'i18n' => [ // {{{ 
             'translations' => [
                 'app*' => [

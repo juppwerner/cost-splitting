@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /** @var yii\web\View $this */
 /** @var app\models\search\ExpenseSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -33,7 +34,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'tableOptions' => ['class'=>'table table-striped table-bordered table-responsive'],
+        'tableOptions' => ['class'=>'table table-striped table-responsive table-hover'],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [

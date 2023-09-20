@@ -4,12 +4,12 @@
 /** @var string $content */
 
 use yii\bootstrap4\Breadcrumbs;
-use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\helpers\Url;
 
 use app\assets\AppAsset;
+use app\components\Html;
 use app\widgets\Alert;
 
 // Create copyright text
@@ -201,6 +201,7 @@ $menuItems[] = ['label' => '<i class="fas fa-language"></i> '.Yii::t('app', 'Lan
     <?php
     NavBar::begin([ // {{{ 
         'brandLabel' => /* Html::img('@web/img/stell-logo-white.svg', ['style'=>'height:25px']) . '&nbsp;&nbsp;' . ' - ' . */
+            Html::icon('dollar-sign') . '&nbsp;&nbsp;' .
             Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         // Make nav bar extend to ful width:
