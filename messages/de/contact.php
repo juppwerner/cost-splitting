@@ -17,17 +17,17 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Click on the code to get another one' => 'Klicken Sie auf den Code, um einen anderen zu erhalten',
     'Contact' => 'Kontakt',
+    'Email' => 'E-Mail',
     'If you have business inquiries or other questions, please fill out the following form to contact us.' => 'Wenn Sie geschäftliche oder sonstige Anfragen haben, füllen Sie diese Formular aus, um un szu kontaktieren.',
+    'Message' => 'Nachricht',
     'Return to home page' => 'Zurück zur Home-Seite',
+    'Subject' => 'Betreff',
     'Submit' => 'Senden',
     'Thank you for contacting us.' => 'Vielen Dank für Ihre Kontaktanfrage.',
     'Thank you.' => 'Vielen Dank.',
-    'We will respond to you as soon as possible.' => 'Wir werden Ihnen so bald wie möglich antworten.',
-    'Email' => 'E-Mail',
-    'Message' => 'Nachricht',
-    'Subject' => 'Betreff',
     'Verification Code' => 'Überprüfungs-Code',
+    'We will respond to you as soon as possible.' => 'Wir werden Ihnen so bald wie möglich antworten.',
     'Your Name' => 'Ihr Name',
-    'Click on the code to get another one' => 'Klicken Sie auf den Code, um einen anderen zu erhalten'
 ];
