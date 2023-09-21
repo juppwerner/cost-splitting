@@ -83,7 +83,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
             [
                 'attribute'=>'costprojectId',
                 'format'=>'html',
-                'filter'=>ArrayHelper::map(Costproject::find()->all(), 'id', 'title'),
+                'filter'=>ArrayHelper::map(Costproject::find()->innerJoinWith('users')->where(['user.id' => Yii::$app->user->id])->all(), 'id', 'title'),
                 'value'=>function($data) {
                     return Html::a($data->costproject->title, ['costproject/view', 'id'=>$data->costprojectId], ['title'=>Yii::t('app', 'View cost project: {title}', ['title'=>$data->costproject->title])]);
                 },
