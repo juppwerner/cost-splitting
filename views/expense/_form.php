@@ -5,33 +5,17 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 use kartik\select2\Select2;
+use kartik\typeahead\TypeaheadBasic;
 
 use app\components\Html;
 use app\dictionaries\CurrencyCodesDict;
-use app\models\Costproject;
 use app\models\Expense;
 
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
 /** @var yii\widgets\ActiveForm $form */
 
-// Get a list of all user-assigned cost projects
-$costprojects = Costproject::find()
-    ->select(['costproject.*'])
-    ->innerJoinWith('users')
-    ->where(['user.id' => Yii::$app->user->id])
-    ->all();
 
-// Get a list of all participants, if a cost project is already selected
-$participants = null;
-if(!empty($model->costprojectId))
-    $participants = Costproject::findOne(['id' => $model->costprojectId])->getParticipantsList();
-if(!is_array($model->participants)) {
-    if(empty($model->participants))
-        $model->participants = array();
-    else
-        $model->participants = explode(';', $model->participants);
-}
 ?>
 
 <div class="expense-form">
@@ -42,7 +26,14 @@ if(!is_array($model->participants)) {
 
     <?= $form->field($model, 'expenseType')->dropdownList(\app\dictionaries\ExpenseTypesDict::all(), ['prompt'=>Yii::t('app', '(Select)')]) ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= '' // $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'title')->widget(TypeaheadBasic::classname(), [
+        'data' => $titles,
+        'dataset' => ['limit' => 10],
+        'options' => ['placeholder' => 'Filter as you type ...'],
+        'pluginOptions' => ['highlight'=>true, 'minLength' => 0],
+    ]); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 

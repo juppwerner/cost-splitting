@@ -25,7 +25,7 @@ abstract class ExpenseTypesDict
             return $all[$key];
         }
 
-        return Yii::t('app', '(not set');
+        return Yii::t('app', '(not set)');
     } // }}} 
 }
 
