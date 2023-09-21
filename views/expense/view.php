@@ -88,7 +88,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= GridView::widget([
         'id' => 'expenses-grid',
         'dataProvider' => $costitemsDataProvider,
-        'tableOptions' => ['class' => 'table table-striped table-responsive table-hover'],
+        'tableOptions' => ['class' => 'table table-striped table-responsive-sm table-hover'],
         'columns' => [
             [
                 'attribute'=>'participant',
@@ -122,7 +122,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,
-        'options' => ['class' => 'table table-striped table-responsive table-hover'],
+        'options' => ['class' => 'table table-striped table-responsive-sm table-hover'],
         'attributes' => [
             ['attribute'=>'created_at', 'format'=>'html', 'value'=>Yii::$app->formatter->asDateTime($model->created_at)],
             ['attribute'=>'createUserName', 'format'=>'html'],

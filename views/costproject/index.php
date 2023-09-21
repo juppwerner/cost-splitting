@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'tableOptions' => ['class'=>'table table-striped table-responsive table-hover'],
+        'tableOptions' => ['class'=>'table table-striped table-responsive-sm table-hover'],
         'columns' => [
             [
                 'class' => ActionColumn::className(),

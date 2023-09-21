@@ -68,7 +68,7 @@ $expensesDataProvider = new ActiveDataProvider([
     <?= GridView::widget([
         'id' => 'expenses-grid',
         'dataProvider' => $expensesDataProvider,
-        'tableOptions' => ['class' => 'table table-striped table-responsive table-hover'],
+        'tableOptions' => ['class' => 'table table-striped table-responsive-sm table-hover'],
         'columns' => [
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -140,7 +140,7 @@ $expensesDataProvider = new ActiveDataProvider([
     <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,
-        'options' => ['class' => 'table table-striped table-responsive table-hover'],
+        'options' => ['class' => 'table table-striped table-responsive-sm table-hover'],
         'attributes' => [
             ['attribute'=>'created_at', 'format'=>'html', 'value'=>Yii::$app->formatter->asDateTime($model->created_at)],
             ['attribute'=>'createUserName', 'format'=>'html'],

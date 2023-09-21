@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## Rev. 12
+
+2023-09-21
+
+* Changed internal mailer library
+* Harmonized table CSS
+
 ## Rev. 11
 
 2023-09-20
