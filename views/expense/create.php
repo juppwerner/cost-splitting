@@ -6,6 +6,13 @@ use yii\helpers\Html;
 /** @var app\models\Expense $model */
 
 $this->title = Yii::t('app', 'Create Expense');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['costproject/index']];
+if(!empty($model->costprojectId)) {
+    $costproject = \app\models\Costproject::findOne($model->costprojectId);
+    if(!empty($costproject)) {
+        $this->params['breadcrumbs'][] = ['label' => $costproject->recordName, 'url' => ['costproject/view', 'id' => $model->costprojectId]];
+    }
+}
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Expenses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
