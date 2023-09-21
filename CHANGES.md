@@ -2,6 +2,18 @@
 
 This page lists changes for this application.
 
+## Rev. 13
+
+2023-09-21
+
+* [Homepage](../site/index): Count of expenses now only shows user expenses
+* Languages Menue: Added country flags
+* Expenses Views: Added button icons
+* Expenses Grid: Only show project filter for user projects
+* Adding a new expense: Show message when there is no cost project yet
+* Forms: hint-block now red
+* New Cost Project: Added intro message
+
 ## Rev. 12
 
 2023-09-21
