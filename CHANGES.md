@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## Rev. 15
+
+2023-09-21
+
+* Homepage cards: increased padding
+* Translated [contact form](../site/contact)
+
 ## Rev. 14
 
 2023-09-21

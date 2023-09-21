@@ -107,7 +107,7 @@ else
 // Common user roles
 $isGuest = Yii::$app->user->isGuest;
 $isAdmin = !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin;
-$isDev = !Yii::$app->user->isGuest && strtolower(Yii::$app->user->identity->username)==='xzndzw';
+$isDev = !Yii::$app->user->isGuest && strtolower(Yii::$app->user->identity->username)==='jwerner';
 // {{{ *** SETUP MENU ITEMS ***
 $menuItems = [];
 // {{{ HOME
@@ -115,21 +115,21 @@ $menuItems = [];
 if ($isGuest) {
     // {{{ Login
     if( Yii::$app->getModule('user')->enableRegistration)
-        $menuItems[] = ['label' => '<i class="fas fa-user-plus"></i> '.Yii::t('app', 'Register'), 'url' => ['/user/registration/register'], 'options'=>['id'=>'mnuRegister']]; 
-    $menuItems[] = ['label' => '<i class="fas fa-sign-in-alt"></i> '.Yii::t('app', 'Login'), 'url' => ['/user/security/login'], 'options'=>['id'=>'mnuSignIn']]; // }}} 
+        $menuItems[] = ['label' => Html::icon('user-plus') . Yii::t('app', 'Register'), 'url' => ['/user/registration/register'], 'options'=>['id'=>'mnuRegister']]; 
+    $menuItems[] = ['label' => Html::icon('log-in') . Yii::t('app', 'Login'), 'url' => ['/user/security/login'], 'options'=>['id'=>'mnuSignIn']]; // }}} 
 } else {
     // {{{ APP PAGES
-    $menuItems[] = ['label' => '<i class="fas fa-cog"></i> '    .Yii::t('app','App'), 'items' => [
-        ['label' => '<i class="fas fa-home"></i> '              .Yii::t('app', 'Home'), 'url' => ['/site/index']],
+    $menuItems[] = ['label' => Html::icon('settings') . Yii::t('app','App'), 'items' => [
+        ['label' => Html::icon('home').Yii::t('app', 'Home'), 'url' => ['/site/index']],
         '<div class="dropdown-divider"></div>',
-        ['label' => '<i class="fas fa-th-list"></i> '           .Yii::t('app','Cost Projects'), 'url' => ['/costproject/index']],
-        ['label' => '<i class="fas fa-th-list"></i> '           .Yii::t('app','Expenses'), 'url' => ['/expense/index']],
+        ['label' => Html::icon('list').Yii::t('app','Cost Projects'), 'url' => ['/costproject/index']],
+        ['label' => Html::icon('list').Yii::t('app','Expenses'), 'url' => ['/expense/index']],
         // '<div class="dropdown-divider"></div>',
         // ['label' => '<i class="fas fa-filter"></i> '            .Yii::t('app','List Filters'),    'url' => ['/listfilter/index']],
     ]]; // }}} 
     // {{{ SETTINGS
-    $menuItems[] = ['label' => '<i class="fas fa-wrench"></i> '.Yii::t('app','Settings'), 'items' => [
-        ['label' => '<i class="fas fa-user"></i> '.Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
+    $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
+        ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
     ]]; // }}} 
     $idx = count($menuItems)-1;
     // {{{ THEMES
@@ -143,15 +143,15 @@ if ($isGuest) {
         $newItems = [
             // '<li class="divider"></li>',
             // ['label'=>'<i class="fas fa-wrench"></i> '      .Yii::t('app','Site Settings'),     'url' => ['/site/manage-settings'], 'visible'=>!$isGuest && $isAdmin],
-            ['label' => '<i class="fas fa-list"></i> '      .\Yii::t('app','Blog Admin'),       'url' => ['/blog/post/index'],      'visible'=>!$isGuest && $isAdmin],
-            ['label' => '<i class="fas fa-user"></i> '      .\Yii::t('app','Users Admin'),      'url' => ['/user/admin', 'sort'=> '-last_login_at'], 'visible'=>!$isGuest && $isAdmin],
-            ['label' => '<i class="fas fa-user"></i> '      .\Yii::t('app','Roles and Users'),  'url' => ['/user-management/roles-and-users']],
+            ['label' => Html::icon('list') . Yii::t('app','Blog Admin'),       'url' => ['/blog/post/index'],      'visible'=>!$isGuest && $isAdmin],
+            ['label' => Html::icon('users') . Yii::t('app','Users Admin'),      'url' => ['/user/admin', 'sort'=> '-last_login_at'], 'visible'=>!$isGuest && $isAdmin],
+            ['label' => Html::icon('users') . Yii::t('app','Roles and Users'),  'url' => ['/user-management/roles-and-users']],
             // DEACTIVATED: ['label' => '<i class="fas fa-search"></i> '    .\Yii::t('app','Lookups'),          'url' => ['/lookup'],               'visible'=>$isAdmin],
         ]; // }}} 
         // {{{ DEVELOPER
         if($isDev) {
             // $newItems[] = '<li class="divider"></li>';
-            $newItems[] = ['label' => '<i class="fas fa-cog"></i> '.'Gii', 'url' => ['/gii']];
+            $newItems[] = ['label' => Html::icon('settings') . 'Gii', 'url' => ['/gii']];
         } // }}} 
         $menuItems[$idx]['items'] = array_merge($oldItems, $newItems);
         /* {{{ DEBUG
@@ -164,9 +164,9 @@ if ($isGuest) {
     }
 
     // {{{ BLOG
-    $menuItems[] = ['label' => '<i class="fas fa-newspaper"></i> '.Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
+    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
     // {{{ LOGOUT
-    $menuItems[] = ['label' => '<i class="fas fa-sign-out-alt"></i> '.Yii::t('app', 'Logout ({username})', ['username'=>Yii::$app->user->identity->username]), 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']]; // }}}
+    $menuItems[] = ['label' => Html::icon('log-out').Yii::t('app', 'Logout ({username})', ['username'=>Yii::$app->user->identity->username]), 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']]; // }}}
     // {{{ SWITCH USER
     $userModule = Yii::$app->getModule('user');
     if(Yii::$app->session->has($userModule->switchIdentitySessionKey)) {
@@ -176,6 +176,7 @@ if ($isGuest) {
         ) . Html::endForm() . '</li>';
     } // }}} 
 }
+$menuItems[] = ['label' => Html::icon('help-circle').Yii::t('app', 'About'), 'url' => ['/site/page', 'view'=>'about']];
 // {{{ LANGUAGES
 $menuItems[] = ['label' => Html::icon('flag') /* . Yii::t('app', 'Language') */, 'items' => [
     ['label' => Html::img('@web/img/flags/uk_24.png') . ' ' . Yii::t('app', 'English'), 'url' => Url::current(['language'=>'en'])],
