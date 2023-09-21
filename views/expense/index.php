@@ -1,13 +1,14 @@
 <?php
 
-use app\models\Costproject;
-use app\models\Expense;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
+use app\components\Html;
+use app\models\Costproject;
+use app\models\Expense;
 
 /** @var yii\web\View $this */
 /** @var app\models\search\ExpenseSearch $searchModel */
@@ -25,7 +26,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Expense'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Create Expense'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

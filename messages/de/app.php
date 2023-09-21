@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'You do not have any cost projects yet.' => 'Sie haben bisher noch keine Kostenprojekte.',
+    'Create the first cost project now.' => 'Legen Sie jetzt das erste Kostenprojekt an.',
     'Enter the data for your new cost project.' => 'Geben Sie die Daten für Ihr neues Kostenprojekt ein.',
     'When it was saved, you can continue with adding expenses to the project.' => 'Nachdem es gespeichert wurde, können Sie fortfahren mit dem Hinzufügen von Ausgaben.',
     '{participantLeft} owes {participantRight} {amount}' => '{participantLeft} schuldet {participantRight} {amount}',

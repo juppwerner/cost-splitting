@@ -41,9 +41,6 @@ class CostprojectSearch extends Costproject
      */
     public function search($params)
     {
-        $query = Costproject::find()->with(['users' => function($query) {
-            $query->andWhere(['id' => Yii::$app->user->id]);
-        }]);
         $query = Costproject::find()
             ->select(['costproject.*'])
             ->innerJoinWith('users')
