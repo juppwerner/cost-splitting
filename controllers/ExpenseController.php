@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Costproject;
 use app\models\Expense;
 use app\models\search\CostprojectSearch;
 use app\models\search\ExpenseSearch;
@@ -126,8 +127,43 @@ class ExpenseController extends Controller
             $model->loadDefaultValues();
         }
 
+        // Get a list of all user-assigned cost projects
+        $costprojects = Costproject::find()
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->all();
+
+        // Get a list of all participants, if a cost project is already selected
+        $participants = null;
+        if(!empty($model->costprojectId))
+            $participants = Costproject::findOne(['id' => $model->costprojectId])->getParticipantsList();
+        if(!is_array($model->participants)) {
+            if(empty($model->participants))
+                $model->participants = array();
+            else
+                $model->participants = explode(';', $model->participants);
+        }
+
+        // Get all titles
+        $costprojectIDs = Costproject::find()
+            ->select(['costproject.id'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->column();
+
+        $titles = Expense::find()
+            ->select('title')
+            ->where(['costprojectId' => $costprojectIDs])
+            ->groupBy('title')
+            ->orderBy('title ASC')
+            ->column();
+
         return $this->render('create', [
             'model' => $model,
+            'costprojects' => $costprojects,
+            'participants' => $participants,
+            'titles' => $titles,
         ]);
     }
 
