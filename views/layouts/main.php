@@ -162,11 +162,7 @@ if ($isGuest) {
         die;
         }}} */
     }
-// {{{ LANGUAGES
-$menuItems[] = ['label' => '<i class="fas fa-language"></i> '.Yii::t('app', 'Language'), 'items' => [
-    ['label' => Yii::t('app', 'English'), 'url' => Url::current(['language'=>'en'])],
-    ['label' => Yii::t('app', 'German'), 'url' => Url::current(['language'=>'de'])],
-]]; // }}} 
+
     // {{{ BLOG
     $menuItems[] = ['label' => '<i class="fas fa-newspaper"></i> '.Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
     // {{{ LOGOUT
@@ -180,6 +176,11 @@ $menuItems[] = ['label' => '<i class="fas fa-language"></i> '.Yii::t('app', 'Lan
         ) . Html::endForm() . '</li>';
     } // }}} 
 }
+// {{{ LANGUAGES
+$menuItems[] = ['label' => Html::icon('flag') /* . Yii::t('app', 'Language') */, 'items' => [
+    ['label' => Html::img('@web/img/flags/uk_24.png') . ' ' . Yii::t('app', 'English'), 'url' => Url::current(['language'=>'en'])],
+    ['label' => Html::img('@web/img/flags/germany_24.png') . ' ' . Yii::t('app', 'German'), 'url' => Url::current(['language'=>'de'])],
+]]; // }}} 
 // }}} End Menu Items
 // \yii\helpers\VarDumper::dump($menuItems, 10, true); die;
 ?>
