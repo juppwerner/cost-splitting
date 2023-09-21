@@ -116,7 +116,7 @@ return [
     'Listfilters' => 'Listenfilter',
     'Login' => 'Anmelden',
     'Logout ({username})' => 'Abmelden ({username})',
-    'Manage costs and split them with your community.' => 'Verwalten Sie Kosten und teilen Sie sie in Ihrer Gemeinschaft auf.',
+    'Manage costs in travels or other projects, and split them with your community.' => 'Verwalten Sie Kosten aus Reisen oder anderen Projekten, und teilen Sie sie in Ihrer Gemeinschaft auf.',
     'Manage expenses.' => 'Ausgaben verwalten.',
     'Manage projects.' => 'Projekte verwalten.',
     'Money Transfer' => 'Ausgleichszahlung',

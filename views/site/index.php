@@ -22,7 +22,7 @@ $this->context->fluid = false;
     <div class="jumbotron text-center bg-transparent">
         <h1 class="display-4"><?= Yii::$app->name ?>!</h1>
 
-        <p class="lead"><?= Yii::t('app', 'Manage costs and split them with your community.') ?></p>
+        <p class="lead"><?= Yii::t('app', 'Manage costs in travels or other projects, and split them with your community.') ?></p>
 
     </div>
 
