@@ -34,7 +34,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'tableOptions' => ['class'=>'table table-striped table-responsive table-hover'],
+        'tableOptions' => ['class'=>'table table-striped table-responsive-sm table-hover'],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
             [
