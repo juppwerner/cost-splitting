@@ -67,12 +67,24 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $costprojects = \app\models\Costproject::find()
+        $userCostprojects = \app\models\Costproject::find()
             ->select(['costproject.*'])
             ->innerJoinWith('users')
-            ->where(['user.id' => Yii::$app->user->id])
-            ->count();
-        return $this->render('index', ['costprojects'=>$costprojects]);
+            ->where(['user.id' => Yii::$app->user->id]);
+        $costprojects = $userCostprojects->count();
+
+        // User's cost projects
+        $userCostprojects = $userCostprojects->column();
+        if($userCostprojects===array())
+            $userCostprojects = [0];
+
+        $query = \app\models\Expense::find()->with('costproject');
+        $query->andFilterWhere([
+            'costprojectId' => $userCostprojects
+        ]);
+        $expenses = $query->count();
+
+        return $this->render('index', ['costprojects'=>$costprojects, 'expenses' => $expenses]);
     }
 
     /**

@@ -1,13 +1,14 @@
 <?php
 
-use app\models\Costproject;
-use app\models\Expense;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
+use app\components\Html;
+use app\models\Costproject;
+use app\models\Expense;
 
 /** @var yii\web\View $this */
 /** @var app\models\search\ExpenseSearch $searchModel */
@@ -25,7 +26,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Expense'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Create Expense'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -82,7 +83,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
             [
                 'attribute'=>'costprojectId',
                 'format'=>'html',
-                'filter'=>ArrayHelper::map(Costproject::find()->all(), 'id', 'title'),
+                'filter'=>ArrayHelper::map(Costproject::find()->innerJoinWith('users')->where(['user.id' => Yii::$app->user->id])->all(), 'id', 'title'),
                 'value'=>function($data) {
                     return Html::a($data->costproject->title, ['costproject/view', 'id'=>$data->costprojectId], ['title'=>Yii::t('app', 'View cost project: {title}', ['title'=>$data->costproject->title])]);
                 },

@@ -2,8 +2,10 @@
 
 namespace app\models\search;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\models\Costproject;
 use app\models\Expense;
 
 /**
@@ -41,7 +43,19 @@ class ExpenseSearch extends Expense
      */
     public function search($params)
     {
+        // User's cost projects
+        $userCostprojects = Costproject::find()
+            ->select(['costproject.id'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->column();
+        if($userCostprojects===array())
+            $userCostprojects = [0];
+
         $query = Expense::find()->with('costproject');
+        $query->andFilterWhere([
+            'costprojectId' => $userCostprojects
+        ]);
 
         // add conditions that should always apply here
 
@@ -66,7 +80,7 @@ class ExpenseSearch extends Expense
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'costprojectId' => $this->costprojectId,
+            // 'costprojectId' => $this->costprojectId,
             'itemDate' => $this->itemDate,
             'amount' => $this->amount,
             'payedBy' => $this->payedBy,

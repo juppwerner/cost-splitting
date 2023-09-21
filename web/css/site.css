@@ -72,10 +72,14 @@ a.desc:after {
     white-space: nowrap;
 }
 
-.hint-block {
+/* .hint-block {
     display: block;
     margin-top: 5px;
     color: #999;
+} */
+
+form div.hint-block {
+    color:#a94442;
 }
 
 .error-summary {

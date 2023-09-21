@@ -103,7 +103,7 @@ class CostprojectController extends Controller
                 ])->execute();
                 Yii::$app->session->addFlash('success', 
                     Html::tag('h4', Yii::t('app', 'Create New Cost Project'))
-                    . Html::tag('p', Yii::t('app', 'The cost project {name} has been created.', ['name'=>$model->recordName]))
+                    . Html::tag('p', Yii::t('app', 'The cost project <em>{name}</em> has been created.', ['name'=>$model->recordName]))
                     . Html::a(Html::icon('plus-square') . Yii::t('app', 'Add a first expense'), ['expense/create', 'Expense[costprojectId]' => $model->id], ['class' => 'btn btn-primary btn-sm'])
                 );
                 return $this->redirect(['view', 'id' => $model->id]);

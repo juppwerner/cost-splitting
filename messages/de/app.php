@@ -17,6 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'You do not have any cost projects yet.' => 'Sie haben bisher noch keine Kostenprojekte.',
+    'Create the first cost project now.' => 'Legen Sie jetzt das erste Kostenprojekt an.',
+    'Enter the data for your new cost project.' => 'Geben Sie die Daten für Ihr neues Kostenprojekt ein.',
+    'When it was saved, you can continue with adding expenses to the project.' => 'Nachdem es gespeichert wurde, können Sie fortfahren mit dem Hinzufügen von Ausgaben.',
     '{participantLeft} owes {participantRight} {amount}' => '{participantLeft} schuldet {participantRight} {amount}',
     '{person} owes __recipient__ {amount}' => '{person} schuldet __recipient__ {amount}',
     '{person} has payed {countExpenses} expenses with the total value of {sumExpenses} ({sumExpensesSelf} for himself, and {sumExpensesOthers} for others).' => '{person} hat {countExpenses} Ausgabe(n) im Gesamtwert von {sumExpenses} getätigt ({sumExpensesSelf} für sich selbst und {sumExpensesOthers} für andere).',
@@ -154,6 +158,7 @@ return [
     'Splitting' => 'Aufteilung',
     'Status' => 'Status',
     'Submit' => 'Senden',
+    'The cost project <em>{name}</em> has been created.' => 'Das Kostenprojekt <em>{name}</em> wurde angelegt.',
     'The expense <b>{title}</b> has been created.' => 'Die Ausgabe <b>{title}</b> wurde angelegt.',
     'The expense <em>{title}</em> has been deleted.' => 'Die Ausgabe <em>{title}</em> wurde gelöscht.',
     'The expense <em>{title}</em> has been updated.' => 'Die Ausgabe <em>{title}</em> wurde geändert.',
