@@ -112,6 +112,7 @@ return [
     'If you do not yet have a user account, please register yourself here.' => 'Falls Sie noch kein Benutzerkonto haben, registrieren Sie sich bitee hier.',
     'Intro' => 'Einführung',
     'Item Date' => 'Eintragsdatum',
+    'Expense Date' => 'Ausgabedatum',
     'Kind Regards' => ' Mit freundlichen Grüßen',
     'Language' => 'Sprache',
     'Language:' => 'Sprache:',
