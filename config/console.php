@@ -46,11 +46,10 @@ $config = [
         ],
         'db' => $db,
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+            'class' => 'yii\symfony\Mailer',
             'useFileTransport' => true,
         ],
     ], // }}} 
-    'params' => $params,
     'controllerMap' => [ // {{{ 
         'fixture' => [ // Fixture generation command line.
             'class' => 'yii\faker\FixtureController',
@@ -88,6 +87,7 @@ $config = [
             // 'switchIdentitySessionKey' => 'myown_usuario_admin_user_key',
         ], // }}}
     ], // }}}
+    'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
