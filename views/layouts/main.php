@@ -134,7 +134,7 @@ if ($isGuest) {
     $idx = count($menuItems)-1;
     // {{{ THEMES
     // $menuItems[$idx]['items'][] = '<li class="divider"></li>';
-    $menuItems[$idx]['items'][] = ['label' => '<i class="fas fa-tint"></i> '.\Yii::t('app','Themes ({theme})', ['theme'=>ucfirst($theme)]), 'items' => $availableThemeItems];
+    // DEACTIVATED: $menuItems[$idx]['items'][] = ['label' => '<i class="fas fa-tint"></i> '.\Yii::t('app','Themes ({theme})', ['theme'=>ucfirst($theme)]), 'items' => $availableThemeItems];
     // }}} 
     $menuItems[$idx]['items'][] = '<div class="dropdown-divider"></div>';
     if($isAdmin) {
@@ -154,13 +154,6 @@ if ($isGuest) {
             $newItems[] = ['label' => Html::icon('settings') . 'Gii', 'url' => ['/gii']];
         } // }}} 
         $menuItems[$idx]['items'] = array_merge($oldItems, $newItems);
-        /* {{{ DEBUG
-        \yii\helpers\VarDumper::dump($oldItems, 10, true);
-        \yii\helpers\VarDumper::dump($newItems, 10, true);
-        echo '<hr>';
-        \yii\helpers\VarDumper::dump($menuItems, 10, true);
-        die;
-        }}} */
     }
 
     // {{{ BLOG

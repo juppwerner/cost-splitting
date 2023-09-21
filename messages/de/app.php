@@ -121,6 +121,8 @@ return [
     'List of Expenses' => 'Liste der Ausgaben',
     'Listfilters' => 'Listenfilter',
     'Login' => 'Anmelden',
+    'Login as an existing user' => 'Als bereits bestehender Benutzer anmelden',
+    'Regster as a new user' => 'Als neuer Benutzer registrieren',
     'Logout ({username})' => 'Abmelden ({username})',
     'Manage costs in travels or other projects, and split them with your community.' => 'Verwalten Sie Kosten aus Reisen oder anderen Projekten, und teilen Sie sie in Ihrer Gemeinschaft auf.',
     'Manage expenses.' => 'Ausgaben verwalten.',

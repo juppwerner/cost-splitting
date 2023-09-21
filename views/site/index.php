@@ -24,6 +24,10 @@ $this->context->fluid = false;
 
         <p class="lead"><?= Yii::t('app', 'Manage costs in travels or other projects, and split them with your community.') ?></p>
 
+        <p>
+            <?= Html::a(Html::icon('log-in') . Yii::t('app', 'Login'), ['user/login'], ['title' => Yii::t('app', 'Login as an existing user'), 'class' => 'btn btn-lg btn-primary']) ?>
+            <?= Html::a(Html::icon('user-plus') . Yii::t('app', 'Register'), ['user/register'], ['title' => Yii::t('app', 'Regster as a new user'), 'class' => 'btn btn-lg btn-info']) ?>
+        </p>
     </div>
 
     <div class="body-content">
