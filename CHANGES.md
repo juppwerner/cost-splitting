@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 14
+
+2023-09-21
+
+* News Item View: Fixed internal error
+
 ## Rev. 13
 
 2023-09-21
