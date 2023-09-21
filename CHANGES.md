@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## Rev. 16
+
+2023-09-21
+
+* [Home Page](../site/index): Added showing login/register buttons for guest users
+* [Cost Projects](../costproject/index): Added parameter max. number of user cost projects
+
 ## Rev. 15
 
 2023-09-21
