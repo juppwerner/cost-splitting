@@ -65,6 +65,14 @@ $config = [
                         'app/error' => 'error.php',
                     ],
                 ],
+                'contact*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'contact' => 'contact.php'
+                    ],
+                ],
                 'lookup*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',

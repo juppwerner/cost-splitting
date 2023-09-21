@@ -116,7 +116,7 @@ class Expense extends \yii\db\ActiveRecord
             'payedBy' => Yii::t('app', 'Payed By'),
             'costprojectId' => Yii::t('app', 'Cost Project'),
             'expenseType' => Yii::t('app', 'Expense Type'),
-            'itemDate' => Yii::t('app', 'Item Date'),
+            'itemDate' => Yii::t('app', 'Expense Date'),
             'amount' => Yii::t('app', 'Amount'),
             'currency' => Yii::t('app', 'Currency'),
             'exchangeRate' => Yii::t('app', 'Exchange Rate'),
