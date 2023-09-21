@@ -29,7 +29,7 @@ $this->context->fluid = false;
     <div class="body-content">
 
         <div class="row"><!-- {{{ 1st row -->
-            <div class="col-lg-6 card pl-2 pt-2">
+            <div class="col-lg-6 card pl-3 pt-2">
                 <h2><?= Yii::t('app', 'Cost Projects') ?></h2>
                 <p><?= Yii::t('app', 'Manage projects.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no projects} =1{is <b>one</b> project} other{are <b>#</b> projects}} in this system.', ['n' => $costprojects ]); ?></p>
@@ -38,7 +38,7 @@ $this->context->fluid = false;
                     <?= Html::a(Html::icon('plus-square'), ['/costproject/create'], ['class'=>'btn btn-success', 'title' => Yii::t('app', 'Add new cost project')]) ?>
                 </div>
             </div>
-            <div class="col-lg-6 card pl-2 pt-2">
+            <div class="col-lg-6 card pl-3 pt-2">
                 <h2><?= Yii::t('app', 'Expenses') ?></h2>
                 <p><?= Yii::t('app', 'Manage expenses.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no expenses} =1{is <b>one</b> expense} other{are <b>#</b> expenses}} in this system.', ['n' => $expenses ]); ?></p>
