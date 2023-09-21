@@ -2,10 +2,11 @@
 
 namespace app\controllers;
 
+use app\components\Html;
 use app\models\Costproject;
 use app\models\search\CostprojectSearch;
 use Yii;
-use app\components\Html;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -92,6 +93,23 @@ class CostprojectController extends Controller
      */
     public function actionCreate()
     {
+        $maxNbrOfCostProjects = Yii::$app->params['user.maxNbrOfCostProjects'] ?? 0;
+        Yii::info('maxNbrOfCostProjects: '.$maxNbrOfCostProjects, __METHOD__);
+        $countUserCostProjects = Costproject::find()
+        ->select(['costproject.*'])
+        ->innerJoinWith('users')
+        ->where(['user.id' => Yii::$app->user->id])
+        ->count();
+        Yii::info('countUserCostProjects: '.$countUserCostProjects, __METHOD__);
+        if($countUserCostProjects + 1 > $maxNbrOfCostProjects && $maxNbrOfCostProjects>0) {
+            Yii::$app->session->addFlash(
+                'warning', 
+                Html::tag('h4', Yii::t('app', 'Maximum Number of Cost Projects exceeded'))
+                . Yii::t('app', 'You have exceeded the maximum number of allowed cost projects (limit: {n,plural,=0{no limit} =1{<b>one</b> cost project} other{<b>#</b> cost projects}}).', ['n'=>$maxNbrOfCostProjects]) . '<br>'
+                . Yii::t('app', 'Currently you have {n,plural,=0{ no cost projects} =1{<b>one</b> cost project} other{<b>#</b> cost projects}}.', ['n' => $countUserCostProjects])
+            );
+            return $this->redirect(Url::previous());
+        }
         $model = new Costproject();
 
         if ($this->request->isPost) {

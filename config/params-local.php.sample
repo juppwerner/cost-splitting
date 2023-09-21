@@ -23,6 +23,9 @@ return [
     // Send contact form email to this email (To:):
     'contactForm.recipientEmail'    => 'noreply@example.com',
     
+    // Max. number of cost projects per user. 0=unlimited
+    'user.maxNbrOfCostProjects' => 1,
+
     // Users Module: These users/netids are allowed to administer users:
     'userAdmins' => [
         // 'YOURADMINUSERNAMEHERE',

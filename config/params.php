@@ -2,7 +2,7 @@
 
 return [
     // Year this application was released
-    'applicationReleaseYear' => 2022,
+    'applicationReleaseYear' => 2023,
     // Bootswatch UI theme
     // cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, 
     // lux, materia, minty, pulse, sandstone, simplex, sketchy, 
@@ -19,6 +19,9 @@ return [
     'contactForm.senderName'        => 'Example.com mailer',
     // Send contact form email to this email (To:):
     'contactForm.recipientEmail'    => 'noreply@example.com',
+    
+    // Max. number of cost projects per user. 0=unlimited
+    'user.maxNbrOfCostProjects' => 1,
     
     // set a default Bootstrap version globally for all Krajee Extensions
     'bsVersion'                     => '4.x',    
