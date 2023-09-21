@@ -113,8 +113,8 @@ $this->context->fluid = false;
                 </div>
 
                 <?php if(Yii::$app->user->can('blogAuthor')) : ?>
-                <?= Html::a('<span class="fas fa-plus"></span>', ['/blog/post/create'], ['class' => 'btn btn-success btn-sm', 'title'=>Yii::t('app.blog','Create New Blog Post')]) ?>&nbsp;
-                <?= Html::a('<span class="fas fa-th-list"></span>', ['/blog/post/index'], ['class' => 'btn btn-success btn-sm', 'title'=>Yii::t('app.blog','Manage Blog Posts')]) ?>
+                <?= Html::a(Html::icon('plus-square'), ['/blog/post/create'], ['class' => 'btn btn-success btn-sm', 'title'=>Yii::t('app.blog','Create New Blog Post')]) ?>&nbsp;
+                <?= Html::a(Html::icon('list'), ['/blog/post/index'], ['class' => 'btn btn-success btn-sm', 'title'=>Yii::t('app.blog','Manage Blog Posts')]) ?>
                 <?php endif; ?>
         
                 <?php else : ?>
