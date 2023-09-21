@@ -2,9 +2,9 @@
 
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
-use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+use app\components\Html;
 use app\models\Costitem;
 
 /** @var yii\web\View $this */
@@ -30,8 +30,8 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <h1><?= Html::encode(Yii::t('app', 'Expense: {title}', ['title'=>$model->title])) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Html::icon('trash-2') . Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
