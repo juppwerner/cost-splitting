@@ -56,7 +56,7 @@ $this->context->leftMenu = [
         'as filterBehavior' => \thrieu\grid\FilterStateBehavior::className(),
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'options' => ['class' => 'grid-view table-responsive'],
+        'options' => ['class' => 'grid-view table-responsive-sm'],
         'tableOptions' => ['class' => 'table table-striped table-condensed'], // table-bordered 
         'rowOptions'   => function ($model, $key, $index, $grid) {
             return ['data-id' => $model->id];

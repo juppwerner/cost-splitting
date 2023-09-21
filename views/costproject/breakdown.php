@@ -63,7 +63,7 @@ $defaultParticipantDetails = [
 
     <?php else : ?>
 
-    <table class="table table-striped table-responsive table-hover" style="width:100%">
+    <table class="table table-striped table-responsive-sm table-hover" style="width:100%">
 
         <thead>
             <tr>

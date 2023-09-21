@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $this->beginContent('@Da/User/resources/views/shared/admin_layout.php') ?>
-<div class="table-responsive">
+<div class="table-responsive-sm">
 <?= GridView::widget(
     [
         'dataProvider' => $dataProvider,
