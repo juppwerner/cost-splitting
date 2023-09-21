@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Expense;
+use app\models\search\CostprojectSearch;
 use app\models\search\ExpenseSearch;
 
 use Yii;
@@ -83,6 +84,14 @@ class ExpenseController extends Controller
      */
     public function actionCreate($lastId=null)
     {
+        // Do we already have a user cost project?
+        $searchModel = new CostprojectSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        if($dataProvider->getTotalCount()===0) {
+            Yii::$app->session->addFlash('warning', Yii::t('app', 'You do not have any cost projects yet.') . '<br>' . Yii::t('app', 'Create the first cost project now.'));
+            return $this->redirect(['costproject/create']);
+        }
+
         $model = new Expense();
 
         $model->itemDate = date('Y-m-d');
