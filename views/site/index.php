@@ -23,11 +23,14 @@ $this->context->fluid = false;
         <h1 class="display-4"><?= Yii::$app->name ?>!</h1>
 
         <p class="lead"><?= Yii::t('app', 'Manage costs in travels or other projects, and split them with your community.') ?></p>
-
+        
+        <?php if(Yii::$app->user->isGuest) : ?>
         <p>
             <?= Html::a(Html::icon('log-in') . Yii::t('app', 'Login'), ['user/login'], ['title' => Yii::t('app', 'Login as an existing user'), 'class' => 'btn btn-lg btn-primary']) ?>
             <?= Html::a(Html::icon('user-plus') . Yii::t('app', 'Register'), ['user/register'], ['title' => Yii::t('app', 'Regster as a new user'), 'class' => 'btn btn-lg btn-info']) ?>
         </p>
+        <?php endif; ?>
+
     </div>
 
     <div class="body-content">
@@ -52,8 +55,8 @@ $this->context->fluid = false;
                 </div>
             </div>
         </div><!-- }}} end 1st row -->
-        <div class="row"><!-- {{{ 2nd row -->
-            <div class="col-lg-8">
+        <div class="row mt-3"><!-- {{{ 2nd row -->
+            <div class="col-lg-8 pr-2">
                 <h2>Heading</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
                     dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
