@@ -66,6 +66,9 @@ $config = [
                 'nemmo\attachments\migrations',
             ],
         ], // }}}
+        'migration' => [
+            'class' => 'bizley\migration\controllers\MigrationController',
+        ],
     ], // }}}
     'modules' => [ // {{{ 
         'attachments' => [ // {{{ 
