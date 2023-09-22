@@ -97,6 +97,8 @@ return [
     'You can assign multiple roles or permissions to user by using the form below' => 'Sie können mehrere Rollen oder Berechtigungen zuweisen',
     'Your account on {0} has been created' => 'Ihr Benutzerkonto auf {0] wurde angelegt',
     '{0, date, MMM dd, YYYY HH:mm}' => '{0, date, dd. MMM YYYY, HH:mm}',
+    'Continue' => '',
+    'Finish' => '',
     'Thank you for signing up on {0}' => '',
     'This is the login URL:' => '@@Dies ist die Anmelde-URL:@@',
 ];

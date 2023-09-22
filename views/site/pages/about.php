@@ -11,13 +11,21 @@ $this->title = Yii::t('app', 'About {appName}', ['appName'=>Yii::$app->name]);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php if($this->context->action->id=='page') $tag='h1'; else $tag = 'h2'; ?>
+    <?= Html::tag($tag, $this->title) ?>
 
     <p>
-        <?= Yii::t('app', 'This application allows managing of costs/expenses in projects.') ?></p>
+        This application allows managing of costs/expenses in projects.</p>
     <p>
-        <?= Yii::t('app', 'Expenses can be summarized by project.') ?><br>
-        <?= Yii::t('app', 'Expenses are captured with the persons who payed them.') ?><br>
-        <?= Yii::t('app', 'A cost breakdown can calculate which participant owes the other some amounts.') ?> 
+        Expenses can be summarized by project.<br>
+        Expenses are captured with the persons who payed them.<br>
+        A cost breakdown can calculate which participant owes the other some amounts. 
     </p>
+    <?php if($this->context->action->id=='page') : ?>
+    <p>
+        <?= Yii::t('app', 'This project was inspired by the article about Haushaltsbuch apps in the c\'T magazine 19/2022.') ?>
+        <?= Yii::t('app', 'See <a href="{link}" target="_blank">here</a>.', ['link'=>'https://www.heise.de/select/ct/2022/19/2217110544762309952']) ?>
+    </p>
+    <?php endif; ?>
 </div>
+<?php $this->title = strip_tags($this->title); ?>

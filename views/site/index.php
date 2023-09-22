@@ -38,10 +38,12 @@ $this->context->fluid = false;
         'options' => [
             'class' => 'alert-info',
         ],
-        'body' => Html::tag('h4', 'Getting Started')
+        'body' => Html::tag('h4', Yii::t('app', 'Getting Started'))
             . Yii::t('app', 'First create a new cost project.')
             . '<br>'
             . Yii::t('app', 'Then add expenses to the cost project.')
+            . '<br>'
+            . Html::tag('p', Html::a(Html::icon('plus-square') . Yii::t('app', 'Create the first cost project'), ['costproject/create'], ['class' => 'btn btn-primary btn-sm']), ['class' => 'mt-2'])
     ]) ?>
     <?php endif; ?>
     <div class="body-content">
@@ -66,13 +68,9 @@ $this->context->fluid = false;
                 </div>
             </div>
         </div><!-- }}} end 1st row -->
-        <div class="row mt-3"><!-- {{{ 2nd row -->
+        <div class="row mt-5"><!-- {{{ 2nd row -->
             <div class="col-lg-8 pr-2">
-                <h2>Heading</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <?= $this->render('pages/about') ?>
             </div>
             <div class="col-lg-4">
                  <h2><?= Yii::t('app', 'News') ?></h2>
