@@ -13,13 +13,12 @@ use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
 /**
- * @var yii\web\View                   $this
- * @var \Da\User\Form\RegistrationForm $model
- * @var \Da\User\Model\User            $user
- * @var \Da\User\Module                $module
+ * @var yii\web\View               $this
+ * @var yii\bootstrap4\ActiveForm  $form
+ * @var \Da\User\Form\RecoveryForm $model
  */
 
-$this->title = Yii::t('app', 'Register');
+$this->title = Yii::t('app', 'Recover your password');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -27,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
-                <p><?= Yii::t('app', 'If you do not yet have a user account, please register yourself here.') ?></p>
             </div>
             <div class="panel-body">
+                <p><?= Yii::t('app', 'Enter your email address and submit. We will send you an email with a link which will allow you to recreate your password.') ?></p>
                 <?php $form = ActiveForm::begin(
                     [
                         'id' => $model->formName(),
@@ -40,24 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
 
-                <?= $form->field($model, 'username') ?>
-
-                <?php if ($module->generatePasswords === false): ?>
-                    <?= $form->field($model, 'password')->passwordInput() ?>
-                    <?= $form->field($model, 'passwordConfirm')->passwordInput() ?>
-                <?php endif ?>
-
-                <?php if ($module->enableGdprCompliance): ?>
-                    <?= $form->field($model, 'gdpr_consent')->checkbox(['value' => 1]) ?>
-                <?php endif ?>
-
-                <?= Html::submitButton(Yii::t('usuario', 'Submit'), ['class' => 'btn btn-success btn-block']) ?>
+                <?= Html::submitButton(Yii::t('usuario', 'Continue'), ['class' => 'btn btn-primary btn-block']) ?><br>
 
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
-        <p class="text-center">
-            <?= Html::a(Yii::t('usuario', 'Already registered? Login!'), ['/user/security/login']) ?>
-        </p>
     </div>
 </div>

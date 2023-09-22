@@ -72,10 +72,7 @@ class SiteController extends Controller
             ->innerJoinWith('users')
             ->where(['user.id' => Yii::$app->user->id]);
         $costprojects = $userCostprojects->count();
-        if($costprojects===0) {
-            // No cost projects yet, show some help:
-            Yii::$app->session->addFlash('info', Html::tag('h4', 'Getting Started').Yii::t('app', 'First create a new cost project.').'<br>'.Yii::t('app', 'Then add expenses to the cost project.'));
-        }
+
         // User's cost projects
         $userCostprojects = $userCostprojects->column();
         if($userCostprojects===array())
