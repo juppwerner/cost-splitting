@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## Rev. 17
+
+2023-09-22
+
+* [Register](../user/register), [Recover Password](../user/forgot): Added _Password (confirm)_ field
+* Home Page: Added help message for first project if no project exists yet
+* [Expense](../expense/index): Added typeahead for title field
+
 ## Rev. 16
 
 2023-09-21
