@@ -143,7 +143,7 @@ $config = [
         'view' => [ // {{{ 
             'theme' => [
                 'pathMap' => [
-                    '@Da/User/resources/views'          => '@app/views/user',
+                    '@Da/User/resources/views' => '@app/views/user',
                 ],
             ],
         ], // }}} 
@@ -190,8 +190,9 @@ $config = [
             'classMap' => [
                 'User' => app\models\User::class,
                 'Profile' => app\models\Profile::class,
+                'RegistrationForm' => app\models\forms\RegistrationForm::class,
+                'RecoveryForm' => 'app\models\forms\RecoveryForm',            
             ],
-
             /* 'mailer' => [
                  'viewPath' => '@app/views/user/mail',
             ], */
