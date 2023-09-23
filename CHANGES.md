@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 18
+
+2023-09-23
+
+* Changed exchange rates service to own service via EZB data
+
 ## Rev. 17
 
 2023-09-22
