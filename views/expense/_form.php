@@ -94,19 +94,20 @@ $('#expense-currency').on('change', function() {
 
     // alert(date + ': ' + $(this).val() + ' ' + symbol);
 
-    var requestURL = 'https://api.exchangerate.host/';
+    var requestURL = '".Url::to(['/exchangerate/default/api'], true)."';
+    requestURL += '?currencyCode=' + base + '&date=' + date;
     var request = new XMLHttpRequest();
-    request.open('GET', requestURL + date + '?base=' + base + '&symbols=' + symbol);
+    request.open('GET', requestURL);
     request.responseType = 'json';
     request.send();
 
     request.onload = function() {
         var response = request.response;
         console.log(response);
-        if(!('rates' in response)) {
+        if(!('exchangeRate' in response)) {
             alert('No exchange rate available for currency: ' + base)
         } else {
-            $('#expense-exchangerate').val(response.rates[symbol]);
+            $('#expense-exchangerate').val(response.exchangeRate);
         }
     }
 });

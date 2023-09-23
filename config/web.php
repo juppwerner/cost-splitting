@@ -73,6 +73,14 @@ $config = [
                         'contact' => 'contact.php'
                     ],
                 ],
+                'exchangerate*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'lookup' => 'exchangerate.php',
+                    ],
+                ],
                 'lookup*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
@@ -166,6 +174,9 @@ $config = [
         'blog' => [ // {{{ 
             'class' => 'app\modules\blog\Module',
         ], // }}}
+        'exchangerate' => [
+            'class' => 'app\modules\exchangerate\Module',
+        ],
         'gridview' =>  [ // {{{ 
             'class' => '\kartik\grid\Module'
             // enter optional module parameters below - only if you need to  
