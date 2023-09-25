@@ -3,6 +3,7 @@
 use yii\data\ArrayDataProvider;
 use yii\helpers\Url;
 use yii\helpers\VarDumper as VD;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 use app\components\Html;
@@ -10,6 +11,8 @@ use app\dictionaries\CurrencyCodesDict;
 use app\dictionaries\ExpenseTypesDict;
 use app\models\Expense;
 use app\widgets\GridView;
+use app\components\chartjs\Chart;
+use app\assets\ChartJSAsset;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
@@ -18,8 +21,9 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-\yii\helpers\Url::remember('', 'cost-project');
-\yii\web\YiiAsset::register($this);
+Url::remember('', 'cost-project');
+YiiAsset::register($this);
+ChartJSAsset::register($this);
 
 // Get expenses for grid
 $expensesDataProvider = new ArrayDataProvider([
@@ -212,6 +216,7 @@ $defaultParticipantDetails = [
     <?php // if(true or count($bilanzen)>0) : ?>
 
     <?php
+    $numBilanzenGt0 = 0;
     foreach($bilanzen as $bilanzKey=>$partnerStaende) {
         $partners = explode('|', $bilanzKey);
         $saldo = $partnerStaende[$partners[0]] - $partnerStaende[$partners[1]];
@@ -229,24 +234,44 @@ $defaultParticipantDetails = [
     sort($schlusszahlungen);
     ksort($personenKonten);
     $amounts = array_values($personenKonten);
+    foreach($personenKonten as $partner=>$saldo) {
+        if($saldo !==0)
+            $numBilanzenGt0++;
+    }
     ?>
+    <?php if($numBilanzenGt0>0) : ?>
     <h3><?= Yii::t('app', 'Balance Sheet') ?></h3>
-    <table class="table table-striped">
-        <thead>
-        </thead>
-        <tbody>
-            <?php foreach($personenKonten as $person => $saldo) : ?>
-            <tr>
-                <td class="<?= '' // $saldo<0 ? 'progress' :'' ?>"><?php if($saldo<0) : ?><div class="progress-bar float-right" role="progressbar" style="width: <?= abs($saldo)/max($amounts)*100 ?>%;" aria-valuenow="<?= abs($saldo)/max($amounts)*100 ?>" aria-valuemin="0" aria-valuemax="100"><?= Yii::$app->formatter->asCurrency($saldo, $model->currency) ?></div><?php endif; ?></td>
-                <td class="text-center"><h5><span class="badge badge-primary"><?= $person ?></span></h5></td>
-                <td class="<?= '' // $saldo>0 ? 'progress' : '' ?>"><?php if($saldo>0) : ?><div class="progress-bar float-left" role="progressbar" style="width: <?= $saldo/max($amounts)*100 ?>%;" aria-valuenow="<?= $saldo/max($amounts)*100 ?>" aria-valuemin="0" aria-valuemax="100"><?= Yii::$app->formatter->asCurrency($saldo, $model->currency) ?></div><?php endif; ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php
-// DEBUG VD::dump($personenKonten, 10, true);
-?>
+    <?= Chart::widget([
+        'type' => Chart::TYPE_BAR,
+        'datasets' => [
+            [
+                'data' => $personenKonten
+            ],
+        ],
+        'clientOptions' => [
+            'responsive' => true,
+            'indexAxis' => 'y',
+            // Elements options apply to all of the options unless overridden in a dataset
+            // In this case, we are setting the border of each horizontal bar to be 2px wide
+            'elements' => [
+                'bar' => [
+                    'borderWidth' => 2,
+                ],
+            ],
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                    'position' => 'right',
+                ],
+                'title' => [
+                    'display' => false,
+                    'text' => 'Chart.js Horizontal Bar Chart'
+                ]
+            ],
+        ],
+    ]); ?>
+    <?php endif; ?>
+    <?php // DEBUG VD::dump($personenKonten, 10, true); ?>
 
     <h3><?= Yii::t('app', 'Participants') ?></h3><!-- {{{ -->
     <div class="card-deck">

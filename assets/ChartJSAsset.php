@@ -8,9 +8,12 @@ class ChartJSAsset extends AssetBundle
     public $sourcePath = null;
     public $baseUrl = 'https://cdn.jsdelivr.net/npm/chart.js@3.6.0';
     public $js = [
-        ['dist/chart.min.js', 'integrity' => 'sha256-7lWo7cjrrponRJcS6bc8isfsPDwSKoaYfGIHgSheQkk='],
+        'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js'
     ];
     public $jsOptions = [
         'crossorigin' => 'anonymous',
+    ];
+    public $depends = [
+        'yii\web\JqueryAsset',
     ];
 }
