@@ -7,10 +7,6 @@
             'label' => \app\components\Html::icon('help-circle') . Yii::t('app', 'Currencies'), 
             'class' => 'btn btn-sm btn-secondary'
         ],
-        'closeButton' => [
-            'label' => \app\components\Html::icon('x-square'), 
-            'class' => 'btn btn-secondary'
-        ],
     ]);
     ?>
         <div class="text-left">
