@@ -15,7 +15,7 @@ use yii\helpers\Html;
  * @var \Da\User\Model\User  $user
  * @var \Da\User\Model\Token $token
  */
-$p_style = 'font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;';
+$p_style = "font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;";
 ?>
 <p style="">
     <?= Yii::t('usuario', 'Hello') ?>,
