@@ -99,6 +99,7 @@ return [
     'Expense: {title}' => 'Ausgabe: {title}',
     'Expenses' => 'Ausgaben',
     'Expenses are captured with the persons who payed them.' => 'Ausgaben werden erfasst zu den Personen, die sie bezahlt haben.',
+    'Filter as you type ...' => 'Filtern beim Tippen...',
     'Filter State' => 'Filter-Status',
     'Final Compensations (simplified)' => 'Schlusszahlungen (vereinfacht)',
     'First create a new cost project.' => 'Erstellen Sie zuerst ein neues Kostenprojekt.',

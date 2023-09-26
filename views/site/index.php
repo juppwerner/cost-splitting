@@ -36,7 +36,7 @@ $this->context->fluid = false;
     <?php if(!Yii::$app->user->isGuest && $costprojects===0) : // No cost projects yet, show some help: ?>
         <?= \yii\bootstrap4\Alert::widget([
         'options' => [
-            'class' => 'alert-info',
+            'class' => 'alert-success',
         ],
         'body' => Html::tag('h4', Yii::t('app', 'Getting Started'))
             . Yii::t('app', 'First create a new cost project.')

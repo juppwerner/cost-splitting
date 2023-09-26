@@ -127,37 +127,27 @@ if ($isGuest) {
         // '<div class="dropdown-divider"></div>',
         // ['label' => '<i class="fas fa-filter"></i> '            .Yii::t('app','List Filters'),    'url' => ['/listfilter/index']],
     ]]; // }}} 
-    // {{{ SETTINGS
-    $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
-        ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
-    ]]; // }}} 
-    $idx = count($menuItems)-1;
+    // {{{ BLOG
+    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
     // {{{ THEMES
     // $menuItems[$idx]['items'][] = '<li class="divider"></li>';
     // DEACTIVATED: $menuItems[$idx]['items'][] = ['label' => '<i class="fas fa-tint"></i> '.\Yii::t('app','Themes ({theme})', ['theme'=>ucfirst($theme)]), 'items' => $availableThemeItems];
     // }}} 
-    $menuItems[$idx]['items'][] = '<div class="dropdown-divider"></div>';
+    // $menuItems[$idx]['items'][] = '<div class="dropdown-divider"></div>';
+
+    // {{{ ADMIN
     if($isAdmin) {
-        $oldItems = $menuItems[$idx]['items'];
-        // {{{ ADMIN
-        $newItems = [
-            // '<li class="divider"></li>',
-            // ['label'=>'<i class="fas fa-wrench"></i> '      .Yii::t('app','Site Settings'),     'url' => ['/site/manage-settings'], 'visible'=>!$isGuest && $isAdmin],
-            ['label' => Html::icon('list') . Yii::t('app','Blog Admin'),       'url' => ['/blog/post/index'],      'visible'=>!$isGuest && $isAdmin],
+        $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Admin'), 'items' => [
+            ['label' => Html::icon('list') . Yii::t('app','Blog Admin'),        'url' => ['/blog/post/index'],      'visible'=>!$isGuest && $isAdmin],
             ['label' => Html::icon('users') . Yii::t('app','Users Admin'),      'url' => ['/user/admin', 'sort'=> '-last_login_at'], 'visible'=>!$isGuest && $isAdmin],
             ['label' => Html::icon('users') . Yii::t('app','Roles and Users'),  'url' => ['/user-management/roles-and-users']],
-            // DEACTIVATED: ['label' => '<i class="fas fa-search"></i> '    .\Yii::t('app','Lookups'),          'url' => ['/lookup'],               'visible'=>$isAdmin],
-        ]; // }}} 
-        // {{{ DEVELOPER
-        if($isDev) {
-            // $newItems[] = '<li class="divider"></li>';
-            $newItems[] = ['label' => Html::icon('settings') . 'Gii', 'url' => ['/gii']];
-        } // }}} 
-        $menuItems[$idx]['items'] = array_merge($oldItems, $newItems);
-    }
-
-    // {{{ BLOG
-    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
+            ['label' => Html::icon('code') . Yii::t('app','Gii Code Generators'),        'url' => ['/gii'],      'visible'=>$isDev],
+        ]];
+    } // }}}
+    // {{{ SETTINGS
+    $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
+        ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
+    ]]; // }}} 
     // {{{ LOGOUT
     $menuItems[] = ['label' => Html::icon('log-out').Yii::t('app', 'Logout ({username})', ['username'=>Yii::$app->user->identity->username]), 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']]; // }}}
     // {{{ SWITCH USER
