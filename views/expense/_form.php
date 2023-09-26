@@ -33,7 +33,7 @@ use app\models\Expense;
         'dataset' => ['limit' => 10],
         'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
         'pluginOptions' => ['highlight'=>true, 'minLength' => 0],
-    ]); ?>
+    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 

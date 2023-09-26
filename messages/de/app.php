@@ -84,6 +84,7 @@ return [
     'Divide equally betweeen all' => 'Gleichmässig zwischen allen aufteilen',
     'Don\'t have an account? Register now!' => 'Sie haben noch kein Konto? Jetzt registrieren!',
     'Draft' => 'Entwurf',
+    'e.g. Accommodation, Restaurant, Drinks' => 'z.b. Übernachtung, Restaurant, Getränke',
     'English' => 'Englisch',
     'Enter one participant per line' => 'Geben Sie einen Teilnehmer pro Zeile ein',
     'Enter the data for your new cost project.' => 'Geben Sie die Daten für Ihr neues Kostenprojekt ein.',
