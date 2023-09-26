@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## Rev. 19
+
+2023-09-26
+
+* Rearranged menue
+* Added translations
+* Added ChartJS to show breakdown balances as bar chart
+
 ## Rev. 18
 
 2023-09-23
