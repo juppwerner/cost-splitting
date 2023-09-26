@@ -127,11 +127,8 @@ if ($isGuest) {
         // '<div class="dropdown-divider"></div>',
         // ['label' => '<i class="fas fa-filter"></i> '            .Yii::t('app','List Filters'),    'url' => ['/listfilter/index']],
     ]]; // }}} 
-    // {{{ SETTINGS
-    $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
-        ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
-    ]]; // }}} 
-    $idx = count($menuItems)-1;
+    // {{{ BLOG
+    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
     // {{{ THEMES
     // $menuItems[$idx]['items'][] = '<li class="divider"></li>';
     // DEACTIVATED: $menuItems[$idx]['items'][] = ['label' => '<i class="fas fa-tint"></i> '.\Yii::t('app','Themes ({theme})', ['theme'=>ucfirst($theme)]), 'items' => $availableThemeItems];
@@ -147,8 +144,10 @@ if ($isGuest) {
             ['label' => Html::icon('code') . Yii::t('app','Gii Code Generators'),        'url' => ['/gii'],      'visible'=>$isDev],
         ]];
     } // }}}
-    // {{{ BLOG
-    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
+    // {{{ SETTINGS
+    $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
+        ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
+    ]]; // }}} 
     // {{{ LOGOUT
     $menuItems[] = ['label' => Html::icon('log-out').Yii::t('app', 'Logout ({username})', ['username'=>Yii::$app->user->identity->username]), 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']]; // }}}
     // {{{ SWITCH USER
