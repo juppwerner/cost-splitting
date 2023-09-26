@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /** @var app\modules\exchangerate\models\Exchangerate $model */
 
 $this->title = Yii::t('exchangerate', 'Create Exchangerate');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('exchangerate', 'Exchangerates'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('exchangerate', 'Exchange Rates'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="exchangerate-create">

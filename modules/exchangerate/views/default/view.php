@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var app\modules\exchangerate\models\Exchangerate $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('exchangerate', 'Exchangerates'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('exchangerate', 'Exchange Rates'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
             </div>
             <div class="panel-body">
+                <p><?= Yii::t('app', 'Please enter your new password, and confirm the password.') ?></p>
                 <?php $form = ActiveForm::begin(
                     [
                         'id' => $model->formName(),

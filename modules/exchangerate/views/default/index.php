@@ -1,7 +1,7 @@
 <?php
 
 use app\modules\exchangerate\models\Exchangerate;
-use yii\helpers\Html;
+use app\components\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\modules\exchangerate\models\search\ExchangerateSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('exchangerate', 'Exchangerates');
+$this->title = Yii::t('exchangerate', 'Exchange Rates');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="exchangerate-index">
@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('exchangerate', 'Create Exchangerate'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('plus-square') . Yii::t('exchangerate', 'Add Exchange Rate'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('upload') . Yii::t('exchangerate', 'Import EZB Data'), ['import'], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

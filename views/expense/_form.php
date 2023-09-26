@@ -31,9 +31,9 @@ use app\models\Expense;
     <?= $form->field($model, 'title')->widget(TypeaheadBasic::classname(), [
         'data' => $titles,
         'dataset' => ['limit' => 10],
-        'options' => ['placeholder' => 'Filter as you type ...'],
+        'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
         'pluginOptions' => ['highlight'=>true, 'minLength' => 0],
-    ]); ?>
+    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 

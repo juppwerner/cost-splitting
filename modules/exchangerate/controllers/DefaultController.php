@@ -3,10 +3,13 @@
 namespace app\modules\exchangerate\controllers;
 
 use app\modules\exchangerate\models\Exchangerate;
+use app\modules\exchangerate\models\forms\UploadEzbDataForm;
 use app\modules\exchangerate\models\search\ExchangerateSearch;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
@@ -24,6 +27,15 @@ class DefaultController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -88,21 +100,26 @@ class DefaultController extends Controller
             'THB',
             'ZAR',
         ];
+
         if(!in_array($currencyCode, $allowedCurrencies))
             throw new NotFoundHttpException(Yii::t('exchangerate', 'The requested currency is not allowed.'));
     
         if(empty($date) || $date == date('Y-m-d')) {
             $date = date('Y-m-d', strtotime('-1 day'));
         }
+
         $model = Exchangerate::find()
-            ->where(['currencyCode' => $currencyCode, 'histDate' => $date])
+            ->where(['currencyCode' => $currencyCode])
+            ->andWhere("histDate <= '" .$date . "'")
+            ->orderBy('histDate DESC')  
             ->one();
-        if(!empty($model))
+        if(!empty($model)) {
             return [
                 'histDate'=>$model->histDate, 
                 'currencyCode' => $currencyCode,
                 'exchangeRate' => $model->exchangeRate
             ];
+        }
         $diff = date_diff(date_create($date), date_create(date('Y-m-d', time())));
         // return $diff->format('%a');
         if($diff->format('%a')<=5+2) {
@@ -113,12 +130,15 @@ class DefaultController extends Controller
 
             $items = $xml->item;
             foreach($items as $item) {
+                // echo $item->title;
                 if(preg_match('/^([-+]?[0-9]*\.?[0-9]+) ([A-Z]{3}) = 1 EUR ([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/', $item->title, $matches)) {
+                    print_r($matches);
                     $model = new Exchangerate();
                     $model->histDate = $matches[3];  
                     $model->currencyCode = $currencyCode;
                     $model->exchangeRate = $matches[1];
-                    $model->save();
+                    // if(!$model->save())
+                    //     print_r($model->errors);
                     if($date==$model->histDate) {
                         return [
                             'histDate'=>$model->histDate, 
@@ -134,63 +154,77 @@ class DefaultController extends Controller
 
     public function actionImport()
     {
-        $csvFilePath = Yii::getAlias('@app/data/eurofxref-hist.csv');
-        // Check if the file exists
-        if (file_exists($csvFilePath)) {
-            // Open the CSV file for reading
-            $file = fopen($csvFilePath, 'r');
-
-            if ($file) {
-                // Initialize an array to store the CSV data
-                $csvData = [];
-                $nR = 0;
-                $headers = [];
-                $fields = [];
-                // Read each line of the CSV file and parse it
-                while (($row = fgetcsv($file)) !== false) {
-                    // $row is now an array containing the values of the current row
-                    // You can access specific columns using $row[index], where index is the column number (0-based)
-                    if($nR == 0) {
-                        $headers = $row;
-                        $nR++;
-                        continue;
-                    }
-                    // Add the current row to the CSV data array
-                    $csvData[] = $row;
-                    $rows = [];
-                    for($i=1; $i<count($headers); $i++) {
-                        if($row[$i]==='N/A')
-                            continue;
-                        if(trim($headers[$i])==='' || trim($row[$i])==='')
-                            continue;
-                        $rows[] = [
-                            'histDate' => $row[0],
-                            'currencyCode' => $headers[$i],
-                            'exchangeRate' => $row[$i]
-                        ];
-                    }
-                    // \yii\helpers\VarDumper::dump($rows, 10, true);
-                    Yii::$app->db->createCommand()->batchInsert('{{%exchangerate}}', ['histDate', 'currencyCode', 'exchangeRate'], $rows)->execute();
-                    $nR++;
+        $model = new UploadEzbDataForm();
+        if (Yii::$app->request->isPost && $model->load($this->request->post())) {
+            $model->csvFile = UploadedFile::getInstance($model, 'csvFile');
+            if ($model->upload()) {
+                // file is uploaded successfully
+                $csvFilePath = $model->uploadPath;
+                // Trucate table requested?
+                if($model->truncateTable) {
+                    Yii::$app->db->createCommand('TRUNCATE TABLE {{%exchangerate}}')->execute();
                 }
-
-                // Close the CSV file
-                fclose($file);
-
-                // Now $csvData contains all the rows from the CSV file
-                // You can process or display the data as needed
-                // foreach ($csvData as $row) {
-                //     // Example: Display each row as a comma-separated string
-                //     echo implode(', ', $row) . '<br>';
-                // }
-
-                return $nR . ' rows imported.';
-            } else {
-                return "Failed to open the CSV file.";
+                // Check if the file exists
+                if (file_exists($csvFilePath)) {
+                    // Open the CSV file for reading
+                    $file = fopen($csvFilePath, 'r');
+        
+                    if ($file) {
+                        // Initialize an array to store the CSV data
+                        $csvData = [];
+                        $nR = 0;
+                        $headers = [];
+                        $fields = [];
+                        // Read each line of the CSV file and parse it
+                        while (($row = fgetcsv($file)) !== false) {
+                            // $row is now an array containing the values of the current row
+                            // You can access specific columns using $row[index], where index is the column number (0-based)
+                            if($nR == 0) {
+                                $headers = $row;
+                                $nR++;
+                                continue;
+                            }
+                            // Add the current row to the CSV data array
+                            $csvData[] = $row;
+                            $rows = [];
+                            for($i=1; $i<count($headers); $i++) {
+                                if($row[$i]==='N/A')
+                                    continue;
+                                if(trim($headers[$i])==='' || trim($row[$i])==='')
+                                    continue;
+                                $rows[] = [
+                                    'histDate' => $row[0],
+                                    'currencyCode' => $headers[$i],
+                                    'exchangeRate' => $row[$i]
+                                ];
+                            }
+                            // \yii\helpers\VarDumper::dump($rows, 10, true);
+                            Yii::$app->db->createCommand()->batchInsert('{{%exchangerate}}', ['histDate', 'currencyCode', 'exchangeRate'], $rows)->execute();
+                            $nR++;
+                        }
+                        // Close the CSV file
+                        fclose($file);
+                        // Now $csvData contains all the rows from the CSV file
+                        // You can process or display the data as needed
+                        // foreach ($csvData as $row) {
+                        //     // Example: Display each row as a comma-separated string
+                        //     echo implode(', ', $row) . '<br>';
+                        // }
+        
+                        Yii::$app->session->addFlash('success', Html::tag('h4', Yii::t('exchangerate', 'Import Exchange Rates File')) . Yii::t('app', '{number} rows imported.', ['number' => $nR]));
+                    } else {
+                        Yii::$app->session->addFlash('error', Yii::t('exchangerate', 'Failed to open the CSV file.'));
+                    }
+                } else {
+                    Yii::$app->session->addFlash('error', Yii::t('exchangerate', 'The CSV file does not exist.'));
+                }
             }
-        } else {
-            return "The CSV file does not exist.";
         }
+
+        return $this->render('import', ['model' => $model]);
+
+
+
     }
     /**
      * Displays a single Exchangerate model.
