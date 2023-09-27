@@ -424,7 +424,7 @@ return [
     'Vietnamese đồng' => '',
     'WIR euro (complementary currency)' => '',
     'WIR franc (complementary currency)' => '',
-    'Welcome to {0}' => 'Willkommen auf {0]',
+    'Welcome to {0}' => 'Willkommen auf {0}',
     'Yemeni rial' => '',
     'Zambian kwacha' => '',
     'Zimbabwean dollar' => '',
