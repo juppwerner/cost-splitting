@@ -130,10 +130,10 @@ class Chart extends \yii\base\Widget
     public function getDefaultDatasetClass()
     {
         if ($this->type === self::TYPE_SCATTER) {
-            return 'practically\chartjs\ScatterDataset';
+            return 'app\components\chartjs\ScatterDataset';
         }
 
-        return 'practically\chartjs\Dataset';
+        return 'app\components\chartjs\Dataset';
     }
 
     /**
