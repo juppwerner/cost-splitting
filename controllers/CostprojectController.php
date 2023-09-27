@@ -37,7 +37,7 @@ class CostprojectController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['view'],
+                            'actions' => ['view', 'breakdown'],
                             'roles' => ['viewCostproject'],
                         ],
                         [
