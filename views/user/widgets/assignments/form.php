@@ -9,17 +9,15 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-use dosamigos\selectize\SelectizeDropDownList;
+// use dosamigos\selectize\SelectizeDropDownList;
+use kartik\select2\Select2;
 use yii\bootstrap4\Alert;
-use yii\bootstrap4\Html;
+use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
-/**
- * @var $this           yii\web\View
- * @var $model          Da\User\Model\Assignment
- * @var $availableItems string[]
- */
-
+/** @var \yii\web\View $this */
+/** @var string[] $availableItems */
+/** @var Da\User\Model\Assignment $model */
 ?>
 
 <?php if ($model->updated): ?>
@@ -37,34 +35,24 @@ use yii\bootstrap4\ActiveForm;
 
 <?php $form = ActiveForm::begin(
     [
-        'layout' => 'horizontal',
         'enableClientValidation' => false,
         'enableAjaxValidation' => false,
-        'fieldConfig' => [
-            'horizontalCssClasses' => [
-                'wrapper' => 'col-sm-9',
-            ],
-        ],
     ]
 ) ?>
 
 <?= Html::activeHiddenInput($model, 'user_id') ?>
 
 <?= $form->field($model, 'items')->widget(
-    SelectizeDropDownList::class,
-    [
-        'items' => $availableItems,
-        'options' => [
-            'id' => 'children',
-            'multiple' => true,
-        ],
-    ]
-) ?>
+    Select2::classname(), [
+    'data' => $availableItems,
+    'options' => ['placeholder' => Yii::t('app', 'Select an auth item ...'), 'multiple' => true],
+    'pluginOptions' => [
+        'tags' => true,
+        'tokenSeparators' => [',', ' '],
+        'maximumInputLength' => 10
+    ],
+]) ?>
 
-<div class="form-group">
-    <div class="col-lg-offset-3 col-lg-9">
-        <?= Html::submitButton(Yii::t('usuario', 'Update assignments'), ['class' => 'btn btn-success btn-block']) ?>
-    </div>
-</div>
+<?= Html::submitButton(Yii::t('usuario', 'Update assignments'), ['class' => 'btn btn-success btn-block']) ?>
 
 <?php ActiveForm::end() ?>

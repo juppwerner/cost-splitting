@@ -2,8 +2,8 @@
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\bootstrap\Button;
-use yii\bootstrap\Nav;
+use yii\bootstrap4\Button;
+use yii\bootstrap4\Nav;
 use yii\web\View;
 
 // use yii\grid\GridView;
