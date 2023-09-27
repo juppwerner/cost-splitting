@@ -8,7 +8,7 @@ use Da\User\Model\Profile as BaseProfile;
 class Profile extends BaseProfile
 {
 
-    public $timezone = 'Europe/Berlin';
+    // public $timezone = 'Europe/Berlin';
 
     public function rules()
     {
