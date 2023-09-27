@@ -9,11 +9,12 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-use Da\User\Helper\TimezoneHelper;
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\validators\DefaultValidator;
+
+use app\components\TimezoneHelper;
 
 /**
  * @var yii\web\View                $this
@@ -63,9 +64,10 @@ $timezoneHelper = $model->make(TimezoneHelper::class);
 
                 <?= $form->field($model, 'location') ?>
 
+
                 <?= $form
                     ->field($model, 'timezone')
-                    ->dropDownList(ArrayHelper::map($timezoneHelper->getAll(), 'timezone', 'name'));
+                    ->dropDownList(TimezoneHelper::getAllByContinentAndTown(), ['prompt'=>Yii::t('app', '--- Select ---')]);
                 ?>
                 <?= $form
                     ->field($model, 'gravatar_email')
