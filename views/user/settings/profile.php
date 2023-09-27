@@ -12,13 +12,13 @@
 use Da\User\Helper\TimezoneHelper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\validators\DefaultValidator;\ActiveForm;
 
 /**
- * @var yii\web\View           $this
- * @var yii\widgets\ActiveForm $form
- * @var \Da\User\Model\Profile $model
- * @var TimezoneHelper         $timezoneHelper
+ * @var yii\web\View                $this
+ * @var yii\bootstrap4\ActiveForm   $form
+ * @var \Da\User\Model\Profile      $model
+ * @var TimezoneHelper              $timezoneHelper
  */
 
 $this->title = Yii::t('usuario', 'Profile settings');

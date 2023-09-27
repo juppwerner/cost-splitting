@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 use kartik\select2\Select2;
 
@@ -10,7 +10,7 @@ use app\dictionaries\CurrencyCodesDict;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
-/** @var yii\widgets\ActiveForm $form */
+/** @var yii\bootstrap4\ActiveForm $form */
 ?>
 
 <div class="costproject-form">

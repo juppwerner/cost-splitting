@@ -41,7 +41,7 @@ style="<?= $p_style ?>">
                         <td style="<?= $p_style ?>">
                             <?php $this->beginBody() ?>
                             <?= $content ?>
-                            <p  style="<?= $p_style ?>"--<br>
+                            <p style="<?= $p_style ?>">
                             <?= Yii::t('app', 'Kind Regards') ?><br>
                             <?= Yii::$app->params['company.name'] ?? '(Company Name)' ?></p>
                             <?php $this->endBody() ?>
