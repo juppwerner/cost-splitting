@@ -10,9 +10,10 @@
  */
 
 use Da\User\Helper\TimezoneHelper;
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\validators\DefaultValidator;\ActiveForm;
+use yii\validators\DefaultValidator;
 
 /**
  * @var yii\web\View                $this
