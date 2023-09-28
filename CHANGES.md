@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## Rev. 24
+
+2023-09-28
+
+* [Expenses](../expense): Renamed participant to recipient
+* [Expense](../expense) Form: Added preventing mousewheel scroll in amount number field and exchangerate number fields
+
 ## Rev. 23
 
 2023-09-28
