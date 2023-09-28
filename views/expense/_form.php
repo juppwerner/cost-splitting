@@ -124,6 +124,13 @@ function toggleFieldExpenseParticipants(show=true) {
     }
 }
 toggleFieldExpenseParticipants(".($model->splitting==='SELECTED' ? 'true' : 'false').");
+
+
+$('#expense-amount, #expense-exchangerate').on('mousewheel',
+    function (event) {
+        this.blur()
+    }
+);
     ",
     yii\web\View::POS_READY,
     'amount-change'
