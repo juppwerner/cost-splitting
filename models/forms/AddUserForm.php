@@ -15,17 +15,26 @@ use yii\base\Model;
  */
 class AddUserForm extends Model
 {
+    const SCENARIO_ADD_USER = 'addUser';
+    const SCENARIO_REMOVE_USER = 'removeUser';
     public $costprojectId;
 
     public $username;
 
     public $userId;
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_ADD_USER] = ['costprojectId', 'username'];
+        $scenarios[self::SCENARIO_REMOVE_USER] = ['costprojectId', 'username'];
+        return $scenarios;
+    }
 
     public function rules()
     {
         return [
             [['costprojectId', 'username'], 'required'],
-            ['username', 'validateUserProject'],
+            ['username', 'validateUserIsOnProject', 'on'=>['addUser']],
             ['userId', 'integer', 'min'=>1],
             ['costprojectId', 'integer', 'min'=>1],
             ['username', 'match', 'pattern' => '/^[-a-zA-Z0-9_\.@\+]+$/'],
@@ -35,9 +44,13 @@ class AddUserForm extends Model
         ];
     }
 
-    public function validateUserProject($attribute, $params)
+    public function validateUserIsOnProject($attribute, $params)
     {
         $user = User::find()->where(['username' => $this->username])->one();
+        if(empty($user)) {
+            $this->addError($attribute, Yii::t('app', 'The user {username} was not found.', ['username' => $this->username]));
+            return;
+        }
         $count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM {{%user_costproject}} WHERE userId=:userId AND costprojectId=:costprojectId')
             ->bindValue(':userId', $user->id)
             ->bindValue(':costprojectId', $this->costprojectId)
@@ -68,17 +81,15 @@ class AddUserForm extends Model
             'userId' => $user->id,
             'costprojectId' => $this->costprojectId,
         ])->execute();
-
-        Yii::$app->mailer->compose(
+        // Confirm addition to new user by mail
+        Yii::$app->mailer->compose('project-added-html', 
             [
-                'html' => 'project-added-html', 
-                'text' => 'project-added-text'
-            ], [
                 'model'=>$this, 
                 'costproject'=>$costproject
-            ])->setTo($user->email)
+            ])
             ->setFrom([Yii::$app->params['contactForm.senderEmail'] => Yii::$app->params['contactForm.senderName']])
-            ->setSubject(Yii::t('app', '{appName} / You have been added to the cost project {title}', ['appName' => Yii::$app->name, 'title' => $costproject->title]))
+            ->setTo($user->email)
+            ->setSubject(Yii::t('app', '[{appName}] You have been added to the cost project {title}', ['appName' => Yii::$app->name, 'title' => $costproject->title]))
             ->send();
         return $result===1;
     }
@@ -88,11 +99,26 @@ class AddUserForm extends Model
         $user = User::find()->where(['username' => $this->username])->one();
         if(empty($user))
             return false;
+
+        $costproject = Costproject::findOne($this->costprojectId);
+        if(empty($costproject))
+            return false;
+
         $this->userId = $user->id;
         $result = Yii::$app->db->createCommand()->delete(
             '{{%user_costproject}}', 
             'userId = ' . $this->userId . ' AND costprojectId = ' . $this->costprojectId
             )->execute();
+        // Confirm removal to user by mail
+        Yii::$app->mailer->compose('project-removed-html', 
+        [
+            'model'=>$this, 
+            'costproject'=>$costproject
+        ])
+            ->setFrom([Yii::$app->params['contactForm.senderEmail'] => Yii::$app->params['contactForm.senderName']])
+            ->setTo($user->email)
+            ->setSubject(Yii::t('app', '[{appName}] You have been removed from the cost project {title}', ['appName' => Yii::$app->name, 'title' => $costproject->title]))
+            ->send();
         return $result===1;
     }
 }
