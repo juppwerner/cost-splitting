@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 23
+
+2023-09-28
+
+* User Registration: Registration and confirmation now redirect to home page
+
 ## Rev. 22
 
 2023-09-28
