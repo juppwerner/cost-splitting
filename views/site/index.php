@@ -16,6 +16,8 @@ ChartJSAsset::register($this);
 $this->title = Yii::t('app', 'Home') . ' :: ' . Yii::$app->name;
 
 $this->context->fluid = false;
+
+Url::remember('', 'cost-project');
 ?>
 <div class="site-index">
 

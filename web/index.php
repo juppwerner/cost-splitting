@@ -35,14 +35,23 @@ if(file_exists($versionFile)) {
 // (new yii\web\Application($config))->setVersion($version)->run();
 $app = new yii\web\Application($config);
 
-$app->getModule('user')->mailParams = [
-    'fromEmail' => 'no-reply@example.com',
-    'welcomeMailSubject' => Yii::t('app', 'Welcome to {0}', $app->name),
-    'confirmationMailSubject' => Yii::t('app', 'Confirm account on {0}', $app->name),
+// Merge mail parameters
+$mailParams = [
+    'welcomeMailSubject'        => Yii::t('app', 'Welcome to {0}', $app->name),
+    'confirmationMailSubject'   => Yii::t('app', 'Confirm account on {0}', $app->name),
     'reconfirmationMailSubject' => Yii::t('app', 'Confirm email change on {0}', $app->name),
-    'recoveryMailSubject' => Yii::t('app', 'Complete password reset on {0}', $app->name),
-    'twoFactorMailSubject' => Yii::t('app', 'Code for two factor authentication on {0}', $app->name),
+    'recoveryMailSubject'       => Yii::t('app', 'Complete password reset on {0}', $app->name),
+    'twoFactorMailSubject'      => Yii::t('app', 'Code for two factor authentication on {0}', $app->name),
 ];
+if(isset($config['modules']['user']['mailParams'])) {
+    $app->getModule('user')->mailParams = \yii\helpers\ArrayHelper::merge(
+        $config['modules']['user']['mailParams'],
+        $mailParams
+    );
+} else {
+    $app->getModule('user')->mailParams = $mailParams;
+}
+
 $app->setVersion($version);
 $app->run();
 

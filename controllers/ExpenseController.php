@@ -152,12 +152,16 @@ class ExpenseController extends Controller
             ->where(['user.id' => Yii::$app->user->id])
             ->column();
 
-        $titles = Expense::find()
-            ->select('title')
-            ->where(['costprojectId' => $costprojectIDs])
-            ->groupBy('title')
-            ->orderBy('title ASC')
-            ->column();
+        $titles = Yii::$app->db->createCommand(
+            "SELECT e.`title` "
+            . "FROM `expense` e "
+            . "LEFT JOIN `costproject` cp ON e.costprojectId=cp.id "
+            . "LEFT JOIN `user_costproject` uc ON cp.id=uc.costprojectId "
+            . "WHERE uc.userId=:userId "
+            . "GROUP BY e.title "
+            . "ORDER BY e.title")
+            ->bindValue(':userId', Yii::$app->user->id)
+            ->queryColumn();
 
         return $this->render('create', [
             'model' => $model,
@@ -215,12 +219,16 @@ class ExpenseController extends Controller
             ->where(['user.id' => Yii::$app->user->id])
             ->column();
 
-        $titles = Expense::find()
-            ->select('title')
-            ->where(['costprojectId' => $costprojectIDs])
-            ->groupBy('title')
-            ->orderBy('title ASC')
-            ->column();
+        $titles = Yii::$app->db->createCommand(
+            "SELECT e.`title` "
+            . "FROM `expense` e "
+            . "LEFT JOIN `costproject` cp ON e.costprojectId=cp.id "
+            . "LEFT JOIN `user_costproject` uc ON cp.id=uc.costprojectId "
+            . "WHERE uc.userId=:userId "
+            . "GROUP BY e.title "
+            . "ORDER BY e.title")
+            ->bindValue(':userId', Yii::$app->user->id)
+            ->queryColumn();
 
         return $this->render('update', [
             'model'         => $model,

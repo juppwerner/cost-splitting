@@ -14,8 +14,6 @@ use app\models\Expense;
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
 /** @var yii\bootstrap4\ActiveForm $form */
-
-
 ?>
 
 <div class="expense-form">
@@ -51,7 +49,7 @@ use app\models\Expense;
     <?= $form->field($model, 'exchangeRate')->textInput(['maxlength' => true])->input('number', ['step'=>'.000001'])->hint(Yii::t('app', 'Will be set when a currency is selected')) ?>
 
     <?php if(is_null($participants)) : ?>
-    <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true])->hint(Yii::t('app', 'Press ENTER to show all partoicipants')) ?>
     <?php else : ?>
     <?= $form->field($model, 'payedBy')->widget(Select2::classname(), [
         'data' => $participants,
@@ -59,7 +57,7 @@ use app\models\Expense;
         'pluginOptions' => [
             'allowClear' => true
         ],
-    ]); ?>
+    ])->hint(Yii::t('app', 'Press ENTER to show all participants')); ?>
     <?php endif; ?>
 
     <?= $form->field($model, 'splitting')->radioList(Expense::getSplittingOptions(), ['separator'=>'<br>']) ?>
