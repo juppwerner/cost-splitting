@@ -121,7 +121,7 @@ class Expense extends \yii\db\ActiveRecord
             'currency' => Yii::t('app', 'Currency'),
             'exchangeRate' => Yii::t('app', 'Exchange Rate'),
             'splitting' => Yii::t('app', 'Splitting'),
-            'participants' => Yii::t('app', 'Participants'),
+            'participants' => Yii::t('app', 'Recipients'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'createUserName' => Yii::t('app', 'Created By'),
@@ -230,6 +230,6 @@ class Expense extends \yii\db\ActiveRecord
     {
         return [
             self::SPLITTING_EQUAL                   => Yii::t('app', 'Divide equally betweeen all'),
-            self::SPLITTING_SELECTED_PARTICIPANTS   => Yii::t('app', 'Divide between selected participants only'),
+            self::SPLITTING_SELECTED_PARTICIPANTS   => Yii::t('app', 'Divide between selected recipients only'),
         ];
     }} // }}}

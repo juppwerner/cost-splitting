@@ -64,7 +64,7 @@ use app\models\Expense;
 
     <?=$form->field($model, 'participants')->widget(Select2::classname(), [
         'data' => $participants,
-        'options' => ['placeholder' => Yii::t('app', 'Select one or more participants ...'), 'multiple' => true],
+        'options' => ['placeholder' => Yii::t('app', 'Select one or more recipients ...'), 'multiple' => true],
         'pluginOptions' => [
             'tags' => true,
             'tokenSeparators' => [',', ' '],
@@ -124,6 +124,13 @@ function toggleFieldExpenseParticipants(show=true) {
     }
 }
 toggleFieldExpenseParticipants(".($model->splitting==='SELECTED' ? 'true' : 'false').");
+
+
+$('#expense-amount, #expense-exchangerate').on('mousewheel',
+    function (event) {
+        this.blur()
+    }
+);
     ",
     yii\web\View::POS_READY,
     'amount-change'

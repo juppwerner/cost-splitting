@@ -10,9 +10,6 @@ defined('YII_ENV') or define('YII_ENV', 'dev');
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
-require(__DIR__ . '/../config/events.php'); // <--- adding events here! :)
-
-
 // Get application config:
 $config = require(__DIR__ . '/../config/web.php');
 // Load additional local config settings?

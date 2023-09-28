@@ -57,6 +57,7 @@ class m230927_094435_rbac_init_app_2 extends Migration
         $auth->add($author);
         $auth->addChild($author, $manageCostprojects);
         $auth->addChild($author, $createCostproject);
+        $auth->addChild($author, $viewCostproject);
         $auth->addChild($author, $deleteCostproject);
 
         // allow "author" to update their own cost projects
