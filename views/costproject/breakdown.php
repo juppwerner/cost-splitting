@@ -77,8 +77,8 @@ $defaultParticipantDetails = [
                 <?php if($model->useCurrency) : ?>
                 <th><?= Yii::t('app', 'Exchange Rate') ?></th>
                 <?php endif; ?>
-                <th><?= Yii::t('app', 'By') ?></th>
-                <th><?= Yii::t('app', 'Participants') ?></th>
+                <th><?= Yii::t('app', 'Payed By') ?></th>
+                <th><?= Yii::t('app', 'Recipients') ?></th>
                 <?php if($model->useCurrency) : ?>
                 <th><?= Yii::t('app', 'Amount {currency}', ['currency'=>$model->currency]) ?></th>
                 <?php endif; ?>

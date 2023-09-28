@@ -64,7 +64,7 @@ use app\models\Expense;
 
     <?=$form->field($model, 'participants')->widget(Select2::classname(), [
         'data' => $participants,
-        'options' => ['placeholder' => Yii::t('app', 'Select one or more participants ...'), 'multiple' => true],
+        'options' => ['placeholder' => Yii::t('app', 'Select one or more recipients ...'), 'multiple' => true],
         'pluginOptions' => [
             'tags' => true,
             'tokenSeparators' => [',', ' '],
