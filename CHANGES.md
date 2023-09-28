@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 22
+
+2023-09-28
+
+* Added merging email parameters
+
 ## Rev. 21
 
 2023-09-28
