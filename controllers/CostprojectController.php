@@ -50,7 +50,13 @@ class CostprojectController extends Controller
                             'actions' => ['update', 'manage-users', 'remove-user'],
                             'roles' => ['updateCostproject'],
                             'roleParams' => function() {
-                                return ['costproject' => Costproject::findOne(['id' => Yii::$app->request->get('id')])];
+                                $id=null;
+                                if(!empty(Yii::$app->request->get('id')))
+                                    $id = Yii::$app->request->get('id');
+                                elseif(!empty($_GET['AddUserForm']['costprojectId']))
+                                    $id = $_GET['AddUserForm']['costprojectId'];
+
+                                return ['costproject' => Costproject::find()->where(['id'=>$id])->one()];
                             },
                         ],
                         [
