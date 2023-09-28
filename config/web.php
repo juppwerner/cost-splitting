@@ -198,6 +198,24 @@ $config = [
             // 'generatePasswords' => true,
             // 'switchIdentitySessionKey' => 'myown_usuario_admin_user_key',
 
+            'controllerMap' => [
+                'registration' => [
+                    'class' => \Da\User\Controller\RegistrationController::class,
+                    'on ' . \Da\User\Event\FormEvent::EVENT_AFTER_REGISTER => function (\Da\User\Event\FormEvent $event) {
+                        \Yii::$app->controller->redirect(['/site/index']);
+                        \Yii::$app->end();
+                    },
+                    'on ' . \Da\User\Event\UserEvent::EVENT_AFTER_CONFIRMATION => function (\Da\User\Event\UserEvent $event) {
+                        // Assign author role to user
+                        $user = $event->getUser();
+                        $auth = Yii::$app->authManager;
+                        $author = $auth->getRole('author');
+                        $auth->assign($author, $user->id);
+                        \Yii::$app->controller->redirect(['/site/index']);
+                        \Yii::$app->end();
+                    },
+                ],
+            ],
             'classMap' => [
                 'User' => app\models\User::class,
                 'Profile' => app\models\Profile::class,
