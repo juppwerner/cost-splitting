@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 21
+
+2023-09-28
+
+* New User Registration: Assign default role _author_
+
 ## Rev. 20
 
 2023-09-28
