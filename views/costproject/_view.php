@@ -37,7 +37,7 @@ use app\dictionaries\CurrencyCodesDict;
                 $tmp = [];
                 foreach($data->users as $user) {
                     $item =  $user->displayName.' (#'.$user->id.')';
-                    if((int)$user->id!==(int)Yii::$app->user->id && Yii::$app->user->can('updateCostproject'))
+                    if((int)$user->id!==(int)Yii::$app->user->id && Yii::$app->user->can('updateCostproject', ['costproject'=>$data]))
                         $item .= ' ' . Html::a(Html::icon('trash-2'), ['remove-user', 'AddUserForm[costprojectId]'=>$data->id, 'AddUserForm[username]' => $user->username], [
                             'class' => 'btn btn-primary btn-sm',
                             'data' => [
@@ -47,7 +47,7 @@ use app\dictionaries\CurrencyCodesDict;
                         ]);
                     $tmp[] = $item;
                 }
-                if($this->context->action->id!=='manage-users' && Yii::$app->user->can('updateCostproject'))
+                if($this->context->action->id!=='manage-users' && Yii::$app->user->can('updateCostproject', ['costproject'=>$data]))
                     $tmp[] = Html::a(Html::icon('plus-square') . Yii::t('app', 'Manage Users'), ['manage-users', 'id'=>$data->id], ['class' => 'btn btn-sm btn-primary mt-2']);
                 return join('<br>', $tmp);
             }
