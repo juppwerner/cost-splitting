@@ -16,6 +16,10 @@ use yii\helpers\Html;
 <body>
     <?php $this->beginBody() ?>
     <?= $content ?>
+    <p>
+        <?= Yii::t('app', 'Kind Regards') ?><br>
+        <?= Yii::$app->params['company.name'] ?? '(Company Name)' ?>
+    </p>
     <?php $this->endBody() ?>
 </body>
 </html>

@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## Rev. 20
+
+2023-09-28
+
+* [Cost Projects](../costproject): Added access checks to only allow owner user to add other users
+* User Preferences: Fixed setting user profile timezone
+* Improved email layouts
+
 ## Rev. 19
 
 2023-09-26

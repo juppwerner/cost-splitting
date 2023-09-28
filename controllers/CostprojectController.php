@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\components\Html;
 use app\models\Costproject;
+use app\models\forms\AddUserForm;
 use app\models\search\CostprojectSearch;
 use Yii;
 use yii\helpers\Url;
@@ -25,12 +26,43 @@ class CostprojectController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+    
                 'access' => [
                     'class' => AccessControl::class,
                     'rules' => [
                         [
                             'allow' => true,
-                            'roles' => ['@'],
+                            'actions' => ['index'],
+                            'roles' => ['manageCostprojects'],
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['view', 'breakdown'],
+                            'roles' => ['viewCostproject'],
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['create'],
+                            'roles' => ['createCostproject'],
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['update', 'manage-users', 'remove-user'],
+                            'roles' => ['updateCostproject'],
+                            'roleParams' => function() {
+                                $id=null;
+                                if(!empty(Yii::$app->request->get('id')))
+                                    $id = Yii::$app->request->get('id');
+                                elseif(!empty($_GET['AddUserForm']['costprojectId']))
+                                    $id = $_GET['AddUserForm']['costprojectId'];
+
+                                return ['costproject' => Costproject::find()->where(['id'=>$id])->one()];
+                            },
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['delete'],
+                            'roles' => ['deleteCostproject'],
                         ],
                     ],
                 ],
@@ -153,6 +185,56 @@ class CostprojectController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Displays a form to manage/add users to the project.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionManageUsers($id)
+    {
+        $model = new AddUserForm();
+        $model->costprojectId = (int)$id;
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->validate() && $model->addUser()) {
+                Yii::$app->session->addFlash('success', 
+                    Html::tag('h4', Yii::t('app', 'Add User'))
+                    . Yii::t('app', 'The user {username} has been added.', ['username' => $model->username])
+                );
+            }
+        }
+
+        $costproject = $this->findModel($id);
+
+        return $this->render('manage-users', [
+            'costproject' => $costproject,
+            'model' => $model,
+        ]);
+    } 
+
+    public function actionRemoveUser()
+    {
+        $model = new AddUserForm();
+        if ($this->request->isPost) {
+            if ($model->load($this->request->get()) && $model->validate() && $model->removeUser()) {
+                Yii::$app->session->addFlash('success', 
+                    Html::tag('h4', Yii::t('app', 'Remove User'))
+                    . Yii::t('app', 'The user #{userId} has been removed.', ['userId' => $model->userId])
+                );
+            } else {
+                if($model->hasErrors()) {
+                    Yii::$app->session->addFlash('error', 
+                        Html::tag('h4', Yii::t('app', 'Remove User'))
+                        . Yii::t('app', 'The user #{userId} has not been removed.', ['userId' => $model->userId]) . ' ' 
+                        . join('<br>', $model->getErrorSummary(true))
+                    );
+                }
+            }
+        }
+        return $this->redirect(['manage-users', 'id'=>$model->costprojectId]);
     }
 
     /**

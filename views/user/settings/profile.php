@@ -9,16 +9,18 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-use Da\User\Helper\TimezoneHelper;
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\validators\DefaultValidator;
+
+use app\components\TimezoneHelper;
 
 /**
- * @var yii\web\View           $this
- * @var yii\widgets\ActiveForm $form
- * @var \Da\User\Model\Profile $model
- * @var TimezoneHelper         $timezoneHelper
+ * @var yii\web\View                $this
+ * @var yii\bootstrap4\ActiveForm   $form
+ * @var \Da\User\Model\Profile      $model
+ * @var TimezoneHelper              $timezoneHelper
  */
 
 $this->title = Yii::t('usuario', 'Profile settings');
@@ -62,9 +64,10 @@ $timezoneHelper = $model->make(TimezoneHelper::class);
 
                 <?= $form->field($model, 'location') ?>
 
+
                 <?= $form
                     ->field($model, 'timezone')
-                    ->dropDownList(ArrayHelper::map($timezoneHelper->getAll(), 'timezone', 'name'));
+                    ->dropDownList(TimezoneHelper::getAllByContinentAndTown(), ['prompt'=>Yii::t('app', '--- Select ---')]);
                 ?>
                 <?= $form
                     ->field($model, 'gravatar_email')
