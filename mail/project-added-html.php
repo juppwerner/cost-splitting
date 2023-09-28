@@ -6,7 +6,7 @@ use yii\helpers\Url;
 /* @var $message \yii\mail\BaseMessage instance of newly created mail message */
 
 ?>
-<?= Yii:t('app', 'Hello,') ?>
+<?= Yii::t('app', 'Hello,') ?>
 
 <p><?= Yii::t('app', 'You have been added to the cost project {title} on {appName}.', ['title'=>$costproject->title, 'appName' => Yii::$app->name]) ?></p>
 
