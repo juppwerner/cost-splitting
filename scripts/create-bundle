@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 usage() {
     echo "usage: create-bundle bundle-dir [last-bundle-tag]"
 }
@@ -22,10 +22,10 @@ if [ $# -eq 2 ]; then
 else
     read -e -p "Enter the tag for the 'last bundle' [$LASTBUNDLETAG]: " INPUT
     LASTBUNDLETAG=${INPUT:-$LASTBUNDLETAG}
-    
 fi
 
-. ./git-flow-version
+VERSION_FILE=./VERSION
+GITFLOW_VERSION=$(cat "$VERSION_FILE")
 DIR=`pwd`
 DIRNAME=`basename $DIR`
 BUNDLEFILE=$1/$DIRNAME-$GITFLOW_VERSION.bundle
@@ -33,5 +33,6 @@ echo "Current Version : $GITFLOW_VERSION"
 echo "Bundle File     : $BUNDLEFILE"
 echo "Last Bundle Tag : $LASTBUNDLETAG"
 
+# Create bundle file and tag the master branch
 git bundle create $BUNDLEFILE $LASTBUNDLETAG..master --branches --tags
 git tag -f lastbundle master
