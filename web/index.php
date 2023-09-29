@@ -22,14 +22,11 @@ if(file_exists(__DIR__ . '/../config/web-local.php')) {
 // DEBUG die(\yii\helpers\VarDumper::dumpAsString($config, 10, true));
 
 
-$version = '1.0';
+$version = '0.0.1';
 $versionFile = dirname(__FILE__).'/../VERSION';
 if(file_exists($versionFile)) {
-    $cts = file_get_contents($versionFile);
-    $tmp = explode('=',$cts);
-    $version = $tmp[1];
+    $version = file_get_contents($versionFile);
 }
-// (new yii\web\Application($config))->setVersion($version)->run();
 $app = new yii\web\Application($config);
 
 // Merge mail parameters
