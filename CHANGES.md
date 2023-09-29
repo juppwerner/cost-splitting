@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev 0.4.0
+
+2023-09-29
+
+* Changed app versioning system to a semantic versioning
+
 ## Rev. 24
 
 2023-09-28
