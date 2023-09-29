@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() {
     echo ""
@@ -60,7 +60,8 @@ if ! [ -d $1 ]; then
 	exit 1
 fi
 
-. ./git-flow-version
+VERSION_FILE=./VERSION
+GITFLOW_VERSION=$(cat "$VERSION_FILE")
 DIR=`pwd`
 DIRNAME=`basename $DIR`
 BUNDLEFILE=$1/$DIRNAME-$GITFLOW_VERSION.bundle
