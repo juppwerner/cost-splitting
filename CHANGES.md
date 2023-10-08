@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.5.0
+
+2023-10-08
+
+* [Expenses](../expense): Added documents/attachments
+
 ## Rev 0.4.0
 
 2023-09-29
