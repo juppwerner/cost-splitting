@@ -119,6 +119,13 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
         ],
     ]) ?>
 
+    <h3 class="mt-3"><?= Yii::t('app', 'Attachments') ?></h3>
+    <?= \floor12\files\components\FileListWidget::widget([
+        'files' => $model->documents, 
+        'downloadAll' => true, 
+        'zipTitle' => "Attachments of {$model->title}" 
+    ]) ?>
+
     <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,

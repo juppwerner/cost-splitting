@@ -17,7 +17,6 @@
         "php": ">=5.6.0",
         "2amigos/yii2-usuario": "~1.0",
         "2amigos/2fa-library": "^1.0",
-        "elisevgeniy/yii2-attachments": "~1.0.0",
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap4": "~2.0.0",
         "yii2mod/yii2-markdown": "^1.1",
@@ -33,7 +32,9 @@
         "thrieu/yii2-grid-view-state": "dev-master",
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "kartik-v/yii2-widget-typeahead": "^1.0@dev",
-        "2amigos/qrcode-library": "^2.0"
+        "2amigos/qrcode-library": "^2.0",
+        "nemmo/yii2-attachments": "~1.0.1",
+        "floor12/yii2-module-files": "dev-custom"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -94,6 +95,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/elisevgeniy/yii2-attachments"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/juppwerner/yii2-module-files"
         }
     ]
 }
