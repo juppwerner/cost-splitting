@@ -182,16 +182,22 @@ class ExpenseController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash(
-                'success',
-                Html::tag('h4', Yii::t('app', 'Update Expense'))
-                . Yii::t('app', 'The expense <em>{title}</em> has been updated.', ['title'=>$model->title])
-            );
-            if(!empty(Yii::$app->session->get('cost-project'))) 
-                return $this->redirect(Url::previous('cost-project'));
-            else
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+            if($model->load($this->request->post()) && $model->save()) {
+                Yii::$app->session->setFlash(
+                    'success',
+                    Html::tag('h4', Yii::t('app', 'Update Expense'))
+                    . Yii::t('app', 'The expense <em>{title}</em> has been updated.', ['title'=>$model->title]) . '<br>'
+                    . Html::tag('ul', Html::tag('li', Html::a(Yii::t('app', 'View Expense'), ['expense/view', 'id'=>$model->id]) . ' | '
+                    . Html::a(Yii::t('app', 'Edit'), ['expense/update', 'id'=>$model->id])))
+                );
+                if(!empty(Yii::$app->session->get('cost-project'))) 
+                    return $this->redirect(Url::previous('cost-project'));
+                else
+                    return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
         }
 
         // Get a list of all user-assigned cost projects

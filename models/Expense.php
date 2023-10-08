@@ -47,11 +47,6 @@ class Expense extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            'blameable' => [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'updated_by',
-            ],
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
                 'attributes' => [
@@ -60,6 +55,18 @@ class Expense extends \yii\db\ActiveRecord
                 ],
                 //'value' => new Expression('NOW()'),
             ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'created_by',
+                'updatedByAttribute' => 'updated_by',
+            ],
+
+            'files' => [
+                'class' => \floor12\files\components\FileBehaviour::class,
+                'attributes' => [
+                    'documents'
+                ],
+            ],        
         ];
     } // }}} 
     // {{{ rules
@@ -86,6 +93,9 @@ class Expense extends \yii\db\ActiveRecord
                 if(is_array($this->$attribute))
                     $this->$attribute = join(';', $this->$attribute);
             }],
+            // ['pdf', 'file', 'extensions' => ['pdf']],
+            // Documens allows to upload a few files with this extensions: docx, xlsx
+            ['documents', 'file', 'extensions' => ['docx', 'pdf', 'jpg', 'png'], 'maxFiles' => 5],
         ];
     } // }}}
     // {{{ validateCostproject
@@ -128,6 +138,7 @@ class Expense extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
             'updated_by' => Yii::t('app', 'Updated By'),
             'updateUserName' => Yii::t('app', 'Created By'),
+            'documents' => Yii::t('app', 'Documents'),
         ];
     } // }}} 
     // {{{ getCostitems
@@ -176,7 +187,12 @@ class Expense extends \yii\db\ActiveRecord
     // {{{ afterSave
     public function afterSave( $insert, $changedAttributes )
     {
+        parent::afterSave($insert, $changedAttributes);
         $this->recreateCostitems();
+        // Delete orphaned file entries aged more than 0.5 hrs
+        Yii::$app->db->createCommand('DELETE FROM {{%file}} '
+            . 'WHERE (unix_timestamp() - created)/60/60 > 0.5 '
+            . 'AND object_id=0;')->execute();
     } // }}} 
     // {{{ recreateCostitems
     public function recreateCostitems()

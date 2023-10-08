@@ -20,18 +20,20 @@ use app\models\Expense;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->errorSummary($model) ?>
+
     <?= $form->field($model, 'costprojectId')->dropDownList(ArrayHelper::map($costprojects, 'id', 'title'), ['autofocus'=>'autofocus', 'prompt'=>Yii::t('app', '--- Select ---')])->hint(Yii::t('app','Select the cost project into which this expense falls')) ?>
 
     <?= $form->field($model, 'expenseType')->dropdownList(\app\dictionaries\ExpenseTypesDict::all(), ['prompt'=>Yii::t('app', '(Select)')]) ?>
 
     <?= '' // $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'title')->widget(TypeaheadBasic::classname(), [
+    <?= $form->field($model, 'title')/*->widget(TypeaheadBasic::classname(), [
         'data' => $titles,
         'dataset' => ['limit' => 10],
         'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
         'pluginOptions' => ['highlight'=>true, 'minLength' => 0],
-    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
+    ])*/->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 
@@ -71,6 +73,8 @@ use app\models\Expense;
             'maximumInputLength' => 10
         ],
     ]) ?>
+
+    <?= $form->field($model, 'documents')->widget(app\components\FileInputWidget::class) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

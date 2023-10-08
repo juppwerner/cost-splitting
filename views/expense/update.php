@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use app\components\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
@@ -11,6 +11,7 @@ $this->title = Yii::t('app', 'Update Expense: {name}', [
 $this->params['breadcrumbs'][] = ['label' => $model->costproject->recordName, 'url' => ['costproject/view', 'id'=>$model->costprojectId]];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+\yii\web\YiiAsset::register($this);
 ?>
 <div class="expense-update">
 
