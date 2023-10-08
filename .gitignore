@@ -53,3 +53,6 @@ runtime/debug/*
 
 #vagrant folder
 /.vagrant
+
+/data/storage/*
+/data/storage_cache/*

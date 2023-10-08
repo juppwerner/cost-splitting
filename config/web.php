@@ -157,17 +157,6 @@ $config = [
         ], // }}} 
     ], // }}} 
     'modules' => [ // {{{ 
-        'attachments' => [ // {{{ 
-            'class' => nemmo\attachments\Module::className(),
-            'tempPath' => '@app/data/uploads/temp',
-            'storePath' => '@app/data/uploads/store',
-            'rules' => [ // Rules according to the FileValidator
-                'maxFiles' => 10, // Allow to upload maximum 3 files, default to 3
-                // 'mimeTypes' => 'image/png', // Only png images
-                'maxSize' => 5 * 1024 * 1024 // 1 MB
-            ],
-            'tableName' => '{{%attachments}}' // Optional, default to 'attach_file'
-        ], // }}}
         'api' => [ // {{{ 
             'class' => 'app\modules\api\Module',
         ], // }}} 
@@ -176,6 +165,12 @@ $config = [
         ], // }}}
         'exchangerate' => [
             'class' => 'app\modules\exchangerate\Module',
+        ],
+        'files' => [
+            'class' => 'floor12\files\Module',
+            'storage' => '@app/data/storage',
+            'cache' => '@app/data/storage_cache',
+            'token_salt' => '232j3i3be3uh439ueh39dh39uhe3u9h',
         ],
         'gridview' =>  [ // {{{ 
             'class' => '\kartik\grid\Module'

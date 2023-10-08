@@ -45,7 +45,7 @@ $expensesDataProvider = new ActiveDataProvider([
 ?>
 <div class="costproject-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Yii::t('app', 'Cost Project: {title}', ['title' => Html::encode($this->title)]) ?></h1>
 
     <p>
         <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

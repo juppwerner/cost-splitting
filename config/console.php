@@ -60,10 +60,10 @@ $config = [
                 '@app/migrations',
                 '@yii/rbac/migrations', // Just in case you forgot to run it on console (see next note)
                 '@app/modules/lookup/migrations',
+                '@vendor/floor12/yii2-module-files/src/migrations'
             ],
             'migrationNamespaces' => [
                 'Da\User\Migration',
-                'nemmo\attachments\migrations',
             ],
         ], // }}}
         'migration' => [
