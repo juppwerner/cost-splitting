@@ -71,17 +71,6 @@ $config = [
         ],
     ], // }}}
     'modules' => [ // {{{ 
-        'attachments' => [ // {{{ 
-            'class' => nemmo\attachments\Module::className(),
-            'tempPath' => '@app/data/uploads/temp',
-            'storePath' => '@app/data/uploads/store',
-            'rules' => [ // Rules according to the FileValidator
-                'maxFiles' => 10, // Allow to upload maximum 3 files, default to 3
-                // 'mimeTypes' => 'image/png', // Only png images
-                'maxSize' => 5 * 1024 * 1024 // 1 MB
-            ],
-            'tableName' => '{{%attachments}}' // Optional, default to 'attach_file'
-        ], // }}}
         'user' => [ // {{{ 
             'class' => Da\User\Module::class,
             // ...other configs from here: [Configuration Options](installation/configuration-options.md), e.g.
