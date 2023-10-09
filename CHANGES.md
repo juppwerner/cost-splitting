@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.5.1
+
+* Removed package nemmo/attachments
+
+2023-10-09
+
 ## Rev. 0.5.0
 
 2023-10-08
