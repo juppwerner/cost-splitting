@@ -89,17 +89,24 @@ $expensesDataProvider = new ActiveDataProvider([
             ],
             [
                 'attribute'=>'title',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function($data) {
                     $result = $data->title;
-                    if($data->expenseType===\app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER)
-                        $result .= ' <span class="badge badge-info">'.Yii::t('app', 'Money Transfer').'</span>';
-                    return $result;
+                    // if($data->expenseType===\app\dictionaries\ExpenseTypesDict::EXPENSETYPE_TRANSFER)
+                    //     $result .= ' <span class="badge badge-info">'.Yii::t('app', 'Money Transfer').'</span>';
+                    return Html::a(Html::tag('b', $result), ['expense/view', 'id'=>$data->id]);
+                },
+            ],
+            [
+                'label' => Yii::t('app', 'Documents'),
+                'contentOptions' => [ 'class' => 'text-center' ],
+                'value' => function($data) {
+                    return count($data->documents);
                 },
             ],
             [
                 'attribute'=>'payedBy',
-                'contentOptions' => ['class'=>'text-center'],
+                // 'contentOptions' => ['class'=>'text-center'],
             ],
             [
                 'label' => Yii::t('app', 'Participants'),
