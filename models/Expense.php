@@ -77,18 +77,25 @@ class Expense extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'costprojectId', 'payedBy', 'currency', 'splitting'], 'required'],
+            [['title', 'costprojectId', 'payedBy', 'amount', 'currency', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
             ['costprojectId', 'validateCostproject'],
             [['expenseType'], 'in', 'range' => ['expense', 'transfer']],
-            [['itemDate', 'participants'], 'safe'],
+            [['itemDate'], 'safe'],
             [['amount'], 'number'],
             [['currency'], 'string', 'min' => 3, 'max' => 3],
             [['exchangeRate'], 'number', 'min' => 0.000001],
             [['title'], 'string', 'max' => 255],
             [['payedBy'], 'string', 'max' => 30],
-            [['splitting'], 'safe'],
+            // [['splitting'], 'safe'],
+            ['splitting', 'in', 'range' => array_keys(self::getSplittingOptions())],
             [['costprojectId'], 'exist', 'skipOnError' => true, 'targetClass' => Costproject::class, 'targetAttribute' => ['costprojectId' => 'id']],
+            [['participants'], function ($attribute, $params, $validator) {
+                
+                if($this->splitting == self::SPLITTING_SELECTED_PARTICIPANTS && trim($this->$attribute)=='') {
+                    $this->addError($attribute, 'Please select the participants');
+                }
+            }],
             [['participants'], function ($attribute, $params, $validator) {
                 if(is_array($this->$attribute))
                     $this->$attribute = join(';', $this->$attribute);
