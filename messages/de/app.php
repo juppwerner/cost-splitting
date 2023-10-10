@@ -210,6 +210,7 @@ return [
     'The user #{userId} has not been removed.' => 'Der Benutzer #{userId} konnte nicht entfernt werden.',
     'The user {username} has been added.' => 'Der Benutzer {username} wurde hinzugefügt.',
     'Then add expenses to the cost project.' => 'Fügen Sie dann Ausgaben zum Kostenprojekt hinzu.',
+    'This is the list of all expenses in this project.' => 'Zeigt die Liste aller Ausgaben in diesem Kostenprojekt.',
     'This is the login URL:' => 'Dies ist die Anmelde-URL:',
     'This project was inspired by the article about Haushaltsbuch apps in the c\'T magazine 19/2022.' => 'Dieses Projekt wurde inspiriert vom Artikel über Haushaltsbuch-Apps im c\'T-Magazin 19/2022.',
     'Title' => 'Titel',

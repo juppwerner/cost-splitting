@@ -64,6 +64,7 @@ $expensesDataProvider = new ActiveDataProvider([
     <?= $this->render('_currencyNotes') ?>
 
     <h3><?= Yii::t('app', 'Expenses') ?></h3>
+    <p><?= Yii::t('app', 'This is the list of all expenses in this project.') ?></p>
     <p><?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?></p>
     <?= GridView::widget([
         'id' => 'expenses-grid',
