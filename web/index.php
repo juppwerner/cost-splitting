@@ -1,4 +1,6 @@
 <?php
+if(file_exists(__DIR__.'/../env.php'))
+    require(__DIR__ . '/../env.php');
 
 // comment out the following two lines when deployed to production
 if($_SERVER['SERVER_NAME']=='localhost')

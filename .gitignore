@@ -17,6 +17,7 @@ composer.lock.bu
 data/database.db
 mysql_root.txt
 mysql_user.txt
+env.php
 
 # phpstorm project files
 .idea
