@@ -123,7 +123,7 @@ return [
     'History' => 'Verlauf',
     'Home' => 'Start',
     'ID' => 'ID',
-    'If you do not yet have a user account, please register yourself here.' => 'Falls Sie noch kein Benutzerkonto haben, registrieren Sie sich bitee hier.',
+    'If you do not yet have a user account, please register yourself here.' => 'Falls Sie noch kein Benutzerkonto haben, registrieren Sie sich bitte hier.',
     'Import' => 'Import',
     'Import EZB Historic Currency Exchange Rates' => 'Historische EZB-Währumgs-Umtauschkutse importieren',
     'Intro' => 'Einführung',
