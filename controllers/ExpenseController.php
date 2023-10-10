@@ -183,7 +183,7 @@ class ExpenseController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost) {
-            if($model->load($this->request->post()) && $model->save()) {
+            if($model->load($this->request->post()) && $model->validate() && $model->save()) {
                 Yii::$app->session->setFlash(
                     'success',
                     Html::tag('h4', Yii::t('app', 'Update Expense'))
