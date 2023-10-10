@@ -18,7 +18,7 @@ use app\models\Expense;
 
 <div class="expense-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
 
     <?= $form->errorSummary($model) ?>
 
@@ -51,9 +51,9 @@ use app\models\Expense;
     <?= $form->field($model, 'exchangeRate')->textInput(['maxlength' => true])->input('number', ['step'=>'.000001'])->hint(Yii::t('app', 'Will be set when a currency is selected')) ?>
 
     <?php if(is_null($participants)) : ?>
-    <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true])->hint(Yii::t('app', 'Press ENTER to show all partoicipants')) ?>
+    <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true])->hint(Yii::t('app', 'Press ENTER to show all participants')) ?>
     <?php else : ?>
-    <?= $form->field($model, 'payedBy')->widget(Select2::classname(), [
+    <?= $form->field($model, 'payedBy')->widget(Select2::class, [
         'data' => $participants,
         'options' => ['placeholder' => Yii::t('app', 'Select a participant ...')],
         'pluginOptions' => [
@@ -64,7 +64,7 @@ use app\models\Expense;
 
     <?= $form->field($model, 'splitting')->radioList(Expense::getSplittingOptions(), ['separator'=>'<br>']) ?>
 
-    <?=$form->field($model, 'participants')->widget(Select2::classname(), [
+    <?=$form->field($model, 'participants')->widget(Select2::class, [
         'data' => $participants,
         'options' => ['placeholder' => Yii::t('app', 'Select one or more recipients ...'), 'multiple' => true],
         'pluginOptions' => [
