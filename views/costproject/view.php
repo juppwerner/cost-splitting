@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 use app\components\Html;
-use app\dictionaries\CurrencyCodesDict;
+use app\dictionaries\Ewf;
 use app\models\Expense;
 // use app\widgets\GridView;
 use yii\grid\GridView;

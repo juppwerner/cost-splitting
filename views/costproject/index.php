@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 use app\components\Html;
-use app\dictionaries\CurrencyCodesDict;
+use app\dictionaries\CurrencyCodesDictEwf;
 use app\models\Costproject;
 
 /** @var yii\web\View $this */
@@ -58,7 +58,7 @@ Url::remember('', 'cost-project');
             [
                 'attribute' => 'currency',
                 'value' => function($data) {
-                    return CurrencyCodesDict::get($data->currency);
+                    return CurrencyCodesDictEwf::get($data->currency);
                 },
             ],
             [

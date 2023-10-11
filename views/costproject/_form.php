@@ -6,7 +6,7 @@ use yii\bootstrap4\ActiveForm;
 use kartik\select2\Select2;
 
 use app\components\Html;
-use app\dictionaries\CurrencyCodesDict;
+use app\dictionaries\CurrencyCodesDictEwf;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
@@ -20,7 +20,7 @@ use app\dictionaries\CurrencyCodesDict;
     <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus'=>'autofocus']) ?>
     <?= $form->field($model, 'participants')->textArea(['rows' => 4])->hint(Yii::t('app', 'Enter one participant per line')) ?>
     <?= $form->field($model, 'currency')->widget(Select2::classname(), [
-        'data' => CurrencyCodesDict::all(),
+        'data' => CurrencyCodesDictEwf::allByLabel(),
         // 'language' => 'de',
         'options' => ['placeholder' => Yii::t('app', 'Select a currency ...')],
         'pluginOptions' => [

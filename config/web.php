@@ -73,6 +73,14 @@ $config = [
                         'contact' => 'contact.php'
                     ],
                 ],
+                'currcodes*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'currcodes' => 'currcodes.php'
+                    ],
+                ],
                 'exchangerate*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
