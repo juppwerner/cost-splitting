@@ -7,7 +7,7 @@ use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 use app\components\Html;
-use app\dictionaries\CurrencyCodesDict;
+use app\dictionaries\CurrencyCodesDictEwf;
 use app\dictionaries\ExpenseTypesDict;
 use app\models\Expense;
 use app\widgets\GridView;
@@ -17,7 +17,7 @@ use app\assets\ChartJSAsset;
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
 
-$this->title = $model->title;
+$this->title = Yii::t('app', '{title} / Cost Breakdown', ['title' => $model->title]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 

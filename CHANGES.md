@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.5.3
+
+2023-10-11
+
+* [Expenses](../expense): Reduced currencies dropdown list to only EWF currencies
+
 ## Rev. 0.5.2
 
 2023-10-09

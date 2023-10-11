@@ -42,6 +42,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
 
     <?= DetailView::widget([
         'model' => $model,
+        'options' => ['class' => 'table table-striped table-responsive-sm table-hover'],
         'attributes' => [
             /* [
                 'attribute'=>'title',
