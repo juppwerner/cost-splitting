@@ -253,8 +253,8 @@ abstract class CurrencyCodesDict
 			self::HRK => Yii::t('app', 'Croatian kuna') . ' (HRK)',
 			self::HTG => Yii::t('app', 'Haitian gourde') . ' (HTG)',
 			self::HUF => Yii::t('app', 'Hungarian forint') . ' (HUF)',
-			self::IDR => Yii::t('app', 'Indonesian rupiah') . ' (IDR)',
 			self::ILS => Yii::t('app', 'Israeli new shekel') . ' (ILS)',
+			self::IDR => Yii::t('app', 'Indonesian rupiah') . ' (IDR)',
 			self::INR => Yii::t('app', 'Indian rupee') . ' (INR)',
 			self::IQD => Yii::t('app', 'Iraqi dinar') . ' (IQD)',
 			self::IRR => Yii::t('app', 'Iranian rial') . ' (IRR)',
@@ -382,6 +382,6 @@ abstract class CurrencyCodesDict
             return $all[$key];
         }
 
-        return Yii::t('app', '(not set');
+        return Yii::t('app', '(not set)');
     } // }}} 
 }

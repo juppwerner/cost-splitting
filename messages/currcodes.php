@@ -17,6 +17,4 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Create New Blog Post' => 'Neuen Blog-Beitrag anlegen',
-    'Manage Blog Posts' => 'Blog-Beiträge verwalten',
 ];

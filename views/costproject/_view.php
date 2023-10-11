@@ -2,13 +2,14 @@
 use app\components\Html;
 use yii\widgets\DetailView;
 
-use app\dictionaries\CurrencyCodesDict;
+use app\dictionaries\CurrencyCodesDictEwf;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
 ?>
 <?= DetailView::widget([
     'model' => $model,
+    'options' => ['class' => 'table table-striped table-responsive-sm table-hover'],
     'attributes' => [
         [
             'attribute' => 'title',
@@ -23,8 +24,8 @@ use app\dictionaries\CurrencyCodesDict;
         ],
         [
             'attribute' => 'currency',
-            'value' => CurrencyCodesDict::get($model->currency),
-            'visible' => $model->useCurrency,
+            'value' => CurrencyCodesDictEwf::get($model->currency),
+            // 'visible' => $model->useCurrency,
         ],
         [
             'attribute' => 'useCurrency',

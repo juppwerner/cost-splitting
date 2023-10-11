@@ -8,12 +8,15 @@ use kartik\select2\Select2;
 use kartik\typeahead\TypeaheadBasic;
 
 use app\components\Html;
-use app\dictionaries\CurrencyCodesDict;
+use app\dictionaries\CurrencyCodesDictEwf;
 use app\models\Expense;
 
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
 /** @var yii\bootstrap4\ActiveForm $form */
+
+// Prepare currency codes
+$currencyCodes = CurrencyCodesDictEwf::allByLabel();
 ?>
 
 <div class="expense-form">
@@ -39,8 +42,8 @@ use app\models\Expense;
 
     <?= $form->field($model, 'amount')->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
 
-    <?= $form->field($model, 'currency')->widget(Select2::classname(), [
-        'data' => CurrencyCodesDict::all(),
+    <?= $form->field($model, 'currency')->widget(Select2::class, [
+        'data' => $currencyCodes,
         // 'language' => 'de',
         'options' => ['placeholder' => Yii::t('app', 'Select a currency ...')],
         'pluginOptions' => [
