@@ -70,13 +70,14 @@ Url::remember('', 'cost-project');
             'createUserName',
             [
                 'attribute'=>'updated_at',
+                'format' => 'html',
                 'value' => function($data) {
                     return Yii::$app->formatter->asDatetime($data->updated_at, 'php:'.Yii::t('app', 'Y-m-d H:i:s'));
                 },
             ],
             //'updated_by',
             [
-                'class' => ActionColumn::className(),
+                'class' => ActionColumn::class,
                 'template' => '{delete}',
                 'urlCreator' => function ($action, Costproject $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
