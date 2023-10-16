@@ -6,7 +6,9 @@ use app\components\Html;
 use app\models\Costproject;
 use app\models\forms\AddUserForm;
 use app\models\search\CostprojectSearch;
+
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -113,8 +115,18 @@ class CostprojectController extends Controller
      */
     public function actionBreakdown($id)
     {
+        $model = $this->findModel($id);
+        // Get expenses for grid
+        $expensesDataProvider = new ArrayDataProvider([
+            'allModels' => $model->expenses,
+            'key' => 'id',
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
         return $this->render('breakdown', [
-            'model' => $this->findModel($id),
+            'model'                 => $model,
+            'expensesDataProvider'  => $expensesDataProvider
         ]);
     }
 
