@@ -1,6 +1,5 @@
 <?php
 
-use yii\data\ArrayDataProvider;
 use yii\helpers\Url;
 use yii\helpers\VarDumper as VD;
 use yii\web\YiiAsset;
@@ -16,6 +15,7 @@ use app\assets\ChartJSAsset;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
+/** @var yii\data\ArrayDataProvider $expensesDataProvider Expenses for gridview */
 
 $this->title = Yii::t('app', '{title} / Cost Breakdown', ['title' => $model->title]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['index']];
@@ -25,14 +25,6 @@ Url::remember('', 'cost-project');
 YiiAsset::register($this);
 ChartJSAsset::register($this);
 
-// Get expenses for grid
-$expensesDataProvider = new ArrayDataProvider([
-    'allModels' => $model->expenses,
-    'key' => 'id',
-    'pagination' => [
-        'pageSize' => 10,
-    ],
-]);
 $defaultParticipantDetails = [
     'sumExpenses'=>0, 
     'countExpenses'=>0, 
