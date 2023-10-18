@@ -31,6 +31,7 @@ $config = [
     'sourceLanguage' => 'en-US',
     'bootstrap' => [ // {{{ 
         'log',
+        'app\components\MaintenanceMode',
         'languageSwitcher',
     ], // }}} 
     'aliases' => [ // {{{ 
@@ -230,6 +231,24 @@ $config = [
             ], */
         ], // }}} 
     ], // }}} 
+    'container' => [
+        'singletons' => [
+            'app\components\MaintenanceMode' => [
+                'class' => 'app\components\MaintenanceMode',
+                'enableMode' => function() use ($params) { 
+                    $enabled = false;
+                    if(array_key_exists('maintenance.enabled', $params))
+                        $enabled = (bool) $params['maintenance.enabled'];
+                    return $enabled; 
+                },
+                'urls' => [
+                    'debug/default/toolbar',
+                    'debug/default/view',
+                ],
+                'alertClass' => 'warning',
+            ],
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) { // {{{ 

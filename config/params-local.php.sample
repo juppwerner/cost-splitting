@@ -5,6 +5,14 @@
  */
 
 return [
+    // Maintenance Mode Settings
+    // Set to true to activate, false to deactivate 
+    'maintenance.enabled' => false,
+    // Bootstrap CSS class for Alert background
+    'maintenance.alertClass' => 'warning', 
+    // Message to show
+    'maintenance.message' => '<h4>'.'Important Notice'.'</h4>'.'The site is currently in maintenance mode.',
+    
     // Bootswatch UI theme
     // cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, 
     // lux, materia, minty, pulse, sandstone, simplex, sketchy, 
