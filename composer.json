@@ -33,7 +33,8 @@
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "kartik-v/yii2-widget-typeahead": "^1.0@dev",
         "2amigos/qrcode-library": "^2.0",
-        "floor12/yii2-module-files": "dev-custom"
+        "floor12/yii2-module-files": "dev-custom",
+        "codemix/yii2-configloader": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

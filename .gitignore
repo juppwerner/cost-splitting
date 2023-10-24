@@ -11,12 +11,14 @@ DEBUG
 curl_result.txt
 /scripts/.remote-host
 /config/*-local.php
+/config/local*.php
 vendor.bu
 vendor.zip
 composer.lock.bu
 data/database.db
 mysql_root.txt
 mysql_user.txt
+.env
 env.php
 
 # phpstorm project files

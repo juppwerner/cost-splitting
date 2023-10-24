@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.5.4
+
+2023-10-24
+
+* Changed to codemix/yii2-configloader
+
 ## Rev. 0.5.3
 
 2023-10-11

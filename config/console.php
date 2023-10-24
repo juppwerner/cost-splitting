@@ -2,23 +2,18 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
+
+
 $params = require __DIR__ . '/params.php';
 // Additional Parameters:
-if(file_exists(__DIR__ . '/params-local.php')) {
+if(file_exists(__DIR__ . '/local-params.php')) {
     $params = yii\helpers\ArrayHelper::merge(
         require(__DIR__ . '/params.php'),
-        require(__DIR__ . '/params-local.php')
+        require(__DIR__ . '/local-params.php')
     );
 }
-
-$db = require __DIR__ . '/db.php';
-if(file_exists(__DIR__ . '/db-local.php')) {
-    $db = yii\helpers\ArrayHelper::merge(
-        require(__DIR__ . '/db.php'),
-        require(__DIR__ . '/db-local.php')
-    );
-}
-
+/* @var codemix\yii2confload\Config $this */
+$web = $this->web();
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
@@ -44,7 +39,7 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' => $web['components']['db'],
         'mailer' => [
             'class' => 'yii\symfony\Mailer',
             'useFileTransport' => true,
