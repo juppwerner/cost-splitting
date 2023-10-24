@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    '_appName_' => 'Kosten teilen',
     '(Select)' => '(Auswählen)',
     '(Select...)' => '(Auswählen)',
     '(no expenses found)' => '(keine Ausgaben vorhanden)',

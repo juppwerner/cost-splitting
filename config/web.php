@@ -1,26 +1,18 @@
 <?php
+/* @var codemix\yii2confload\Config $this */
 
 $params = require __DIR__ . '/params.php';
 // Load additional Parameters?
-if(file_exists(__DIR__ . '/params-local.php')) {
+if(file_exists(__DIR__ . '/local-params.php')) {
     $params = array_merge(
         require(__DIR__ . '/params.php'),
-        require(__DIR__ . '/params-local.php')
-    );
-}
-
-$db = require __DIR__ . '/db.php';
-// Load additinal DB settings?
-if(file_exists(__DIR__ . '/db-local.php')) {
-    $db     = array_merge(
-        require(__DIR__ . '/db.php'),
-        require(__DIR__ . '/db-local.php')
+        require(__DIR__ . '/local-params.php')
     );
 }
 
 $config = [
     'id' => 'cost-splitting',
-    'name' => Yii::t('app', 'Cost Splitting'),
+    'name' => 'Cost Splitting',
     'basePath' => dirname(__DIR__),
     'params' => $params,
     // The time zone used by this application.
@@ -46,7 +38,24 @@ $config = [
         'cache' => [ // {{{ 
             'class' => 'yii\caching\FileCache',
         ], // }}} 
-        'db' => $db,
+        'db' => [
+            'class'     => 'yii\db\Connection',
+            'dsn'       => self::env('DB_DSN', 'mysql:host=db;dbname=web'),
+            'username'  => self::env('DB_USER', 'root'),
+            'password'  => self::env('DB_PASSWORD', ''),
+            
+            // The common prefix or suffix for table names, or empty:
+            'tablePrefix' => self::env('DB_TABLEPREFIX', ''),
+
+            // The charset used for database connection:
+            'charset'   => 'utf8',
+
+            // Whether to enable schema caching:
+            'enableSchemaCache' => false,
+
+            // Number of seconds that table metadata can remain valid in cache
+            'schemaCacheDuration' => 0,
+        ],
         'errorHandler' => [ // {{{ 
             'errorAction' => 'site/error',
         ], // }}} 
@@ -250,22 +259,5 @@ $config = [
         ],
     ],
 ];
-
-if (YII_ENV_DEV) { // {{{ 
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
-
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
-} // }}} 
 
 return $config;
