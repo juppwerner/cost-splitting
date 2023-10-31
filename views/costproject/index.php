@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 use app\components\Html;
@@ -27,6 +28,8 @@ Url::remember('', 'cost-project');
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -87,6 +90,28 @@ Url::remember('', 'cost-project');
         ],
     ]); ?>
 
+    <?php else : ?>
+
+    <?= ListView::widget([ // {{{ 
+        'dataProvider' => $dataProvider,
+        'options' => ['class' => 'list-group'],
+        'itemOptions' => function ($model, $key, $index, $widget) {
+            return [
+                'tag' => 'a',
+                'class' => 'list-group-item list-group-item-action d-flex justify-content-between align-items-center', 
+                'href' => Url::to(['view', 'id' => $model->id])
+            ];
+        },
+        'itemView' => function ($model, $key, $index, $widget) {
+            return 
+                Html::encode($model->title)."\r\n"
+                .'<span class="badge badge-primary badge-pill">'.Html::encode(count($model->expenses)).'</span>'
+                ;
+        },
+    ]) /* }}} */ ?>
+
+    <?php endif; ?>
+    
     <?php Pjax::end(); ?>
 
 </div>
