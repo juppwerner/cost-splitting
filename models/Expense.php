@@ -91,8 +91,10 @@ class Expense extends \yii\db\ActiveRecord
             ['splitting', 'in', 'range' => array_keys(self::getSplittingOptions())],
             [['costprojectId'], 'exist', 'skipOnError' => true, 'targetClass' => Costproject::class, 'targetAttribute' => ['costprojectId' => 'id']],
             [['participants'], function ($attribute, $params, $validator) {
-                
-                if($this->splitting == self::SPLITTING_SELECTED_PARTICIPANTS && trim($this->$attribute)=='') {
+                $attributeValue = $this->$attribute;
+                if(is_array($attributeValue))
+                    $attributeValue = join(';', $this->$attribute);
+                if($this->splitting == self::SPLITTING_SELECTED_PARTICIPANTS && trim($attributeValue)=='') {
                     $this->addError($attribute, 'Please select the participants');
                 }
             }],
@@ -206,7 +208,7 @@ class Expense extends \yii\db\ActiveRecord
     {
         // Delete all previously attached cost items
         foreach($this->costitems as $costitem) 
-            $costitem->delete();
+            Yii::info($costitem->delete(), __METHOD__);
 
         $participants = explode("\n", str_replace("\r\n", "\n", $this->costproject->participants));
 
@@ -243,7 +245,10 @@ class Expense extends \yii\db\ActiveRecord
                 $costitem->amount       = $this->amount/count(explode(';', $this->participants));
                 $costitem->currency     = $this->currency;
                 $costitem->exchangeRate = $this->exchangeRate;
-                $costitem->save();
+                if(!$costitem->save()) {
+                    Yii::error($costitem->errors, __METHOD__);
+                }
+
             }
             breaK;
         }
