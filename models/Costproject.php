@@ -16,6 +16,7 @@ use app\components\BaseActiveRecord;
  * @property string $participants
  * @property boolean $useCurrency
  * @property string $currency
+ * @property string $description
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -69,6 +70,7 @@ class Costproject extends BaseActiveRecord
             [['title'], 'string', 'max' => 255],
             [['useCurrency'], 'boolean'],
             [['currency'], 'string', 'min'=>3, 'max' => 255],
+            ['description', 'safe'],
             [['participants'], 'trim'],
             [['participants'], 'safe'],
         ];
@@ -85,6 +87,7 @@ class Costproject extends BaseActiveRecord
             'participants' => Yii::t('app', 'Participants'),
             'useCurrency' => Yii::t('app', 'Use Currency'),
             'currency' => Yii::t('app', 'Currency'),
+            'description' => Yii::t('app', 'Description'), 
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'createUserName' => Yii::t('app', 'Created By'),

@@ -31,6 +31,7 @@ use app\dictionaries\CurrencyCodesDictEwf;
             'attribute' => 'useCurrency',
             'format' => 'checkbox',
         ],
+        'description:markdown',
         [
             'attribute' => Yii::t('app', 'Users'),
             'format' => 'raw',

@@ -145,7 +145,7 @@ $expensesDataProvider = new ActiveDataProvider([
         <?= Html::a(Html::icon('list') . Yii::t('app', 'All Expenses'), ['/expense/index', 'ExpenseSearch[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
     </p>
 
-    <h3><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
+    <h3 class="mt-5"><?= Yii::t('app', 'History') ?></h3><!-- {{{ -->
     <?= DetailView::widget([
         'model' => $model,
         'options' => ['class' => 'table table-striped table-responsive-sm table-hover'],
