@@ -47,17 +47,17 @@ $expensesDataProvider = new ActiveDataProvider([
 
     <h1><?= Yii::t('app', 'Cost Project: {title}', ['title' => Html::encode($this->title)]) ?></h1>
 
-    <p>
-        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Html::icon('file-text') . Yii::t('app', 'Cost Breakdown'), ['breakdown', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <div class="btn-group mb-3" role="group" aria-label="Buttons">
+        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Html::icon('file-text') . Yii::t('app', 'Cost Breakdown'), ['breakdown', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']) ?>
         <?= Html::a(Html::icon('trash-2') . Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
+            'class' => 'btn btn-danger btn-sm',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
-    </p>
+    </div>
 
     <!-- Cost Project Detail View -->
     <?= $this->render('_view', ['model' => $model]) ?>
