@@ -10,10 +10,9 @@
 use codemix\yii2confload\Config;
 
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
+// require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $config = Config::bootstrap(__DIR__);
-
 $application = Yii::createObject('yii\console\Application', [$config->console()]);
 $exitCode = $application->run();
 exit($exitCode);
