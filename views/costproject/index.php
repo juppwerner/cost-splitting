@@ -98,14 +98,20 @@ Url::remember('', 'cost-project');
         'itemOptions' => function ($model, $key, $index, $widget) {
             return [
                 'tag' => 'a',
-                'class' => 'list-group-item list-group-item-action d-flex justify-content-between align-items-center', 
+                'class' => 'list-group-item list-group-item-action', 
                 'href' => Url::to(['view', 'id' => $model->id])
             ];
         },
         'itemView' => function ($model, $key, $index, $widget) {
             return 
-                Html::encode($model->title)."\r\n"
-                .'<span class="badge badge-primary badge-pill">'.Html::encode(count($model->expenses)).'</span>'
+                Html::tag(
+                    'div',
+                    Html::tag('h5', Html::encode($model->title), ['class' => 'mb-1']) 
+                    . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill']),
+                    ['class' => 'd-flex w-100 justify-content-between']
+                )
+                . Html::tag('div', Yii::$app->formatter->asMarkdown(Html::encode($model->description)), ['class' => 'mb-1', 'style'=>'font-size: smaller']) 
+                // . Html::tag('small', 'And some small print.')
                 ;
         },
     ]) /* }}} */ ?>

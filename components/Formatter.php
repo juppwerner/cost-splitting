@@ -1,6 +1,7 @@
 <?php
 namespace app\components;
 
+use yii\helpers\Markdown;
 use app\components\Html;
 
 class Formatter extends \yii\i18n\Formatter
@@ -16,5 +17,10 @@ class Formatter extends \yii\i18n\Formatter
             default:
                 return $value;
         }
+    }
+
+    public function asMarkdown($value)
+    {
+        return Markdown::process($value, 'extra');
     }
 }

@@ -1,8 +1,6 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
-
-
+// require_once __DIR__ . '/../vendor/autoload.php';
+// require_once __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 
 $params = require __DIR__ . '/params.php';
 // Additional Parameters:
@@ -12,9 +10,10 @@ if(file_exists(__DIR__ . '/local-params.php')) {
         require(__DIR__ . '/local-params.php')
     );
 }
+
 /* @var codemix\yii2confload\Config $this */
 $web = $this->web();
-$config = [
+return [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -76,13 +75,3 @@ $config = [
     ], // }}}
     'params' => $params,
 ];
-
-if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-    ];
-}
-
-return $config;

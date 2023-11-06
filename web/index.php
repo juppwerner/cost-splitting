@@ -20,24 +20,8 @@ if(file_exists($versionFile)) {
 }
 
 $config_web = $config->web();
-if(false && YII_ENV_DEV) { // {{{ 
-    // configuration adjustments for 'dev' environment
-    $config_web['bootstrap'][] = 'debug';
-    $config_web['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
-
-    $config_web['bootstrap'][] = 'gii';
-    $config_web['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
-} // }}} 
-// \yii\helpers\VarDumper::dump($config_web, 10, true);
-// die;
+// DEBUG \yii\helpers\VarDumper::dump($config_web, 10, true);
+// DEBUG die;
 
 $app = new yii\web\Application($config_web);
 $app->name = Yii::t('app', '_appName_');

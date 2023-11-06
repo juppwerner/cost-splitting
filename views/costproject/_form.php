@@ -27,6 +27,7 @@ use app\dictionaries\CurrencyCodesDictEwf;
             'allowClear' => true
         ],
     ])->hint(Yii::t('app', 'Select the project currency')); ?>
+    <?= $form->field($model, 'description')->textarea()->hint(Yii::t('app', 'You may use Mardown Extra here')) ?>
     <?= $form->field($model, 'useCurrency')->checkbox()->hint(Yii::t('app', 'Check to capture expenses using foreign currencies')) ?>
     
     <div class="form-group">
