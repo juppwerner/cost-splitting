@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}' => '{n,plural,=0{Keine Ausgaben} =1{eine Ausgabe} other{# Ausgaben}}',
     '_appName_' => 'Kosten teilen',
     '(Select)' => '(Auswählen)',
     '(Select...)' => '(Auswählen)',
@@ -142,6 +143,9 @@ return [
     'Delete Expense' => 'Ausgabe löschen',
     'Delete Item' => 'Eintrag löschen',
     'Delete Post' => 'Post löschen',
+    'Description' => 'Beschreibung',
+    'Desktop View'=> 'Desktop-Ansicht',
+    'Mobile View'=> 'Mobilgerät-Ansicht',
     'Divide between selected recipients only' => 'Nur zwischen ausgewählten Empfängern aufteilen',
     'Divide equally betweeen all' => 'Gleichmässig zwischen allen aufteilen',
     'Djiboutian franc' => '',
@@ -291,6 +295,7 @@ return [
     'Password' => 'Kennwort',
     'Password (confirm)' => 'Kennwort (bestätigen)',
     'Payed By' => 'Bezahlt von',
+    'Payed by {name}'=> 'Bezahlt von {name}',
     'Peruvian sol' => '',
     'Philippine peso' => '',
     'Platinum (one troy ounce)' => '',
@@ -454,6 +459,7 @@ return [
     'You have been added to the cost project {title} on {appName}.' => 'Sie wurden zum Kostenprojekt {title} bei {appName} hinzugefügt.',
     'You have been removed from the cost project {title} on {appName}.' => 'Sie wurden beim Kostenprojekt {title} bei {appName} entfernt.',
     'You have exceeded the maximum number of allowed cost projects (limit: {n,plural,=0{no limit} =1{<b>one</b> cost project} other{<b>#</b> cost projects}}).' => 'Sie haben die maximale Anzahl der Kostenprojekte erreicht (Limit: {n,plural,=0{kein Limit} =1{<b>ein</b> Kostenprojekt} other{<b>#</b> Kostenprojekte}}).',
+    'You may use Mardown Extra here' => 'Sie können hier Markdown Extra verwenden',
     'Your Roles' => 'Ihre Rollen',
     'Zambian kwacha' => '',
     'Zimbabwean dollar' => '',

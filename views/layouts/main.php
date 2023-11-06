@@ -24,6 +24,10 @@ $theme = Yii::$app->params['theme'];
 
 $cookiesRequest     = Yii::$app->request->cookies;
 $cookiesResponse    = Yii::$app->response->cookies;
+
+// Show Mobile views?
+$showMobile = Yii::$app->mobileSwitcher->showMobile;
+
 $themeNew = Yii::$app->request->get('theme');
 if($themeNew) {
     // {{{ Change theme
@@ -147,6 +151,8 @@ if ($isGuest) {
     // {{{ SETTINGS
     $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
         ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
+        ['label' => Html::icon('monitor') . Yii::t('app','Desktop View'), 'url' => Url::current(['showMobile'=>0]), 'visible'=>$showMobile],
+        ['label' => Html::icon('smartphone') . Yii::t('app','Mobile View'), 'url' => Url::current(['showMobile'=>1]), 'visible'=>!$showMobile],
     ]]; // }}} 
     // {{{ LOGOUT
     $menuItems[] = ['label' => Html::icon('log-out').Yii::t('app', 'Logout ({username})', ['username'=>Yii::$app->user->identity->username]), 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']]; // }}}

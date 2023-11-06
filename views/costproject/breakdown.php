@@ -39,10 +39,10 @@ $defaultParticipantDetails = [
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Html::icon('eye') . Yii::t('app', 'View'), ['view', 'id' => $model->id], ['class' => 'btn btn-primary d-print-none']) ?>
-        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary d-print-none']) ?>
-    </p>
+    <div class="btn-group mb-3" role="group" aria-label="Buttons">
+        <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm d-print-none']) ?>
+        <?= Html::a(Html::icon('eye') . Yii::t('app', 'View'), ['view', 'id' => $model->id], ['class' => 'btn btn-info btn-sm d-print-none']) ?>
+    </div>
 
     <!-- Cost Project Detail View -->
     <?= $this->render('_view', ['model' => $model]) ?>
@@ -115,7 +115,7 @@ $defaultParticipantDetails = [
                 <!-- <td class="text-center"><?= Yii::$app->formatter->asDate($row->created_at, 'php:'.Yii::t('app', 'Y-m-d')) ?></td> -->
                 <?php foreach($participants as $participant) : ?>
                 <?php if(!array_key_exists($participant, $participantDetails)) $participantDetails[$participant] = $defaultParticipantDetails; ?>
-                <td style="color:lightgreen" class="text-right">
+                <td style="color:darkseagreen" class="text-right">
                     <?php if($participant==$row->payedBy) : ?>
                     <?= Yii::$app->formatter->asDecimal($row->amount  * $row->exchangeRate, 2) ?>
                     <?php $participantSums[$participant] += $row->amount  * $row->exchangeRate; ?>
@@ -212,15 +212,15 @@ $defaultParticipantDetails = [
     foreach($bilanzen as $bilanzKey=>$partnerStaende) {
         $partners = explode('|', $bilanzKey);
         $saldo = $partnerStaende[$partners[0]] - $partnerStaende[$partners[1]];
-        // echo $bilanzKey.': '.$saldo.'<br>';
+        // DEBUG echo $bilanzKey.': '.$saldo.'<br>';
         if($saldo>0) {
             $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[1], 'participantRight' => $partners[0], 'amount' => Yii::$app->formatter->asCurrency($saldo, $model->currency)]);
-            $personenKonten[$partners[0]] += $saldo;
-            $personenKonten[$partners[1]] -= $saldo;
+            $personenKonten[$partners[0]] += round($saldo, 2);
+            $personenKonten[$partners[1]] -= round($saldo, 2);
         } elseif($saldo<0) {
-            $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[0], 'participantRight' => $partners[1], 'amount' => Yii::$app->formatter->asCurrency($saldo, $model->currency)]);
-            $personenKonten[$partners[0]] -= abs($saldo);
-            $personenKonten[$partners[1]] += abs($saldo);
+            $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[0], 'participantRight' => $partners[1], 'amount' => Yii::$app->formatter->asCurrency(abs($saldo), $model->currency)]);
+            $personenKonten[$partners[0]] -= abs(round($saldo,2));
+            $personenKonten[$partners[1]] += abs(round($saldo, 2));
         }
     }
     sort($schlusszahlungen);
@@ -232,12 +232,14 @@ $defaultParticipantDetails = [
     }
     ?>
     <?php if($numBilanzenGt0>0) : ?>
+
+    <?php if(count(array_filter($personenKonten, function($var) { return abs($var)>0; }))>0) : ?>
     <h3><?= Yii::t('app', 'Balance Sheet') ?></h3>
-    <?= Chart::widget([
+        <?= Chart::widget([
         'type' => Chart::TYPE_BAR,
         'datasets' => [
             [
-                'data' => $personenKonten
+                'data' => array_filter($personenKonten, function($var) { return abs($var)>0; })
             ],
         ],
         'clientOptions' => [
@@ -262,6 +264,7 @@ $defaultParticipantDetails = [
             ],
         ],
     ]); ?>
+    <?php endif; ?>
     <?php endif; ?>
     <?php // DEBUG VD::dump($personenKonten, 10, true); ?>
 
@@ -330,6 +333,8 @@ $defaultParticipantDetails = [
         $schlusszahlungen2  = [];
         $empfaenger         = '';
         foreach($personenKonten as $person=>$saldo) {
+            // DEBUG echo $person . ' Saldo: '.$saldo;
+            // if($saldo - round($saldo, 5)<0.0001) continue;
             if($saldo>0) {
                 $empfaenger = $person;
             } elseif($saldo<0) {

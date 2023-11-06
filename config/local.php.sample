@@ -14,5 +14,19 @@ return [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ], // }}} 
-    ]
+    ],
+    'bootstrap' =>[
+        'debug',
+        'gii'
+    ],
+    'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedHosts' => ['cost-splitting.ddev.site'],
+        ],
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '172.19.0.6'],
+        ],
+    ],
 ];

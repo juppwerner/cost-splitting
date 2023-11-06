@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.5.5
+
+2023-11-06
+
+* Cost Breakdown: Fixed rounding deviations
+
 ## Rev. 0.5.4
 
 2023-10-24

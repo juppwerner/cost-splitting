@@ -3,6 +3,7 @@
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 use app\components\Html;
@@ -27,6 +28,8 @@ Url::remember('', 'cost-project');
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -87,6 +90,34 @@ Url::remember('', 'cost-project');
         ],
     ]); ?>
 
+    <?php else : ?>
+
+    <?= ListView::widget([ // {{{ 
+        'dataProvider' => $dataProvider,
+        'options' => ['class' => 'list-group'],
+        'itemOptions' => function ($model, $key, $index, $widget) {
+            return [
+                'tag' => 'a',
+                'class' => 'list-group-item list-group-item-action', 
+                'href' => Url::to(['view', 'id' => $model->id])
+            ];
+        },
+        'itemView' => function ($model, $key, $index, $widget) {
+            return 
+                Html::tag(
+                    'div',
+                    Html::tag('h5', Html::encode($model->title), ['class' => 'mb-1']) 
+                    . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill']),
+                    ['class' => 'd-flex w-100 justify-content-between']
+                )
+                . Html::tag('div', Yii::$app->formatter->asMarkdown(Html::encode($model->description)), ['class' => 'mb-1', 'style'=>'font-size: smaller']) 
+                // . Html::tag('small', 'And some small print.')
+                ;
+        },
+    ]) /* }}} */ ?>
+
+    <?php endif; ?>
+    
     <?php Pjax::end(); ?>
 
 </div>

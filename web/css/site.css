@@ -124,3 +124,8 @@ form div.hint-block {
 table.table.detail-view > tbody > tr > th {
     width: 30%;
 }
+
+/* Make list-group bottom border re-appear */
+div.list-group >a.list-group-item {
+    margin-bottom: 0;
+}

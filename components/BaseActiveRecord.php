@@ -48,7 +48,7 @@ class BaseActiveRecord extends \yii\db\ActiveRecord
     // {{{ getCreateUser
     public function getCreateUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'created_by']);
+        return $this->hasOne(User::class, ['id' => 'created_by']);
     } // }}} 
     // {{{ getCreateUserName
     /**
@@ -62,7 +62,7 @@ class BaseActiveRecord extends \yii\db\ActiveRecord
     // {{{ getUpdateUser
     public function getUpdateUser()
     {
-       return $this->hasOne(User::className(), ['id' => 'updated_by']);
+       return $this->hasOne(User::class, ['id' => 'updated_by']);
     } // }}} 
     // {{{ getUpdateUserName
     /**
@@ -77,8 +77,12 @@ class BaseActiveRecord extends \yii\db\ActiveRecord
     public function getRecordName()
     {
         $name = $this->recordNameTemplate;
-        foreach($this->attributes as $k=>$v)
-            $name = str_replace('{'.$k.'}', $v, $name);
+        foreach($this->attributes as $k=>$v) {
+            if(!empty($v))
+                $name = str_replace('{'.$k.'}', $v, $name);
+            else
+                $name = str_replace('{'.$k.'}', '', $name);
+        }
         return $name;
     }
 }

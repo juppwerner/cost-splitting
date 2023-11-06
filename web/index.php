@@ -7,7 +7,7 @@ use codemix\yii2confload\Config;
 // defined('YII_ENV') or define('YII_ENV', 'dev');
 
 require __DIR__ . '/../vendor/autoload.php';
-$config = new Config(__DIR__ . '/..');
+$config = new Config(__DIR__ . '/..', true);
 // DEBUG die(\yii\helpers\VarDumper::dumpAsString($config->web(), 10, true));
 
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
@@ -20,22 +20,9 @@ if(file_exists($versionFile)) {
 }
 
 $config_web = $config->web();
-if (YII_ENV_DEV) { // {{{ 
-    // configuration adjustments for 'dev' environment
-    $config_web['bootstrap'][] = 'debug';
-    $config_web['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
+// DEBUG \yii\helpers\VarDumper::dump($config_web, 10, true);
+// DEBUG die;
 
-    $config_web['bootstrap'][] = 'gii';
-    $config_web['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
-} // }}} 
 $app = new yii\web\Application($config_web);
 $app->name = Yii::t('app', '_appName_');
 

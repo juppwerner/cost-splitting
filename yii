@@ -7,23 +7,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license http://www.yiiframework.com/license/
  */
-
-defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+use codemix\yii2confload\Config;
 
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
+// require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
-$config = require __DIR__ . '/config/console.php';
-
-// Load additional local config file?
-if(file_exists(__DIR__ . '/config/console-local.php')) {
-    $config = yii\helpers\ArrayHelper::merge(
-        require __DIR__ . '/config/console.php',
-        require __DIR__ . '/config/console-local.php'
-    );
-}
-
-$application = new yii\console\Application($config);
+$config = Config::bootstrap(__DIR__);
+$application = Yii::createObject('yii\console\Application', [$config->console()]);
 $exitCode = $application->run();
 exit($exitCode);

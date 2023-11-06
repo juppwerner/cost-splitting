@@ -32,6 +32,21 @@ use app\dictionaries\CurrencyCodesDictEwf;
             'format' => 'checkbox',
         ],
         [
+            'attribute' => 'description',
+            'format' => 'html',
+            'value' => function($model) {
+                if(!empty($model->description)) {
+                    return Html::tag(
+                        'div',
+                        Yii::$app->formatter->asMarkdown(Html::encode($model->description)),
+                        ['style' => 'font-size: smaller']
+                    );
+                } else {
+                    return null;
+                }
+            },
+        ],
+        [
             'attribute' => Yii::t('app', 'Users'),
             'format' => 'raw',
             'value' => function($data) {

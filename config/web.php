@@ -142,6 +142,9 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ], // }}} 
+        'mobileSwitcher' => [ // {{{ 
+            'class' => 'app\components\MobileSwitcher',
+        ], // }}} 
         'myUtils' => [ // {{{ 
             'class' => 'app\components\MyUtils',
         ], // }}} 

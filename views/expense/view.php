@@ -29,7 +29,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
 
     <h1><?= Html::encode(Yii::t('app', 'Expense: {title}', ['title'=>$model->title])) ?></h1>
 
-    <p>
+    <div class="btn-group mb-4" role="group" aria-label="Buttons">
         <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Html::icon('trash-2') . Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -38,7 +38,9 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
                 'method' => 'post',
             ],
         ]) ?>
-    </p>
+    </div>
+
+    <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -85,6 +87,57 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
         ],
     ]) ?>
 
+    <?php else : ?>
+
+    <div class="btn-group mb-4">
+        <?= Html::a(Yii::t('app', 'Cost Breakdown'), ['costproject/breakdown', 'id'=>$model->costprojectId], ['class' => 'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->costprojectId], ['class' => 'btn btn-primary btn-sm']) ?>
+    </div>
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'options' => ['tag' => 'div', 'class' => 'list-group'],
+        'template' => '<a class="list-group-item list-group-item-action"><div class="d-flex w-100 justify-content-between"><h5>{label}</h4></div><p>{value}</p></a>',
+        'attributes' => [
+            /* [
+                'attribute'=>'title',
+                'format'=>'html',
+                'value'=>Html::tag('h4', $model->title),
+            ], */
+            [
+                'attribute'=>'costprojectId',
+                'format'=>'html',
+                'value'=>$model->costproject->title
+            ],
+            'payedBy',
+            [
+                'attribute'=>'itemDate',
+                'value'=>Yii::$app->formatter->asDate($model->itemDate, 'medium'),
+            ],
+            [
+                'attribute'=>'amount',
+                'value' => Yii::$app->formatter->asCurrency($model->amount, $model->currency),
+            ],
+            [
+                'attribute'=>'amount',
+                'value' => sprintf('%s (%0.5f %s/%s)',
+                    Yii::$app->formatter->asCurrency($model->amount * $model->exchangeRate, $model->costproject->currency),
+                    $model->exchangeRate,
+                    $model->costproject->currency,
+                    $model->currency
+                ),
+                'visible' => $model->currency !== $model->costproject->currency,
+            ],
+            [
+                'attribute'=>'splitting',
+                'value'=>$splittingOptions[$model->splitting],
+            ],
+            // 'id',
+        ],
+    ]) ?>
+    
+    <?php endif; ?>
+    
     <h3><?= Yii::t('app', 'Cost Splitting') ?></h3>
     <?= GridView::widget([
         'id' => 'expenses-grid',
