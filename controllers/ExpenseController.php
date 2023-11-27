@@ -118,6 +118,11 @@ class ExpenseController extends Controller
         }
 
         $model->load($this->request->get());
+        if(!empty($model->costprojectId)){
+            $costproject = Costproject::findOne(['id'=>$model->costprojectId]);
+            $model->currency = $costproject->currency;
+            $model->exchangeRate=1;
+        }
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -210,10 +215,10 @@ class ExpenseController extends Controller
 
         // Get a list of all user-assigned cost projects
         $costprojects = Costproject::find()
-        ->select(['costproject.*'])
-        ->innerJoinWith('users')
-        ->where(['user.id' => Yii::$app->user->id])
-        ->all();
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->all();
    
         // Get a list of all participants, if a cost project is already selected
         $participants = null;
