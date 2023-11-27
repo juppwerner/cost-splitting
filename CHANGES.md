@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.5.6
+
+2023-11-27
+
+* [Cost Project](../costproject): Improved error validations, success messages when managing project users
+
 ## Rev. 0.5.5
 
 2023-11-06
