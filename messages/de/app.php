@@ -292,6 +292,7 @@ return [
     'Paraguayan guaraní' => '',
     'Participant' => 'Teilnehmer',
     'Participants' => 'Teilnehmer',
+    'Participants: {participants}' => 'Teilnehmer: {participants}',
     'Password' => 'Kennwort',
     'Password (confirm)' => 'Kennwort (bestätigen)',
     'Payed By' => 'Bezahlt von',
