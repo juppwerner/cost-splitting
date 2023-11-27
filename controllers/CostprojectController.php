@@ -237,7 +237,7 @@ class CostprojectController extends Controller
             if ($model->load($this->request->get()) && $model->validate() && $model->removeUser()) {
                 Yii::$app->session->addFlash('success', 
                     Html::tag('h4', Yii::t('app', 'Remove User'))
-                    . Yii::t('app', 'The user #{username} has been removed.', ['username' => $model->username])
+                    . Yii::t('app', 'The user {username} has been removed.', ['username' => $model->username])
                     . '<br>'
                     . Yii::t('app', 'An email was sent to the user to inform about the removal.')
                 );
@@ -245,7 +245,7 @@ class CostprojectController extends Controller
                 if($model->hasErrors()) {
                     Yii::$app->session->addFlash('error', 
                         Html::tag('h4', Yii::t('app', 'Remove User'))
-                        . Yii::t('app', 'The user #{username} has not been removed.', ['username' => $model->username]) . ' ' 
+                        . Yii::t('app', 'The user {username} has not been removed.', ['username' => $model->username]) . ' ' 
                         . join('<br>', $model->getErrorSummary(true))
                     );
                 }
