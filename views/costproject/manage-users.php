@@ -29,11 +29,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_view', ['model' => $costproject]) ?>
 
     <h2><?= Yii::t('app', 'Add New User') ?></h2>
+
+    <p><?= Yii::t('app', 'Add new users to this project.') ?><br>
+        <?= Yii::t('app', 'After having saved, the new user will receive an email containing the link to this project.') ?></p>	
+
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->errorSummary($model) ?>
+    
     <?= Html::activeHiddenInput($model, 'costprojectId') ?>
 
-    <?= $form->field($model, 'username')->textInput() ?>
+    <?= $form->field($model, 'username')->textInput()->hint(Yii::t('app', 'Enter an existing username')) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
