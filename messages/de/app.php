@@ -153,7 +153,7 @@ return [
     'Distribution' => 'Verteilung',
     'Mobile View'=> 'Mobilgerät-Ansicht',
     'Divide between selected recipients only' => 'Nur zwischen ausgewählten Empfängern aufteilen',
-    'Divide between selected recipients only (custom weighting)' => 'Nur zwischen ausgewählten Empfängern aufteilen (spezielle Wichtung)',
+    'Divide between selected recipients only (custom distribution)' => 'Nur zwischen ausgewählten Empfängern aufteilen (spezielle Verteilung)',
     'Divide equally betweeen all' => 'Gleichmässig zwischen allen aufteilen',
     'Djiboutian franc' => '',
     'Documents' => 'Dokumente',

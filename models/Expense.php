@@ -302,6 +302,6 @@ class Expense extends \yii\db\ActiveRecord
         return [
             self::SPLITTING_EQUAL                           => Yii::t('app', 'Divide equally betweeen all'),
             self::SPLITTING_SELECTED_PARTICIPANTS           => Yii::t('app', 'Divide between selected recipients only'),
-            self::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM    => Yii::t('app', 'Divide between selected recipients only (custom weighting)'),
+            self::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM    => Yii::t('app', 'Divide between selected recipients only (custom distribution)'),
         ];
     }} // }}}
