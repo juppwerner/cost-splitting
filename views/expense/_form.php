@@ -17,6 +17,8 @@ use app\models\Expense;
 
 // Prepare currency codes
 $currencyCodes = CurrencyCodesDictEwf::allByLabel();
+
+$costproject = $model->costproject;
 ?>
 
 <div class="expense-form">
@@ -31,16 +33,22 @@ $currencyCodes = CurrencyCodesDictEwf::allByLabel();
 
     <?= '' // $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'title')/*->widget(TypeaheadBasic::classname(), [
+    <?= $form->field($model, 'title')->widget(TypeaheadBasic::class, [
         'data' => $titles,
         'dataset' => ['limit' => 10],
         'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
-        'pluginOptions' => ['highlight'=>true, 'minLength' => 0],
-    ])*/->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
+        'pluginOptions' => ['highlight'=>true, 'minLength' => 2],
+    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 
-    <?= $form->field($model, 'amount')->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
+    <?= $form->field($model, 'amount', [
+        'inputTemplate' => '<div class="input-group">{input}<div class="input-group-append">
+            <span class="input-group-text">'.(!empty($costproject) ? $costproject->currency : '').'</span>
+        </div></div>',
+    ])->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
+
+    <?php if(!empty($costproject) && (bool)$costproject->useCurrency===true) : ?>
 
     <?= $form->field($model, 'currency')->widget(Select2::class, [
         'data' => $currencyCodes,
@@ -52,6 +60,13 @@ $currencyCodes = CurrencyCodesDictEwf::allByLabel();
     ]); ?>
 
     <?= $form->field($model, 'exchangeRate')->textInput(['maxlength' => true])->input('number', ['step'=>'.000001'])->hint(Yii::t('app', 'Will be set when a currency is selected')) ?>
+
+    <?php else : ?>
+    
+    <?= $form->field($model, 'currency')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'exchangeRate')->hiddenInput()->label(false) ?>
+    
+    <?php endif; ?>
 
     <?php if(is_null($participants)) : ?>
     <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true])->hint(Yii::t('app', 'Press ENTER to show all participants')) ?>
