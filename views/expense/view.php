@@ -6,6 +6,7 @@ use yii\widgets\DetailView;
 
 use app\components\Html;
 use app\models\Costitem;
+use app\models\Expense;
 use yii\helpers\Url;
 
 /** @var yii\web\View $this */
@@ -148,6 +149,12 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
         'columns' => [
             [
                 'attribute'=>'participant',
+            ],
+            [
+                'attribute' => 'weight',
+                'label' => Yii::t('app', 'Distribution'),
+                'contentOptions' => [ 'class' => 'text-center' ],
+                'visible' => $model->splitting===Expense::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM
             ],
             [
                 'attribute'=>'amount',

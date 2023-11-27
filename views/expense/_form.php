@@ -92,6 +92,36 @@ $costproject = $model->costproject;
         ],
     ]) ?>
 
+    <?= '' // $form->field($model, 'splitting_weights')->textarea() ?>
+
+    <?php if(!empty($model->splitting_weights) && substr($model->splitting_weights, 0, 1)=='{' and substr($model->splitting_weights, -1)=='}') {
+        $weights = \yii\helpers\Json::decode($model->splitting_weights);
+        $weights[Yii::t('app', '(add participant)')] = 0;
+        // var_dump($weights);
+    } else {
+        $weights = [Yii::t('app', '(add participant)') => 0];  
+    } ?>
+    <div class="form-group field-expense-splitting_weights">
+        <table>
+            <thead>
+                <tr>
+                    <th><?= Yii::t('app', 'Participant') ?></th>
+                    <th><?= Yii::t('app', 'Distribution') ?></th>
+                    <th><?= Yii::t('app', 'Action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $n=0; foreach($weights as $participant=>$weight) : ?>
+                <tr class="participant_row_<?= $n ?>">
+                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][participant]" class="form-control" value="<?= $participant ?>"></td>
+                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][weight]" class="form-control text-center" value="<?= $weight ?>"></td>
+                    <td class="text-center"><a class="deleteRow" href="#" data-id="<?= $n ?>" title="<?= Yii::t('app', 'Delete row') ?>">X</a></th>
+                </tr>
+                <?php $n++; endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
     <?= $form->field($model, 'documents')->widget(app\components\FileInputWidget::class) ?>
 
     <div class="form-group">
@@ -132,27 +162,48 @@ $('#expense-currency').on('change', function() {
     }
 });
 $('input[type=radio][name=\"Expense[splitting]\"]').change(function() {
-    if(this.value==='SELECTED') {
+    if(this.value==='SELECTED' || this.value==='SELECTED_CUST') {
         toggleFieldExpenseParticipants(true);
     } else {
         toggleFieldExpenseParticipants(false);
+    }
+    if(this.value==='SELECTED_CUST') {
+        toggleFieldExpenseSplittingWeights(true);
+    } else {
+        toggleFieldExpenseSplittingWeights(false);
     }
 });
 function toggleFieldExpenseParticipants(show=true) {
     if(show===true) {
         $('div.form-group.field-expense-participants').show();
+
     } else {
         $('div.form-group.field-expense-participants').hide();
     }
 }
-toggleFieldExpenseParticipants(".($model->splitting==='SELECTED' ? 'true' : 'false').");
+toggleFieldExpenseParticipants(".(in_array($model->splitting, ['SELECTED', 'SELECTED_CUST']) ? 'true' : 'false').");
 
+function toggleFieldExpenseSplittingWeights(show=true) {
+    if(show===true) {
+        $('div.form-group.field-expense-splitting_weights').show();
+    } else {
+        $('div.form-group.field-expense-splitting_weights').hide();
+    }
+}
+toggleFieldExpenseSplittingWeights(".(in_array($model->splitting, ['SELECTED_CUST']) ? 'true' : 'false').");
 
 $('#expense-amount, #expense-exchangerate').on('mousewheel',
     function (event) {
         this.blur()
     }
 );
+
+$('.deleteRow').on('click', function(event) {
+    event.preventDefault();
+    alert($(this).data('id'));
+    $('tr.participant_row_'+$(this).data('id')).remove();
+});
+
     ",
     yii\web\View::POS_READY,
     'amount-change'
