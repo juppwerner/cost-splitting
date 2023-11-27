@@ -58,9 +58,17 @@ class ExpenseController extends Controller
         $searchModel = new ExpenseSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        // Get a list of all user-assigned cost projects
+        $costprojects = Costproject::find()
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'costprojects' => $costprojects
         ]);
     }
 
