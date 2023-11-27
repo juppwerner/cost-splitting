@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property string $currency
  * @property string $exchangeRate
  * @property string $splitting
+ * @property string $splitting_weights
  * @property string $participants
  * @property int|null $created_at
  * @property int|null $created_by
@@ -32,6 +33,10 @@ class Expense extends \yii\db\ActiveRecord
 {
     Const SPLITTING_EQUAL = 'EQUAL';
     Const SPLITTING_SELECTED_PARTICIPANTS = 'SELECTED';
+    Const SPLITTING_SELECTED_PARTICIPANTS_CUSTOM = 'SELECTED_CUST';
+
+    public $weights;
+
     // {{{ tableName
     /**
      * {@inheritdoc}
@@ -89,6 +94,21 @@ class Expense extends \yii\db\ActiveRecord
             [['payedBy'], 'string', 'max' => 30],
             // [['splitting'], 'safe'],
             ['splitting', 'in', 'range' => array_keys(self::getSplittingOptions())],
+            // ['splitting_weights', 'safe'],
+            [['splitting_weights'], function($attribute, $params, $validator) {
+                $attributeValue = $this->$attribute;
+                if(is_array($attributeValue)) {
+                    var_dump($attributeValue);
+                    $tmp = new \StdClass;
+                    foreach($attributeValue as $n=>$participantWeight) {
+                        $participant = $participantWeight['participant'];
+                        if((int)$participantWeight['weight']===0)
+                            continue;
+                        $tmp->$participant = $participantWeight['weight'];
+                    }
+                    $this->$attribute = \yii\helpers\Json::encode($tmp, JSON_FORCE_OBJECT);
+                }
+            }],
             [['costprojectId'], 'exist', 'skipOnError' => true, 'targetClass' => Costproject::class, 'targetAttribute' => ['costprojectId' => 'id']],
             [['participants'], function ($attribute, $params, $validator) {
                 $attributeValue = $this->$attribute;
@@ -140,6 +160,7 @@ class Expense extends \yii\db\ActiveRecord
             'currency' => Yii::t('app', 'Currency'),
             'exchangeRate' => Yii::t('app', 'Exchange Rate'),
             'splitting' => Yii::t('app', 'Splitting'),
+            'splitting_weights' => Yii::t('app', 'Splitting Weights'),
             'participants' => Yii::t('app', 'Recipients'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
@@ -210,6 +231,7 @@ class Expense extends \yii\db\ActiveRecord
         foreach($this->costitems as $costitem) 
             Yii::info($costitem->delete(), __METHOD__);
 
+        // All participants from project:
         $participants = explode("\n", str_replace("\r\n", "\n", $this->costproject->participants));
 
         // Create cost item for payer with whole amount
@@ -231,6 +253,7 @@ class Expense extends \yii\db\ActiveRecord
                 $costitem               = new Costitem;
                 $costitem->expenseId    = $this->id;
                 $costitem->participant  = $participant;
+                $costitem->weight       = 1;
                 $costitem->amount       = $this->amount/count($participants);
                 $costitem->currency     = $this->currency;
                 $costitem->exchangeRate = $this->exchangeRate;
@@ -242,6 +265,7 @@ class Expense extends \yii\db\ActiveRecord
                 $costitem               = new Costitem;
                 $costitem->expenseId    = $this->id;
                 $costitem->participant  = $participant;
+                $costitem->weight       = 1;
                 $costitem->amount       = $this->amount/count(explode(';', $this->participants));
                 $costitem->currency     = $this->currency;
                 $costitem->exchangeRate = $this->exchangeRate;
@@ -250,14 +274,34 @@ class Expense extends \yii\db\ActiveRecord
                 }
 
             }
-            breaK;
+            break;
+        case self::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM:
+            $participantsWeights = \yii\helpers\Json::decode($this->splitting_weights);
+            $total = 0;
+            foreach($participantsWeights as $participant=>$weight) {
+                $total += $weight;
+            }
+            foreach($participantsWeights as $participant=>$weight) {
+                $costitem               = new Costitem;
+                $costitem->expenseId    = $this->id;
+                $costitem->participant  = $participant;
+                $costitem->weight       = $weight;
+                $costitem->amount       = $this->amount/$total*$weight;
+                $costitem->currency     = $this->currency;
+                $costitem->exchangeRate = $this->exchangeRate;
+                if(!$costitem->save()) {
+                    Yii::error($costitem->errors, __METHOD__);
+                }
+            }
+            break;
         }
     } // }}}
     // {{{ getSplittingOptions
     public static function getSplittingOptions()
     {
         return [
-            self::SPLITTING_EQUAL                   => Yii::t('app', 'Divide equally betweeen all'),
-            self::SPLITTING_SELECTED_PARTICIPANTS   => Yii::t('app', 'Divide between selected recipients only'),
+            self::SPLITTING_EQUAL                           => Yii::t('app', 'Divide equally betweeen all'),
+            self::SPLITTING_SELECTED_PARTICIPANTS           => Yii::t('app', 'Divide between selected recipients only'),
+            self::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM    => Yii::t('app', 'Divide between selected recipients only (custom distribution)'),
         ];
     }} // }}}
