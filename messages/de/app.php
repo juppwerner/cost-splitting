@@ -186,6 +186,7 @@ return [
     'Falkland Islands pound' => '',
     'Fiji dollar' => '',
     'Filter State' => 'Filter-Status',
+    'Filter as you type ...' => 'Tippen um zu filtern...',
     'Final Compensations (simplified)' => 'Schlusszahlungen (vereinfacht)',
     'First create a new cost project.' => 'Erstellen Sie zuerst ein neues Kostenprojekt.',
     'Forgot password?' => 'Kennwort vergessen?',
