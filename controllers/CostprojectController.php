@@ -208,6 +208,7 @@ class CostprojectController extends Controller
     public function actionManageUsers($id)
     {
         $model = new AddUserForm();
+        $model->scenario = AddUserForm::SCENARIO_ADD_USER;
         $model->costprojectId = (int)$id;
 
         if ($this->request->isPost) {
@@ -215,6 +216,8 @@ class CostprojectController extends Controller
                 Yii::$app->session->addFlash('success', 
                     Html::tag('h4', Yii::t('app', 'Add User'))
                     . Yii::t('app', 'The user {username} has been added.', ['username' => $model->username])
+                    . '<br>'
+                    . Yii::t('app', 'An email was sent to this user containing a link to this cost project.') 
                 );
             }
         }
@@ -234,13 +237,15 @@ class CostprojectController extends Controller
             if ($model->load($this->request->get()) && $model->validate() && $model->removeUser()) {
                 Yii::$app->session->addFlash('success', 
                     Html::tag('h4', Yii::t('app', 'Remove User'))
-                    . Yii::t('app', 'The user #{userId} has been removed.', ['userId' => $model->userId])
+                    . Yii::t('app', 'The user {username} has been removed.', ['username' => $model->username])
+                    . '<br>'
+                    . Yii::t('app', 'An email was sent to the user to inform about the removal.')
                 );
             } else {
                 if($model->hasErrors()) {
                     Yii::$app->session->addFlash('error', 
                         Html::tag('h4', Yii::t('app', 'Remove User'))
-                        . Yii::t('app', 'The user #{userId} has not been removed.', ['userId' => $model->userId]) . ' ' 
+                        . Yii::t('app', 'The user {username} has not been removed.', ['username' => $model->username]) . ' ' 
                         . join('<br>', $model->getErrorSummary(true))
                     );
                 }

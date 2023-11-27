@@ -80,7 +80,7 @@ class ExpenseSearch extends Expense
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            // 'costprojectId' => $this->costprojectId,
+            'costprojectId' => $this->costprojectId,
             'itemDate' => $this->itemDate,
             'amount' => $this->amount,
             'payedBy' => $this->payedBy,

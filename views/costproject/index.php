@@ -107,11 +107,11 @@ Url::remember('', 'cost-project');
                 Html::tag(
                     'div',
                     Html::tag('h5', Html::encode($model->title), ['class' => 'mb-1']) 
-                    . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill']),
+                    . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill pt-2']),
                     ['class' => 'd-flex w-100 justify-content-between']
                 )
                 . Html::tag('div', Yii::$app->formatter->asMarkdown(Html::encode($model->description)), ['class' => 'mb-1', 'style'=>'font-size: smaller']) 
-                // . Html::tag('small', 'And some small print.')
+                . Html::tag('small', Yii::t('app', 'Participants: {participants}', ['participants' => join(', ', $model->participantsList)]))
                 ;
         },
     ]) /* }}} */ ?>

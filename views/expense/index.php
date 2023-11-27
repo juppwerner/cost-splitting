@@ -31,7 +31,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     </p>
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'costprojects' => $costprojects]); ?>
 
     <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
 
