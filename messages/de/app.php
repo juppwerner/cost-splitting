@@ -17,6 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Add new users to this project.' => 'Fügen Sie neue Benutzer zum Projekt hinzu.',
+    'After having saved, the new user will receive an email containing the link to this project.' => 'Nach dem Speichern erhält der neue Benutzer eine E-Mail mit dem Link zum Projekt.',
+    'An email was sent to this user containing a link to this cost project.' => 'Es wurde dem Benutzer eine E-Mail gesendet mit dem Link zum Kostenprojekt.',
+    'An email was sent to the user to inform about the removal.' => 'Es wurde dem Benutzer eine E-Mail gesendet, die ihn über das Entfernen informiert.',
     '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}' => '{n,plural,=0{Keine Ausgaben} =1{eine Ausgabe} other{# Ausgaben}}',
     '_appName_' => 'Kosten teilen',
     '(Select)' => '(Auswählen)',
@@ -158,6 +162,7 @@ return [
     'Edit' => 'Bearbeiten',
     'Egyptian pound' => '',
     'English' => 'Englisch',
+    'Enter an existing username' => 'Geben Sie einen existierenden Benutzernamen ein',
     'Enter one participant per line' => 'Geben Sie einen Teilnehmer pro Zeile ein',
     'Enter the data for your new cost project.' => 'Geben Sie die Daten für Ihr neues Kostenprojekt ein.',
     'Enter your email address and submit. We will send you an email with a link which will allow you to recreate your password.' => 'Geben Sie Ihre E-Mail-Adresse ein und klicken Sie Weiter. Wir senden Ihnen eine E-Mail mit einem Link, mit dem Sie Ihr Kennwort wieder herstellen können.',
@@ -389,8 +394,8 @@ return [
     'The requested List Filter does not exist.' => '',
     'The requested page does not exist.' => 'Die angefragte Seite existiert nicht',
     'The saved filter <em>{name}</em> has been applied.' => '',
-    'The user #{userId} has been removed.' => 'Der Benutzer #{userId} wurde entfernt.',
-    'The user #{userId} has not been removed.' => 'Der Benutzer #{userId} konnte nicht entfernt werden.',
+    'The user #{username} has been removed.' => 'Der Benutzer #{username} wurde entfernt.',
+    'The user #{username} has not been removed.' => 'Der Benutzer #{username} konnte nicht entfernt werden.',
     'The user is already assigned to the cost project.' => 'Der Benutzer ist dem Kostenprojekt bereits zugeordnet.',
     'The user {username} has been added.' => 'Der Benutzer {username} wurde hinzugefügt.',
     'The user {username} was not found.' => 'Der Benutzer {username} wurde nicht gefunden.',
@@ -459,6 +464,7 @@ return [
     'You do not have any cost projects yet.' => 'Sie haben bisher noch keine Kostenprojekte.',
     'You have been added to the cost project {title} on {appName}.' => 'Sie wurden zum Kostenprojekt {title} bei {appName} hinzugefügt.',
     'You have been removed from the cost project {title} on {appName}.' => 'Sie wurden beim Kostenprojekt {title} bei {appName} entfernt.',
+    '[{appName}] You have been removed from the cost project {title}' => '[{appName}] Sie wurden beim Kostenprojekt {title} entfernt',
     'You have exceeded the maximum number of allowed cost projects (limit: {n,plural,=0{no limit} =1{<b>one</b> cost project} other{<b>#</b> cost projects}}).' => 'Sie haben die maximale Anzahl der Kostenprojekte erreicht (Limit: {n,plural,=0{kein Limit} =1{<b>ein</b> Kostenprojekt} other{<b>#</b> Kostenprojekte}}).',
     'You may use Mardown Extra here' => 'Sie können hier Markdown Extra verwenden',
     'Your Roles' => 'Ihre Rollen',
