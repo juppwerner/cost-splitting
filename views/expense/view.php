@@ -6,6 +6,7 @@ use yii\widgets\DetailView;
 
 use app\components\Html;
 use app\models\Costitem;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
@@ -97,7 +98,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= DetailView::widget([
         'model' => $model,
         'options' => ['tag' => 'div', 'class' => 'list-group'],
-        'template' => '<a class="list-group-item list-group-item-action"><div class="d-flex w-100 justify-content-between"><h5>{label}</h4></div><p>{value}</p></a>',
+        'template' => '<a class="list-group-item list-group-item-action"{contentOptions}><div class="d-flex w-100 justify-content-between"><h5>{label}</h4></div><p>{value}</p></a>',
         'attributes' => [
             /* [
                 'attribute'=>'title',
@@ -107,7 +108,8 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
             [
                 'attribute'=>'costprojectId',
                 'format'=>'html',
-                'value'=>$model->costproject->title
+                'value'=>$model->costproject->title,
+                'contentOptions' => ['href'=>Url::to(['costproject/view', 'id'=>$model->costprojectId])],
             ],
             'payedBy',
             [
