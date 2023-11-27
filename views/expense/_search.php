@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
@@ -18,17 +19,17 @@ use yii\bootstrap4\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= '' // $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'title') ?>
+    <?= '' // $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'costprojectId') ?>
+    <?= $form->field($model, 'costprojectId')->dropDownList(ArrayHelper::map($costprojects, 'id', 'title'), ['autofocus'=>'autofocus', 'prompt'=>Yii::t('app', '--- Select ---')]) ?>
 
-    <?= $form->field($model, 'itemDate') ?>
+    <?= '' // $form->field($model, 'itemDate') ?>
 
-    <?= $form->field($model, 'amount') ?>
+    <?= '' // $form->field($model, 'amount') ?>
 
-    <?php // echo $form->field($model, 'splitting') ?>
+    <?= '' // $form->field($model, 'splitting') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
