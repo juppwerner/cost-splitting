@@ -146,6 +146,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
         'id' => 'expenses-grid',
         'dataProvider' => $costitemsDataProvider,
         'tableOptions' => ['class' => 'table table-striped table-responsive-sm table-hover'],
+        'summary' => Yii::t('app', 'Total <b>{count, number}</b> {count, plural, one{participant} other{participants}}.'),
         'columns' => [
             [
                 'attribute'=>'participant',
@@ -183,6 +184,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     ]) ?>
 
     <h3 class="mt-3"><?= Yii::t('app', 'Attachments') ?></h3>
+    <?= count($model->documents)===0 ? Yii::t('app', '(no file attachments yet)') : '' ?>
     <?= \floor12\files\components\FileListWidget::widget([
         'files' => $model->documents, 
         'downloadAll' => true, 
