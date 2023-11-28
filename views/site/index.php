@@ -31,6 +31,10 @@ Url::remember('', 'cost-project');
             <?= Html::a(Html::icon('log-in') . Yii::t('app', 'Login'), ['user/login'], ['title' => Yii::t('app', 'Login as an existing user'), 'class' => 'btn btn-lg btn-primary']) ?>
             <?= Html::a(Html::icon('user-plus') . Yii::t('app', 'Register'), ['user/register'], ['title' => Yii::t('app', 'Regster as a new user'), 'class' => 'btn btn-lg btn-info']) ?>
         </p>
+        <p>
+            <?= Yii::t('app', 'Click on <b>Login</b> if you already have a username.') ?><br>
+            <?= Yii::t('app', 'Click on <b>Register</b> if you want to get a new username.') ?>
+        </p>
         <?php endif; ?>
 
     </div>

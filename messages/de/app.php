@@ -98,6 +98,8 @@ return [
     'Check to capture expenses using foreign currencies' => 'Ankreuzen, wenn Ausgaben in Fremdwährungen erfasst werden sollen',
     'Chilean peso' => '',
     'Clear Filters' => 'Filter löschen',
+    'Click on <b>Login</b> if you already have a username.' => 'Klicken Sie auf <b>Anmelden</b>, falls Sie bereits einen benutzernamen haben.',
+    'Click on <b>Register</b> if you want to get a new username.' => 'Klicken Sie auf <b>Registrieren</b>, falls Sie einen neuen Benutzernamen erhalten möchten.',
     'Click to confirm deleting post: {recordName}' => 'Klicken zum Bestätigen des Löschens von Post: {recordName}',
     'Click to get your password resetted' => 'Klicken, um Ihr Kennwort zurücksetzen zu lassen',
     'Code for two factor authentication on {0}' => 'Code für die Zweifaktor-Anmeldung auf {0}',
