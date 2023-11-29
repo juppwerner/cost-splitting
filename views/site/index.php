@@ -60,7 +60,7 @@ Url::remember('', 'cost-project');
                 <p><?= Yii::t('app', 'Manage projects.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no projects} =1{is <b>one</b> project} other{are <b>#</b> projects}} in this system.', ['n' => $costprojects ]); ?></p>
                 <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                    <?= Html::a(Yii::t('app', 'List of Cost Projects').' '.'&raquo;', ['/costproject'], ['class'=>'btn btn-primary']) ?>
+                    <?= Html::a(Yii::t('app', 'Your Cost Projects').' '.'&raquo;', ['/costproject'], ['class'=>'btn btn-primary']) ?>
                     <?= Html::a(Html::icon('plus-square'), ['/costproject/create'], ['class'=>'btn btn-success', 'title' => Yii::t('app', 'Add new cost project')]) ?>
                 </div>
             </div>
@@ -69,7 +69,7 @@ Url::remember('', 'cost-project');
                 <p><?= Yii::t('app', 'Manage expenses.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no expenses} =1{is <b>one</b> expense} other{are <b>#</b> expenses}} in this system.', ['n' => $expenses ]); ?></p>
                 <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                    <?= Html::a(Yii::t('app', 'List of Expenses').' '.'&raquo;', ['/expense'], ['class'=>'btn btn-primary']) ?>
+                    <?= Html::a(Yii::t('app', 'Your Expenses').' '.'&raquo;', ['/expense'], ['class'=>'btn btn-primary']) ?>
                     <?= Html::a(Html::icon('plus-square'), ['/expense/create'], ['class'=>'btn btn-success', 'title' => Yii::t('app', 'Add new expense')]) ?>
                 </div>
             </div>

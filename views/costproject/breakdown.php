@@ -62,24 +62,24 @@ $defaultParticipantDetails = [
     <table class="table table-striped table-responsive-sm table-hover" style="width:100%">
 
         <thead>
+            <?php ob_start(); ?>
             <tr>
                 <th><?= Yii::t('app', 'Date') ?></th>
                 <th><?= Yii::t('app', 'Title') ?></th>
+                <th><?= Yii::t('app', 'Payed By') ?></th>
+                <th><?= Yii::t('app', 'Recipients') ?></th>
                 <th><?= Yii::t('app', 'Amount') ?></th>
                 <?php if($model->useCurrency) : ?>
                 <th><?= Yii::t('app', 'Exchange Rate') ?></th>
-                <?php endif; ?>
-                <th><?= Yii::t('app', 'Payed By') ?></th>
-                <th><?= Yii::t('app', 'Recipients') ?></th>
-                <?php if($model->useCurrency) : ?>
                 <th><?= Yii::t('app', 'Amount {currency}', ['currency'=>$model->currency]) ?></th>
                 <?php endif; ?>
-                <!-- <th><?= Yii::t('app', 'Created At') ?></th>-->
                 <?php foreach($participants as $participant) : ?>
                 <?php if(!array_key_exists($participant, $participantSums)) $participantSums[$participant] = 0; ?>
                 <th colspan="2"><?= $participant ?></th>
                 <?php endforeach; ?>
             </tr>
+            <?php $headerRow = ob_get_clean(); ?>
+            <?= $headerRow; ?>
         </thead>
 
         <tbody>
@@ -89,29 +89,35 @@ $defaultParticipantDetails = [
                 <td class="text-center">
                     <?= Yii::$app->formatter->asDate($row->itemDate, 'php:'.Yii::t('app', 'Y-m-d')) ?>
                 </td>
+
                 <td>
                     <?= $row->title ?> <?= Html::a('.', ['/expense/update', 'id'=>$row->id], ['class'=>'d-print-none']) ?>
                 </td>
+
+                <td class="text-center">
+                    <?= $row->payedBy ?>
+                </td>
+
+                <td class="text-center">
+                    <?= $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : $row->participants ?>
+                </td>
+                
                 <td class="text-right">
                     <?= Yii::$app->formatter->asCurrency($row->amount, $row->currency) ?>
                 </td>
+
                 <?php if($model->useCurrency) : ?>
                 <td class="text-right">
                     <?= $row->exchangeRate ?>
                 </td>
                 <?php endif; ?>
-                <td class="text-center">
-                    <?= $row->payedBy ?>
-                </td>
-                <td class="text-center">
-                    <?= $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : $row->participants ?>
-                </td>
-                
+
                 <?php if($model->useCurrency) : ?>
                 <td class="text-right">
                     <?= Yii::$app->formatter->asCurrency($row->amount * $row->exchangeRate, $model->currency) ?>
                 </td>
                 <?php endif; ?>
+
                 <!-- <td class="text-center"><?= Yii::$app->formatter->asDate($row->created_at, 'php:'.Yii::t('app', 'Y-m-d')) ?></td> -->
                 <?php foreach($participants as $participant) : ?>
                 <?php if(!array_key_exists($participant, $participantDetails)) $participantDetails[$participant] = $defaultParticipantDetails; ?>
@@ -152,7 +158,7 @@ $defaultParticipantDetails = [
 
             <!-- Participants Sums Row -->
             <tr>
-                <td colspan="<?= 5 + (int)$model->useCurrency ?>">&nbsp;</td>
+                <td colspan="<?= 5 + (int)$model->useCurrency*2 ?>">&nbsp;</td>
                 <?php foreach($participants as $participant) : ?>
                 <?php $sum += $participantSums[$participant]; ?>
                 <td colspan="2" class="text-right"><?= Yii::$app->formatter->asCurrency($participantSums[$participant], 'EUR') ?></td>
@@ -160,6 +166,10 @@ $defaultParticipantDetails = [
             </tr>
 
         </tbody>
+
+        <thead>
+            <?= $headerRow ?>
+        </thead>
     </table>
 
     <?php endif; ?>

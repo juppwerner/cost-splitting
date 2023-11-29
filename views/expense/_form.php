@@ -134,6 +134,7 @@ $costproject = $model->costproject;
 </div>
 
 <?php $this->registerJs("
+// When currency was selected, get historic exchange rate
 $('#expense-currency').on('change', function() {
     var base = $('#expense-currency').val();
     var symbol = 'EUR';
@@ -157,7 +158,10 @@ $('#expense-currency').on('change', function() {
         if(!('exchangeRate' in response)) {
             alert('No exchange rate available for currency: ' + base)
         } else {
-            $('#expense-exchangerate').val(response.exchangeRate);
+            var rate = 1/parseFloat(response.exchangeRate);
+            rate = rate.toFixed(4);
+            console.log('rate: ' + rate);
+            $('#expense-exchangerate').val(rate);
         }
     }
 });
