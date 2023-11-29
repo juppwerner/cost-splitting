@@ -23,6 +23,9 @@ return [
     // Can be used to receive administrative emails (To:):
     'adminEmail' => 'YOURADMIN@DOMAIN.TLD',
 
+    // Company Settings
+    'company.name'                  => 'My Company Name',
+    
     // *** Contact Form Settings ***
     // Send contact form email using this email as sender (From:):
     'contactForm.senderEmail'       => 'noreply@example.com',

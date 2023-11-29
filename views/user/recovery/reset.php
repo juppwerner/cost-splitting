@@ -37,9 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ); ?>
 
-                <?= $form->field($model, 'password') // ->passwordInput() ?>
+                <?= $form->field($model, 'password')->passwordInput() ?>
 
-                <?= $form->field($model, 'passwordConfirm') // ->passwordInput() ?>
+                <?= $form->field($model, 'passwordConfirm')->passwordInput() ?>
 
                 <?= Html::submitButton(Yii::t('usuario', 'Finish'), ['class' => 'btn btn-success btn-block']) ?><br>
 
