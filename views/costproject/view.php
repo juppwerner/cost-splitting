@@ -4,12 +4,14 @@ use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+use yii\web\YiiAsset;
 
 use app\components\Html;
 use app\dictionaries\Ewf;
 use app\models\Expense;
 // use app\widgets\GridView;
-use yii\grid\GridView;
+
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
@@ -18,8 +20,8 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-\yii\helpers\Url::remember('', 'cost-project');
-\yii\web\YiiAsset::register($this);
+Url::remember('', 'cost-project');
+YiiAsset::register($this);
 
 // Get expenses for grid
 $expensesDataProvider = new ActiveDataProvider([
@@ -38,7 +40,7 @@ $expensesDataProvider = new ActiveDataProvider([
         ],
         'defaultOrder' => [
             'itemDate' => SORT_DESC,
-            'title' => SORT_ASC,
+            'title' => SORT_DESC,
         ],
     ],
 ]);
@@ -111,8 +113,18 @@ $expensesDataProvider = new ActiveDataProvider([
             ],
             [
                 'label' => Yii::t('app', 'Participants'),
+                'format' => 'html',
+                'contentOptions' => ['style' => 'font-size: smaller'],
                 'value' => function($data) {
-                    return join(', ', $data->getParticipants());
+                    if($data->splitting == Expense::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM) {
+                        $tmp = [];
+                        $participantWeightings = \yii\helpers\Json::decode($data->splitting_weights);
+                        foreach($participantWeightings as $participant => $weighting) {
+                            $tmp[] = sprintf('%s - %sx', $participant, $weighting);
+                        }
+                        return join('<br>', $tmp);
+                    }
+                    return join('<br>', $data->getParticipants());
                 },
             ],
             [
