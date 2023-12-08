@@ -12,6 +12,8 @@ use Yii;
  * @property string $participant
  * @property float $weight
  * @property float $amount
+ * @property string $currency
+ * @property float $exchangeRate
  * @property Expense $expense
  */
 class Costitem extends \yii\db\ActiveRecord

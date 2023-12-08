@@ -165,8 +165,17 @@ class ExpenseController extends Controller
             ->where(['user.id' => Yii::$app->user->id])
             ->column();
 
+        $defaultTitles = [
+            Yii::t('app', 'Accomodation'),
+            Yii::t('app', 'Eating'),
+            Yii::t('app', 'Beverages'),
+            Yii::t('app', 'Drinks'),
+            Yii::t('app', 'Flight Ticket'),
+            Yii::t('app', 'Railway Ticket'),
+            Yii::t('app', 'Transport')
+        ];
         $titles = Yii::$app->db->createCommand(
-            "SELECT e.`title` "
+            "SELECT TRIM(e.`title`) "
             . "FROM `expense` e "
             . "LEFT JOIN `costproject` cp ON e.costprojectId=cp.id "
             . "LEFT JOIN `user_costproject` uc ON cp.id=uc.costprojectId "
@@ -175,6 +184,9 @@ class ExpenseController extends Controller
             . "ORDER BY e.title")
             ->bindValue(':userId', Yii::$app->user->id)
             ->queryColumn();
+        $titles = array_unique(array_merge($defaultTitles, $titles));
+        array_walk($titles, 'trim');
+        sort($titles);
 
         return $this->render('create', [
             'model' => $model,
@@ -201,8 +213,12 @@ class ExpenseController extends Controller
                     'success',
                     Html::tag('h4', Yii::t('app', 'Update Expense'))
                     . Yii::t('app', 'The expense <em>{title}</em> has been updated.', ['title'=>$model->title]) . '<br>'
-                    . Html::tag('ul', Html::tag('li', Html::a(Yii::t('app', 'View Expense'), ['expense/view', 'id'=>$model->id]) . ' | '
-                    . Html::a(Yii::t('app', 'Edit'), ['expense/update', 'id'=>$model->id])))
+                    . '<br>'
+                    . Html::a(Html::icon('eye') . Yii::t('app', 'View Expense'), ['view', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm']) . ' '
+                    . Html::a(Html::icon('edit') . Yii::t('app', 'Update Expense'), ['update', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm']) . ' '
+                    . Html::a(Html::icon('file-text') . Yii::t('app', 'View Project'), ['costproject/view', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm']) . ' '
+                    . Html::a(Html::icon('file-text') . Yii::t('app', 'View Cost Breakdown'), ['costproject/breakdown', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm'])
+
                 );
                 if(!empty(Yii::$app->session->get('cost-project'))) 
                     return $this->redirect(Url::previous('cost-project'));
@@ -231,6 +247,16 @@ class ExpenseController extends Controller
                 $model->participants = explode(';', $model->participants);
         }
 
+        $defaultTitles = [
+            Yii::t('app', 'Accomodation'),
+            Yii::t('app', 'Eating'),
+            Yii::t('app', 'Beverages'),
+            Yii::t('app', 'Drinks'),
+            Yii::t('app', 'Flight Ticket'),
+            Yii::t('app', 'Railway Ticket'),
+            Yii::t('app', 'Transport')
+        ];
+
         // Get all titles
         $costprojectIDs = Costproject::find()
             ->select(['costproject.id'])
@@ -239,7 +265,7 @@ class ExpenseController extends Controller
             ->column();
 
         $titles = Yii::$app->db->createCommand(
-            "SELECT e.`title` "
+            "SELECT TRIM(e.`title`) "
             . "FROM `expense` e "
             . "LEFT JOIN `costproject` cp ON e.costprojectId=cp.id "
             . "LEFT JOIN `user_costproject` uc ON cp.id=uc.costprojectId "
@@ -248,6 +274,9 @@ class ExpenseController extends Controller
             . "ORDER BY e.title")
             ->bindValue(':userId', Yii::$app->user->id)
             ->queryColumn();
+        $titles = array_unique(array_values(array_merge($defaultTitles, $titles)));
+        array_walk($titles, 'trim');
+        sort($titles);
 
         return $this->render('update', [
             'model'         => $model,
