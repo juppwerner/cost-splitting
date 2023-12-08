@@ -33,12 +33,15 @@ $costproject = $model->costproject;
 
     <?= '' // $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'title')->widget(TypeaheadBasic::class, [
+    <?= $form->field($model, 'title')->widget(Select2::class, [
         'data' => $titles,
-        'dataset' => ['limit' => 10],
+        // 'dataset' => ['limit' => 10],
         'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
-        'pluginOptions' => ['highlight'=>true, 'minLength' => 2],
-    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
+        'pluginOptions' => [
+            'allowClear' => true,
+            'highlight'=>true, 'minLength' => 2
+        ],
+    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks').' | ' . Yii::t('app', 'Press ENTER to select an already entered title')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 
@@ -86,7 +89,7 @@ $costproject = $model->costproject;
         'data' => $participants,
         'options' => ['placeholder' => Yii::t('app', 'Select one or more recipients ...'), 'multiple' => true],
         'pluginOptions' => [
-            'tags' => true,
+            // 'tags' => true,
             'tokenSeparators' => [',', ' '],
             'maximumInputLength' => 10
         ],
@@ -96,26 +99,25 @@ $costproject = $model->costproject;
 
     <?php if(!empty($model->splitting_weights) && substr($model->splitting_weights, 0, 1)=='{' and substr($model->splitting_weights, -1)=='}') {
         $weights = \yii\helpers\Json::decode($model->splitting_weights);
-        $weights[Yii::t('app', '(add participant)')] = 0;
+        if(count($weights)==0)
+            $weights[/* Yii::t('app', '(add participant)')*/ ''] = 0;
         // var_dump($weights);
     } else {
-        $weights = [Yii::t('app', '(add participant)') => 0];  
+        $weights = []; // [/* Yii::t('app', '(add participant)') */ '' => 0];  
     } ?>
     <div class="form-group field-expense-splitting_weights">
-        <table>
+        <table id="participants-share-table">
             <thead>
                 <tr>
                     <th><?= Yii::t('app', 'Participant') ?></th>
                     <th><?= Yii::t('app', 'Distribution') ?></th>
-                    <th><?= Yii::t('app', 'Action') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php $n=0; foreach($weights as $participant=>$weight) : ?>
                 <tr class="participant_row_<?= $n ?>">
-                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][participant]" class="form-control" value="<?= $participant ?>"></td>
+                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][participant]" class="form-control participantCell" value="<?= $participant ?>" readonly placeholder="<?= Yii::t('app', '(add participant)') ?>"></td>
                     <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][weight]" class="form-control text-center" value="<?= $weight ?>"></td>
-                    <td class="text-center"><a class="deleteRow" href="#" data-id="<?= $n ?>" title="<?= Yii::t('app', 'Delete row') ?>">X</a></th>
                 </tr>
                 <?php $n++; endforeach; ?>
             </tbody>
@@ -202,11 +204,61 @@ $('#expense-amount, #expense-exchangerate').on('mousewheel',
     }
 );
 
-$('.deleteRow').on('click', function(event) {
-    event.preventDefault();
-    alert($(this).data('id'));
-    $('tr.participant_row_'+$(this).data('id')).remove();
+function attachDelete() 
+{
+    $('.deleteRow').on('click', function(event) {
+        event.preventDefault();
+        // alert($(this).data('id'));
+        $('tr.participant_row_'+$(this).data('id')).remove();
+    });
+}
+// attachDelete();
+
+$('#expense-participants').on('change', function(event) {
+    var participants = $(event.target).val();
+    // count existing rows
+    var rows = $('#participants-share-table tbody tr').length;
+    // Get existing participant rows
+    var existingParticipants = [];
+    $('#participants-share-table input.participantCell').each(function(index) {
+        existingParticipants.push($( this ).val());
+    });
+    
+    var idx=rows;
+    participants.forEach(function(value, index, array) {
+        if(existingParticipants.includes(value)) {
+        } else {
+            addParticipantRow(idx, value, 1);
+            idx++;
+        }
+    });
+    // attachDelete();
+
+    existingParticipants = [];
+    $('#participants-share-table input.participantCell').each(function(index) {
+        existingParticipants.push($( this ));
+    });
+    existingParticipants.forEach(function(value, index, array) {
+        if(participants.includes(value.val())) {
+        } else {
+            // Delete row
+            value.closest('tr').remove();
+        }
+    });
+
 });
+
+function addParticipantRow(idx, name, share)
+{
+    var tableBody = $('#participants-share-table tbody');
+    // 
+
+    var markup = '<tr class=\"participant_row_' + idx + '\">';
+    markup += '<td><input type=\"text\" name=\"Expense[splitting_weights][' + idx + '][participant]\" class=\"form-control participantCell\" value=\"' + name + '\" readonly placeholder=\"" . Yii::t('app', '(add participant)') . "\"></td>';
+    markup += '<td><input type=\"text\" name=\"Expense[splitting_weights][' + idx + '][weight]\" class=\"form-control text-center\" value=\"' + share + '\"></td>';
+    markup += '</tr>';
+    tableBody.append(markup);
+}
 
     ",
     yii\web\View::POS_READY,
