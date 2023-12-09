@@ -33,15 +33,15 @@ $costproject = $model->costproject;
 
     <?= '' // $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'title')->widget(Select2::class, [
+    <?= $form->field($model, 'title')->widget(TypeaheadBasic::class, [
         'data' => $titles,
-        // 'dataset' => ['limit' => 10],
+        'dataset' => ['limit' => 10],
         'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
         'pluginOptions' => [
-            'allowClear' => true,
-            'highlight'=>true, 'minLength' => 2
+            'highlight'=>true, 
+            'minLength' => 2
         ],
-    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks').' | ' . Yii::t('app', 'Press ENTER to select an already entered title')); ?>
+    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 
