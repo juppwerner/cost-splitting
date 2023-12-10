@@ -65,15 +65,26 @@ Url::remember('', 'cost-project');
                 },
             ],
             [
+                'attribute' => 'expensesAmount',
+                'contentOptions' => [ 'class' => 'text-right pr-4' ],
+                'value' => function($data) {
+                    return Yii::$app->formatter->asCurrency($data->expensesAmount, $data->currency);
+                },
+            ],
+            /*
+            [
                 'attribute'=>'created_at',
+                'contentOptions' => [ 'class' => 'text-center text-nowrap' ],
                 'value' => function($data) {
                     return Yii::$app->formatter->asDatetime($data->created_at, 'php:'.Yii::t('app', 'Y-m-d H:i:s'));
                 },
             ],
+            */
             'createUserName',
             [
                 'attribute'=>'updated_at',
                 'format' => 'html',
+                'contentOptions' => [ 'class' => 'text-center text-nowrap' ],
                 'value' => function($data) {
                     return Yii::$app->formatter->asDatetime($data->updated_at, 'php:'.Yii::t('app', 'Y-m-d H:i:s'));
                 },

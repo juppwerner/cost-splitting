@@ -27,16 +27,14 @@ use app\components\BaseActiveRecord;
 class Costproject extends BaseActiveRecord
 {
     public $recordNameTemplate = '{title} (#{id})';
-
-    // {{{ tableName
+    public $expensesAmount;
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return '{{%costproject}}';
-    } // }}}
-    // {{{ behaviors
+    }
     /**
      * @inheritdoc
      */
@@ -57,8 +55,7 @@ class Costproject extends BaseActiveRecord
                 //'value' => new Expression('NOW()'),
             ],
         ];
-    } // }}} 
-    // {{{ rules
+    } 
     /**
      * {@inheritdoc}
      */
@@ -74,8 +71,7 @@ class Costproject extends BaseActiveRecord
             [['participants'], 'trim'],
             [['participants'], 'safe'],
         ];
-    } // }}}
-    // {{{ attributeLabels
+    }
     /**
      * {@inheritdoc}
      */
@@ -88,6 +84,7 @@ class Costproject extends BaseActiveRecord
             'useCurrency' => Yii::t('app', 'Use Currency'),
             'currency' => Yii::t('app', 'Currency'),
             'description' => Yii::t('app', 'Description'), 
+            'expensesAmount' => Yii::t('app', 'Expenses'), 
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'createUserName' => Yii::t('app', 'Created By'),
@@ -95,8 +92,8 @@ class Costproject extends BaseActiveRecord
             'updated_by' => Yii::t('app', 'Updated By'),
             'updateUserName' => Yii::t('app', 'Created By'),
         ];
-    } // }}}
-    // {{{ getBreakdown
+    }
+
     public function getBreakdown()
     {
         $result = array();
@@ -104,8 +101,13 @@ class Costproject extends BaseActiveRecord
             $result[$expense->id] = $expense;
 
         return $result;
-    } // }}}
-    // {{{ getParticipantsList
+    }
+
+    public function getExpensesAmount()
+    {
+        return $this->hasMany(Expense::className(), ['costprojectId' => 'id'])->sum('amount');
+    }
+
     public function getParticipantsList()
     {
         $participants = explode("\n", preg_replace('~\R~u', "\n", $this->participants));
@@ -113,8 +115,8 @@ class Costproject extends BaseActiveRecord
         foreach($participants as $participant)
             $result[$participant] = $participant;
         return $result;
-    } // }}}
-    // {{{ getAllParticipants
+    }
+
     /**
      * Returns a list of all projects' participants
      *
@@ -128,8 +130,8 @@ class Costproject extends BaseActiveRecord
             $result = array_merge($result, $project->participantsList);
         asort($result);
         return $result;
-    } // }}} 
-    // {{{ find
+    } 
+
     /**
      * {@inheritdoc}
      * @return \app\models\queries\CostprojectQuery the active query used by this AR class.
@@ -137,8 +139,8 @@ class Costproject extends BaseActiveRecord
     public static function find()
     {
         return new \app\models\queries\CostprojectQuery(get_called_class());
-    } // }}}
-    // {{{ getExpenses
+    }
+
     /**
      * Gets query for [[Expenses]].
      *
@@ -147,8 +149,8 @@ class Costproject extends BaseActiveRecord
     public function getExpenses()
     {
         return $this->hasMany(Expense::class, ['costprojectId' => 'id']);
-    } // }}} 
-    // {{{ getTotalExpenses
+    } 
+
     public function getTotalExpenses()
     {
         $total = 0;
@@ -158,7 +160,7 @@ class Costproject extends BaseActiveRecord
             $total += $expense->amount * $expense->exchangeRate;
         }
         return $total;
-    } // }}} 
+    } 
 
     public function getUsers()
     {
@@ -166,13 +168,12 @@ class Costproject extends BaseActiveRecord
             ->viaTable('user_costproject', ['costprojectId' => 'id']);
 
     }
-    // {{{ *** Blameable Methods ***
-    // {{{ getCreateUser
+
     public function getCreateUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
-    } // }}} 
-    // {{{ getCreateUserName
+    } 
+
     /**
      * @getCreateUserName
      * 
@@ -180,13 +181,13 @@ class Costproject extends BaseActiveRecord
     public function getCreateUserName() 
     {
         return $this->createUser ? $this->createUser->username : '- no user -';
-    } // }}} 
-    // {{{ getUpdateUser
+    } 
+
     public function getUpdateUser()
     {
        return $this->hasOne(User::className(), ['id' => 'updated_by']);
-    } // }}} 
-    // {{{ getUpdateUserName
+    } 
+
     /**
      * @getUpdateUserName
      * 
@@ -194,6 +195,6 @@ class Costproject extends BaseActiveRecord
     public function getUpdateUserName() 
     {
         return $this->updateUser ? $this->updateUser->username : '- no user -';
-    } // }}} 
+    } 
     // }}} End Blameable methods
 }
