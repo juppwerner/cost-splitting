@@ -137,13 +137,14 @@ class CostprojectController extends Controller
      */
     public function actionCreate()
     {
-        $maxNbrOfCostProjects = Yii::$app->params['user.maxNbrOfCostProjects'] ?? 0;
+        // Check if user has not exceeded maximum number of allwoed cost projects
+        $maxNbrOfCostProjects = Yii::$app->params['user.maxNbrOfCostProjects'] ?? 1;
         Yii::info('maxNbrOfCostProjects: '.$maxNbrOfCostProjects, __METHOD__);
         $countUserCostProjects = Costproject::find()
-        ->select(['costproject.*'])
-        ->innerJoinWith('users')
-        ->where(['user.id' => Yii::$app->user->id])
-        ->count();
+            ->select(['costproject.*'])
+            ->innerJoinWith('users')
+            ->where(['user.id' => Yii::$app->user->id])
+            ->count();
         Yii::info('countUserCostProjects: '.$countUserCostProjects, __METHOD__);
         if($countUserCostProjects + 1 > $maxNbrOfCostProjects && $maxNbrOfCostProjects>0) {
             Yii::$app->session->addFlash(
@@ -152,8 +153,9 @@ class CostprojectController extends Controller
                 . Yii::t('app', 'You have exceeded the maximum number of allowed cost projects (limit: {n,plural,=0{no limit} =1{<b>one</b> cost project} other{<b>#</b> cost projects}}).', ['n'=>$maxNbrOfCostProjects]) . '<br>'
                 . Yii::t('app', 'Currently you have {n,plural,=0{ no cost projects} =1{<b>one</b> cost project} other{<b>#</b> cost projects}}.', ['n' => $countUserCostProjects])
             );
-            return $this->redirect(Url::previous());
+            return $this->redirect(Url::previous('cost-project'));
         }
+
         $model = new Costproject();
 
         if ($this->request->isPost) {
