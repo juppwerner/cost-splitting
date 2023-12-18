@@ -2,6 +2,25 @@
 
 This page lists changes for this application.
 
+## Rev. 0.6.0
+
+* Cost Projects table: added showing and searching for sum of expense amounts
+* Cost Project Form : Rearranged fields order
+* Create New Project: return to previous URL if user exceeded max. nbr. of projects
+* Cost Breakdown: Rearranged expense table columns
+* Expense Form: Added showing / changing participants weightings table on change of participants select field
+* Expenses: Added showing weightings for custom splitting expenses
+* Expenses: Added splitting expense using distribution
+* Expense Form: Added default values for titles  auto-complete
+* Expense Form: Added default titles for auto-complete
+* Expense Form: Changed calculation of currency to use reverse rate
+* Expense Create: Set currency from project
+* User Password Recovery: Changed fields to passwordInput
+* Home Page: Added messages regarding Login/Register
+* General: Improved mobile views
+
+2023-12-18
+
 ## Rev. 0.5.6
 
 2023-11-27
