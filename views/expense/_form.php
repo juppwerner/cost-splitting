@@ -17,6 +17,8 @@ use app\models\Expense;
 
 // Prepare currency codes
 $currencyCodes = CurrencyCodesDictEwf::allByLabel();
+
+$costproject = $model->costproject;
 ?>
 
 <div class="expense-form">
@@ -31,16 +33,25 @@ $currencyCodes = CurrencyCodesDictEwf::allByLabel();
 
     <?= '' // $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'title')/*->widget(TypeaheadBasic::classname(), [
+    <?= $form->field($model, 'title')->widget(TypeaheadBasic::class, [
         'data' => $titles,
         'dataset' => ['limit' => 10],
         'options' => ['placeholder' => Yii::t('app', 'Filter as you type ...')],
-        'pluginOptions' => ['highlight'=>true, 'minLength' => 0],
-    ])*/->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
+        'pluginOptions' => [
+            'highlight'=>true, 
+            'minLength' => 2
+        ],
+    ])->hint(Yii::t('app', 'e.g. Accommodation, Restaurant, Drinks')); ?>
 
     <?= $form->field($model, 'itemDate')->input('date') ?>
 
-    <?= $form->field($model, 'amount')->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
+    <?= $form->field($model, 'amount', [
+        'inputTemplate' => '<div class="input-group">{input}<div class="input-group-append">
+            <span class="input-group-text">'.(!empty($costproject) ? $costproject->currency : '').'</span>
+        </div></div>',
+    ])->textInput(['maxlength' => true])->input('number', ['step'=>'.01']) ?>
+
+    <?php if(!empty($costproject) && (bool)$costproject->useCurrency===true) : ?>
 
     <?= $form->field($model, 'currency')->widget(Select2::class, [
         'data' => $currencyCodes,
@@ -52,6 +63,13 @@ $currencyCodes = CurrencyCodesDictEwf::allByLabel();
     ]); ?>
 
     <?= $form->field($model, 'exchangeRate')->textInput(['maxlength' => true])->input('number', ['step'=>'.000001'])->hint(Yii::t('app', 'Will be set when a currency is selected')) ?>
+
+    <?php else : ?>
+    
+    <?= $form->field($model, 'currency')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'exchangeRate')->hiddenInput()->label(false) ?>
+    
+    <?php endif; ?>
 
     <?php if(is_null($participants)) : ?>
     <?= $form->field($model, 'payedBy')->textInput(['maxlength' => true])->hint(Yii::t('app', 'Press ENTER to show all participants')) ?>
@@ -71,11 +89,40 @@ $currencyCodes = CurrencyCodesDictEwf::allByLabel();
         'data' => $participants,
         'options' => ['placeholder' => Yii::t('app', 'Select one or more recipients ...'), 'multiple' => true],
         'pluginOptions' => [
-            'tags' => true,
+            // 'tags' => true,
             'tokenSeparators' => [',', ' '],
             'maximumInputLength' => 10
         ],
     ]) ?>
+
+    <?= '' // $form->field($model, 'splitting_weights')->textarea() ?>
+
+    <?php if(!empty($model->splitting_weights) && substr($model->splitting_weights, 0, 1)=='{' and substr($model->splitting_weights, -1)=='}') {
+        $weights = \yii\helpers\Json::decode($model->splitting_weights);
+        if(count($weights)==0)
+            $weights[/* Yii::t('app', '(add participant)')*/ ''] = 0;
+        // var_dump($weights);
+    } else {
+        $weights = []; // [/* Yii::t('app', '(add participant)') */ '' => 0];  
+    } ?>
+    <div class="form-group field-expense-splitting_weights">
+        <table id="participants-share-table">
+            <thead>
+                <tr>
+                    <th><?= Yii::t('app', 'Participant') ?></th>
+                    <th><?= Yii::t('app', 'Distribution') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $n=0; foreach($weights as $participant=>$weight) : ?>
+                <tr class="participant_row_<?= $n ?>">
+                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][participant]" class="form-control participantCell" value="<?= $participant ?>" readonly placeholder="<?= Yii::t('app', '(add participant)') ?>"></td>
+                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][weight]" class="form-control text-center" value="<?= $weight ?>"></td>
+                </tr>
+                <?php $n++; endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
     <?= $form->field($model, 'documents')->widget(app\components\FileInputWidget::class) ?>
 
@@ -89,6 +136,7 @@ $currencyCodes = CurrencyCodesDictEwf::allByLabel();
 </div>
 
 <?php $this->registerJs("
+// When currency was selected, get historic exchange rate
 $('#expense-currency').on('change', function() {
     var base = $('#expense-currency').val();
     var symbol = 'EUR';
@@ -112,32 +160,106 @@ $('#expense-currency').on('change', function() {
         if(!('exchangeRate' in response)) {
             alert('No exchange rate available for currency: ' + base)
         } else {
-            $('#expense-exchangerate').val(response.exchangeRate);
+            var rate = 1/parseFloat(response.exchangeRate);
+            rate = rate.toFixed(4);
+            console.log('rate: ' + rate);
+            $('#expense-exchangerate').val(rate);
         }
     }
 });
 $('input[type=radio][name=\"Expense[splitting]\"]').change(function() {
-    if(this.value==='SELECTED') {
+    if(this.value==='SELECTED' || this.value==='SELECTED_CUST') {
         toggleFieldExpenseParticipants(true);
     } else {
         toggleFieldExpenseParticipants(false);
+    }
+    if(this.value==='SELECTED_CUST') {
+        toggleFieldExpenseSplittingWeights(true);
+    } else {
+        toggleFieldExpenseSplittingWeights(false);
     }
 });
 function toggleFieldExpenseParticipants(show=true) {
     if(show===true) {
         $('div.form-group.field-expense-participants').show();
+
     } else {
         $('div.form-group.field-expense-participants').hide();
     }
 }
-toggleFieldExpenseParticipants(".($model->splitting==='SELECTED' ? 'true' : 'false').");
+toggleFieldExpenseParticipants(".(in_array($model->splitting, ['SELECTED', 'SELECTED_CUST']) ? 'true' : 'false').");
 
+function toggleFieldExpenseSplittingWeights(show=true) {
+    if(show===true) {
+        $('div.form-group.field-expense-splitting_weights').show();
+    } else {
+        $('div.form-group.field-expense-splitting_weights').hide();
+    }
+}
+toggleFieldExpenseSplittingWeights(".(in_array($model->splitting, ['SELECTED_CUST']) ? 'true' : 'false').");
 
 $('#expense-amount, #expense-exchangerate').on('mousewheel',
     function (event) {
         this.blur()
     }
 );
+
+function attachDelete() 
+{
+    $('.deleteRow').on('click', function(event) {
+        event.preventDefault();
+        // alert($(this).data('id'));
+        $('tr.participant_row_'+$(this).data('id')).remove();
+    });
+}
+// attachDelete();
+
+$('#expense-participants').on('change', function(event) {
+    var participants = $(event.target).val();
+    // count existing rows
+    var rows = $('#participants-share-table tbody tr').length;
+    // Get existing participant rows
+    var existingParticipants = [];
+    $('#participants-share-table input.participantCell').each(function(index) {
+        existingParticipants.push($( this ).val());
+    });
+    
+    var idx=rows;
+    participants.forEach(function(value, index, array) {
+        if(existingParticipants.includes(value)) {
+        } else {
+            addParticipantRow(idx, value, 1);
+            idx++;
+        }
+    });
+    // attachDelete();
+
+    existingParticipants = [];
+    $('#participants-share-table input.participantCell').each(function(index) {
+        existingParticipants.push($( this ));
+    });
+    existingParticipants.forEach(function(value, index, array) {
+        if(participants.includes(value.val())) {
+        } else {
+            // Delete row
+            value.closest('tr').remove();
+        }
+    });
+
+});
+
+function addParticipantRow(idx, name, share)
+{
+    var tableBody = $('#participants-share-table tbody');
+    // 
+
+    var markup = '<tr class=\"participant_row_' + idx + '\">';
+    markup += '<td><input type=\"text\" name=\"Expense[splitting_weights][' + idx + '][participant]\" class=\"form-control participantCell\" value=\"' + name + '\" readonly placeholder=\"" . Yii::t('app', '(add participant)') . "\"></td>';
+    markup += '<td><input type=\"text\" name=\"Expense[splitting_weights][' + idx + '][weight]\" class=\"form-control text-center\" value=\"' + share + '\"></td>';
+    markup += '</tr>';
+    tableBody.append(markup);
+}
+
     ",
     yii\web\View::POS_READY,
     'amount-change'

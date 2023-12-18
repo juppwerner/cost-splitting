@@ -31,6 +31,10 @@ Url::remember('', 'cost-project');
             <?= Html::a(Html::icon('log-in') . Yii::t('app', 'Login'), ['user/login'], ['title' => Yii::t('app', 'Login as an existing user'), 'class' => 'btn btn-lg btn-primary']) ?>
             <?= Html::a(Html::icon('user-plus') . Yii::t('app', 'Register'), ['user/register'], ['title' => Yii::t('app', 'Regster as a new user'), 'class' => 'btn btn-lg btn-info']) ?>
         </p>
+        <p>
+            <?= Yii::t('app', 'Click on <b>Login</b> if you already have a username.') ?><br>
+            <?= Yii::t('app', 'Click on <b>Register</b> if you want to get a new username.') ?>
+        </p>
         <?php endif; ?>
 
     </div>
@@ -56,7 +60,7 @@ Url::remember('', 'cost-project');
                 <p><?= Yii::t('app', 'Manage projects.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no projects} =1{is <b>one</b> project} other{are <b>#</b> projects}} in this system.', ['n' => $costprojects ]); ?></p>
                 <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                    <?= Html::a(Yii::t('app', 'List of Cost Projects').' '.'&raquo;', ['/costproject'], ['class'=>'btn btn-primary']) ?>
+                    <?= Html::a(Yii::t('app', 'Your Cost Projects').' '.'&raquo;', ['/costproject'], ['class'=>'btn btn-primary']) ?>
                     <?= Html::a(Html::icon('plus-square'), ['/costproject/create'], ['class'=>'btn btn-success', 'title' => Yii::t('app', 'Add new cost project')]) ?>
                 </div>
             </div>
@@ -65,7 +69,7 @@ Url::remember('', 'cost-project');
                 <p><?= Yii::t('app', 'Manage expenses.') ?></p>
                 <p><?php echo Yii::t('app', 'Currently there {n,plural,=0{are no expenses} =1{is <b>one</b> expense} other{are <b>#</b> expenses}} in this system.', ['n' => $expenses ]); ?></p>
                 <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                    <?= Html::a(Yii::t('app', 'List of Expenses').' '.'&raquo;', ['/expense'], ['class'=>'btn btn-primary']) ?>
+                    <?= Html::a(Yii::t('app', 'Your Expenses').' '.'&raquo;', ['/expense'], ['class'=>'btn btn-primary']) ?>
                     <?= Html::a(Html::icon('plus-square'), ['/expense/create'], ['class'=>'btn btn-success', 'title' => Yii::t('app', 'Add new expense')]) ?>
                 </div>
             </div>

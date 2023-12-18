@@ -111,6 +111,10 @@ $config = [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@Da/User/resources/i18n',
                 ],
+                'files' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@vendor/floor12/yii2-module-files/src/messages',
+                ],
                 /*
                 'yii2mod.comments' => [
                     'class' => 'yii\i18n\PhpMessageSource',

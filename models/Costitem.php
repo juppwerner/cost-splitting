@@ -10,8 +10,10 @@ use Yii;
  * @property int $id
  * @property int|null $expenseId
  * @property string $participant
+ * @property float $weight
  * @property float $amount
- *
+ * @property string $currency
+ * @property float $exchangeRate
  * @property Expense $expense
  */
 class Costitem extends \yii\db\ActiveRecord
@@ -32,7 +34,7 @@ class Costitem extends \yii\db\ActiveRecord
         return [
             [['expenseId'], 'integer'],
             [['participant', 'amount'], 'required'],
-            [['amount'], 'number'],
+            [['weight', 'amount'], 'number'],
             [['currency'], 'string', 'min' => 3, 'max' => 3],
             [['exchangeRate'], 'number', 'min' => 0.000001],
             [['participant'], 'string', 'max' => 30],
@@ -49,6 +51,7 @@ class Costitem extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'expenseId' => Yii::t('app', 'Expense ID'),
             'participant' => Yii::t('app', 'Participant'),
+            'weight' => Yii::t('app', 'Weighting'),
             'amount' => Yii::t('app', 'Amount'),
             'currency' => Yii::t('app', 'Currency'),
             'exchangeRate' => Yii::t('app', 'Exchange Rate'),

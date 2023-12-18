@@ -132,7 +132,7 @@ class DefaultController extends Controller
             foreach($items as $item) {
                 // echo $item->title;
                 if(preg_match('/^([-+]?[0-9]*\.?[0-9]+) ([A-Z]{3}) = 1 EUR ([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/', $item->title, $matches)) {
-                    print_r($matches);
+                    // print_r($matches);
                     $model = new Exchangerate();
                     $model->histDate = $matches[3];  
                     $model->currencyCode = $currencyCode;
@@ -141,7 +141,7 @@ class DefaultController extends Controller
                     //     print_r($model->errors);
                     if($date==$model->histDate) {
                         return [
-                            'histDate'=>$model->histDate, 
+                            'histDate'     => $model->histDate, 
                             'currencyCode' => $currencyCode,
                             'exchangeRate' => $model->exchangeRate
                         ];

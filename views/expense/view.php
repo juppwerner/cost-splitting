@@ -6,6 +6,8 @@ use yii\widgets\DetailView;
 
 use app\components\Html;
 use app\models\Costitem;
+use app\models\Expense;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\Expense $model */
@@ -97,7 +99,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <?= DetailView::widget([
         'model' => $model,
         'options' => ['tag' => 'div', 'class' => 'list-group'],
-        'template' => '<a class="list-group-item list-group-item-action"><div class="d-flex w-100 justify-content-between"><h5>{label}</h4></div><p>{value}</p></a>',
+        'template' => '<a class="list-group-item list-group-item-action"{contentOptions}><div class="d-flex w-100 justify-content-between"><h5>{label}</h4></div><p>{value}</p></a>',
         'attributes' => [
             /* [
                 'attribute'=>'title',
@@ -107,7 +109,8 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
             [
                 'attribute'=>'costprojectId',
                 'format'=>'html',
-                'value'=>$model->costproject->title
+                'value'=>$model->costproject->title,
+                'contentOptions' => ['href'=>Url::to(['costproject/view', 'id'=>$model->costprojectId])],
             ],
             'payedBy',
             [
@@ -143,9 +146,16 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
         'id' => 'expenses-grid',
         'dataProvider' => $costitemsDataProvider,
         'tableOptions' => ['class' => 'table table-striped table-responsive-sm table-hover'],
+        'summary' => Yii::t('app', 'Total <b>{count, number}</b> {count, plural, one{participant} other{participants}}.'),
         'columns' => [
             [
                 'attribute'=>'participant',
+            ],
+            [
+                'attribute' => 'weight',
+                'label' => Yii::t('app', 'Distribution'),
+                'contentOptions' => [ 'class' => 'text-center' ],
+                'visible' => $model->splitting===Expense::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM
             ],
             [
                 'attribute'=>'amount',
@@ -174,6 +184,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     ]) ?>
 
     <h3 class="mt-3"><?= Yii::t('app', 'Attachments') ?></h3>
+    <?= count($model->documents)===0 ? Yii::t('app', '(no file attachments yet)') : '' ?>
     <?= \floor12\files\components\FileListWidget::widget([
         'files' => $model->documents, 
         'downloadAll' => true, 

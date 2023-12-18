@@ -18,8 +18,8 @@ use app\dictionaries\CurrencyCodesDictEwf;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus'=>'autofocus']) ?>
-    <?= $form->field($model, 'participants')->textArea(['rows' => 4])->hint(Yii::t('app', 'Enter one participant per line')) ?>
-    <?= $form->field($model, 'currency')->widget(Select2::classname(), [
+    <?= $form->field($model, 'participants')->textArea(['rows' => 3])->hint(Yii::t('app', 'Enter one participant per line')) ?>
+    <?= $form->field($model, 'currency')->widget(Select2::class, [
         'data' => CurrencyCodesDictEwf::allByLabel(),
         // 'language' => 'de',
         'options' => ['placeholder' => Yii::t('app', 'Select a currency ...')],
@@ -27,8 +27,8 @@ use app\dictionaries\CurrencyCodesDictEwf;
             'allowClear' => true
         ],
     ])->hint(Yii::t('app', 'Select the project currency')); ?>
-    <?= $form->field($model, 'description')->textarea()->hint(Yii::t('app', 'You may use Mardown Extra here')) ?>
     <?= $form->field($model, 'useCurrency')->checkbox()->hint(Yii::t('app', 'Check to capture expenses using foreign currencies')) ?>
+    <?= $form->field($model, 'description')->textarea()->hint(Yii::t('app', 'You may use Mardown Extra here')) ?>
     
     <div class="form-group">
         <?= Html::submitButton(Html::icon('save') . Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

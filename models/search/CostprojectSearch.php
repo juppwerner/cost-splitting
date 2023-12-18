@@ -6,12 +6,15 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Costproject;
+use app\models\Expense;
+
 
 /**
  * CostprojectSearch represents the model behind the search form of `app\models\Costproject`.
  */
 class CostprojectSearch extends Costproject
 {
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +22,7 @@ class CostprojectSearch extends Costproject
     {
         return [
             [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'participants', 'currency'], 'safe'],
+            [['title', 'participants', 'currency', 'expensesAmount'], 'safe'],
         ];
     }
 
@@ -42,13 +45,30 @@ class CostprojectSearch extends Costproject
     public function search($params)
     {
         $query = Costproject::find()
-            ->select(['costproject.*'])
+            ->select(['costproject.*', 'expensesSum.expensesAmount'])
             ->innerJoinWith('users')
             ->where(['user.id' => Yii::$app->user->id]);
         // add conditions that should always apply here
+        $subQuery = Expense::find()
+            ->select(new \yii\db\Expression('costprojectId, ROUND(SUM(amount * exchangeRate), 2) AS expensesAmount'))
+            ->groupBy('costprojectId');
+        $query->leftJoin(['expensesSum' => $subQuery], 'expensesSum.costprojectId = costproject.id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'title',
+                    'participants',
+                    'currency',
+                    'updated_at',
+                    'expensesAmount' => [
+                        'asc' => ['expensesSum.expensesAmount' => SORT_ASC],
+                        'desc' => ['expensesSum.expensesAmount' => SORT_DESC],
+                        'label' => (new Expense())->getAttributeLabel('expensesAmount')
+                    ]
+                ]
+            ],
         ]);
 
         $this->load($params);
@@ -71,6 +91,10 @@ class CostprojectSearch extends Costproject
         $query->andFilterWhere(['like', 'title', $this->title]);
         $query->andFilterWhere(['like', 'participants', $this->participants]);
         $query->andFilterWhere(['like', 'currency', $this->currency]);
+
+        // filter by expenses amount
+        if(!empty($this->expensesAmount))
+            $query->andFilterCompare('expensesSum.expensesAmount', str_replace(',', '.', $this->expensesAmount));
 
         return $dataProvider;
     }
