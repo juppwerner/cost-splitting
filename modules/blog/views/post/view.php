@@ -1,6 +1,6 @@
 <?php
 
-use yii\bootstrap4\Html;
+use app\components\Html;
 use yii\helpers\Markdown;
 use yii\widgets\DetailView;
 
@@ -64,7 +64,11 @@ $this->context->leftMenu = [
     <!-- }}} -->
 
     <?php if($isBlogAuthor) : /* {{{ DELETE BTN */ ?>     <p>
-        <?= Html::a('<i class="fas fa-trash"></i>&nbsp;', ['delete', 'id' => $model->id], [
+        <?= Html::a(Html::icon('edit').'&nbsp;', ['update', 'id' => $model->id], [
+            'title' => Yii::t('app','Click to edit post: {recordName}', ['recordName'=>$model->recordName]),
+            'class' => 'btn btn-info btn-xs hidden-print',
+        ]) ?>
+        <?= Html::a(Html::icon('trash-2').'&nbsp;', ['delete', 'id' => $model->id], [
             'title' => Yii::t('app','Click to confirm deleting post: {recordName}', ['recordName'=>$model->recordName]),
             'class' => 'btn btn-danger btn-xs hidden-print',
             'data' => [
