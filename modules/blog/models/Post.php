@@ -4,6 +4,7 @@ namespace app\modules\blog\models;
 
 use Yii;
 
+use app\models\User;
 use app\modules\blog\models\query\PostQuery;
 
 /**
@@ -94,4 +95,9 @@ class Post extends \app\components\BaseActiveRecord
     {
         return new PostQuery(get_called_class());
     } // }}} 
+
+    public function getCreator()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
 }
