@@ -17,6 +17,7 @@ use app\components\BaseActiveRecord;
  * @property boolean $useCurrency
  * @property string $currency
  * @property string $description
+ * @property string $payment
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -67,7 +68,7 @@ class Costproject extends BaseActiveRecord
             [['title'], 'string', 'max' => 255],
             [['useCurrency'], 'boolean'],
             [['currency'], 'string', 'min'=>3, 'max' => 255],
-            ['description', 'safe'],
+            [['description', 'payment'], 'safe'],
             [['participants'], 'trim'],
             [['participants'], 'safe'],
         ];
@@ -84,6 +85,7 @@ class Costproject extends BaseActiveRecord
             'useCurrency' => Yii::t('app', 'Use Currency'),
             'currency' => Yii::t('app', 'Currency'),
             'description' => Yii::t('app', 'Description'), 
+            'payment' => Yii::t('app', 'Payment'),
             'expensesAmount' => Yii::t('app', 'Expenses'), 
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
@@ -197,4 +199,22 @@ class Costproject extends BaseActiveRecord
         return $this->updateUser ? $this->updateUser->username : '- no user -';
     } 
     // }}} End Blameable methods
+
+    public function getIsPaid()
+    {
+        if(empty($this->payment))
+            return false;
+        try {
+            $payment = json_decode($this->payment);
+            if(isset($payment->status)) {
+                if($payment->status==='COMPLETED')
+                    return true;
+                else
+                    return false;
+            }
+        } catch(\Exception $e) {
+            Yii::error($e->getMessage(), __METHOD__);
+            return false;
+        }
+    }
 }

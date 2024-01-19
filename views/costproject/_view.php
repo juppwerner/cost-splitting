@@ -50,7 +50,7 @@ use app\dictionaries\CurrencyCodesDictEwf;
             },
         ],
         [
-            'attribute' => Yii::t('app', 'Users'),
+            'label' => Yii::t('app', 'Users'),
             'format' => 'raw',
             'value' => function($data) {
                 $tmp = [];
@@ -70,6 +70,16 @@ use app\dictionaries\CurrencyCodesDictEwf;
                     $tmp[] = Html::a(Html::icon('plus-square') . Yii::t('app', 'Manage Users'), ['manage-users', 'id'=>$data->id], ['class' => 'btn btn-sm btn-primary mt-2']);
                 return join('<br>', $tmp);
             }
+        ],
+        [
+            'attribute' => 'payment',
+            'format' => 'raw',
+            'value' => function($data) {
+                if($data->isPaid)
+                    return '<span class="badge badge-success">'.Yii::t('app', 'Paid').'</span>';
+                else
+                    return '<span class="badge badge-success">'.Yii::t('app', 'Not Paid').'</span>';
+            },
         ],
         // 'id',
     ],
@@ -140,6 +150,16 @@ use app\dictionaries\CurrencyCodesDictEwf;
                     */
                     return join("\n", $tmp);
                 }
+            ],
+            [
+                'attribute' => 'payment',
+                'format' => 'raw',
+                'value' => function($data) {
+                    if($data->isPaid)
+                        return '<span class="badge badge-success">'.Yii::t('app', 'Paid').'</span>';
+                    else
+                        return '<span class="badge badge-success">'.Yii::t('app', 'Not Paid').'</span>';
+                },
             ],
         ],
     ]) ?>

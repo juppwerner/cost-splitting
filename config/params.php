@@ -25,4 +25,17 @@ return [
     
     // set a default Bootstrap version globally for all Krajee Extensions
     'bsVersion'                     => '4.x',    
+
+    // PayPal payment settings
+    // Client ID:
+    'paypal.clientId' => null,
+    // Client Secret:
+    'paypal.clientSecret' => null,
+
+    // Payment options
+    // Currency Code to be used (3 char. code):
+    'paymentCurrencyCode' => null,
+    // List of payment rates:
+    'paymentOptions' => null,
+
 ];
