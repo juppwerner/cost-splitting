@@ -39,16 +39,18 @@ YiiAsset::register($this);
     </p>
 
     <form class="mb-4">
-        <?php $n=1; foreach($paymentOptions as $paymentOptionCode=>$paymentOption) : ?>
-        <?php $rateType = Yii::t('app', 'Quantity-based'); if($paymentOption['type']==='time') $rateType = Yii::t('app', 'Time-based'); ?>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="paymentOption" id="paymentOption<?= $n ?>" value="<?= $paymentOptionCode ?>"<?= $n==1 ? ' checked' : '' ?>>
-            <label class="form-check-label" for="exampleRadios<?= $n ?>">
-            <span class="badge badge-secondary"><?= $rateType ?></span> <?= $paymentOption['label'] ?> - <?= Yii::$app->formatter->asCurrency($paymentOption['value'], $currencyCode) ?>
-            </label>
-            <?php if(isset($paymentOption['description'])) : ?>
-            <small id="paymentOption<?= $n ?>HelpBlock" class="form-text text-muted">
-            <?= $paymentOption['description'] ?></small><?php endif; ?> 
+        <?php $n=1; foreach($paymentOptions as $n=>$paymentOption) : $paymentOption->loadTranslations(Yii::$app->language); ?>
+        <div class="list-group" role="tablist" id="paymentOptions">
+            <?php $rateType = Yii::t('app', 'Quantity-based'); if($paymentOption->type==='time') $rateType = Yii::t('app', 'Time-based'); ?>
+            <div class="form-check list-group-item list-group-item-action" style="cursor:pointer">
+                &nbsp;&nbsp;<input class="form-check-input" type="radio" name="paymentOption" id="paymentOption<?= $n ?>" value="<?= $paymentOption->sku ?>"<?= $n==0    ? ' checked' : '' ?>>
+                <label class="form-check-label" for="exampleRadios<?= $n ?>">
+                <span class="badge badge-secondary"><?= $rateType ?></span> <?= $paymentOption->translation->name ?> - <span class="badge badge-primary"><?= Yii::$app->formatter->asCurrency($paymentOption->amount, $currencyCode) ?></span>
+                </label>
+                <?php if(isset($paymentOption->description)) : ?>
+                <small id="paymentOption<?= $n ?>HelpBlock" class="form-text text-muted">
+                <?= $paymentOption->translation->description ?></small><?php endif; ?> 
+            </div>
         </div>
         <?php $n++; endforeach; ?>
     </form>
@@ -164,4 +166,13 @@ function resultMessage(message) {
     const container = document.querySelector("#result-message");
     container.innerHTML = message;
 }
+
 </script>
+
+<?php $this->registerJs("
+// var radios = $('input[type=\"radio\"][name=\"paymentOption\"]');
+$('#paymentOptions div.list-group-item').on('click', function(event) {
+    $(this).children('input[type=\"radio\"]').first().prop('checked', true);
+    
+});", VIEW::POS_READY
+); ?>
