@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\components\Html;
 use app\models\Costproject;
 use app\models\Order;
+use app\models\Orderitem;
 use app\models\forms\AddUserForm;
 use app\models\search\CostprojectSearch;
 
@@ -197,19 +198,10 @@ class CostprojectController extends Controller
         }
         $currencyCode = Yii::$app->params['paymentCurrencyCode'];
 
-        $paymentOptions = Yii::$app->params['paymentOptions'];
         // Get configured payment options
-        if(empty(Yii::$app->params['paymentOptions'])) {
-            Yii::error('App Parameter paymentOptions is not configured', __METHOD__);
-            Yii::$app->session->addFlash(
-                'error', 
-                Html::tag('h4', Yii::t('app', 'Error')) .
-                Yii::t('app', 'Payment is not configured')
-            );
-            return $this->redirect(['view', 'id'=>$id]);
-        }
-        $paymentOptions = Yii::$app->params['paymentOptions'];
-
+        // $paymentOptions = Yii::$app->params['paymentOptions'];
+        $paymentOptions = Orderitem::find()->orderBy(['type' => SORT_ASC])->all();
+        
         return $this->render('checkout', [
             'model'                 => $model,
             'paypalClientID'        => $paypalClientID,
