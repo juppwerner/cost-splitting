@@ -75,7 +75,7 @@ window.paypal.Buttons(
         },
         async createOrder() {
             try {
-                const response = await fetch("/paypal/orders", {
+                const response = await fetch("<?= Url::to('/paypal/orders', true) ?>", {
                         method: "POST",
                         headers: {
                         "Content-Type": "application/json",
@@ -112,7 +112,7 @@ window.paypal.Buttons(
         },
         async onApprove(data, actions) {
             try {
-                const response = await fetch("/paypal/orders/"+data.orderID+"/capture", {
+                const response = await fetch("<?= Url::to('/paypal/orders', true) ?>/"+data.orderID+"/capture", {
                     method: "POST",
                     headers: {
                     "Content-Type": "application/json",}
