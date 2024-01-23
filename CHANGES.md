@@ -2,6 +2,10 @@
 
 This page lists changes for this application.
 
+## Rev. 0.7.0
+
+* Added PayPal payment to see cost brekdown in projects
+
 ## Rev. 0.6.0
 
 * Cost Projects table: added showing and searching for sum of expense amounts
