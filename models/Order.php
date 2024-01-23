@@ -119,7 +119,7 @@ class Order extends BaseActiveRecord
                         $order->save();
                         Yii::info('Set order to isConsumed: #'.$order->id, __METHOD__);
                         echo 'This order is set to isConsumed now'.PHP_EOL;
-                        continue;
+                        continue 2;
                     }
                     // Not yet expired
                     $costproject->orderId = $order->id;
@@ -132,7 +132,7 @@ class Order extends BaseActiveRecord
                         $order->save();
                         Yii::info('Set order to isConsumed: #'.$order->id, __METHOD__);
                         echo 'This order is set to isConsumed now'.PHP_EOL;
-                        continue;
+                        continue 2;
                     } else {
                         // Decrement
                         $order->quantityRemaining--;

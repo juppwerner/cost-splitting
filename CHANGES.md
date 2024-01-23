@@ -2,11 +2,21 @@
 
 This page lists changes for this application.
 
+## Rev. 0.7.1
+
+2024-01-23
+
+* Bugfix orders
+
 ## Rev. 0.7.0
+
+2024-01-23
 
 * Added PayPal payment to see cost brekdown in projects
 
 ## Rev. 0.6.0
+
+2023-12-18
 
 * Cost Projects table: added showing and searching for sum of expense amounts
 * Cost Project Form : Rearranged fields order
@@ -22,8 +32,6 @@ This page lists changes for this application.
 * User Password Recovery: Changed fields to passwordInput
 * Home Page: Added messages regarding Login/Register
 * General: Improved mobile views
-
-2023-12-18
 
 ## Rev. 0.5.6
 
