@@ -119,7 +119,7 @@ class CostprojectController extends Controller
     {
         $model = $this->findModel($id);
         // Was project payed already?
-        if(is_null($model->payment)) {
+        if(is_null($model->orderId)) {
             // Check avalable deposit
             $result = Order::pay($id);
             if(!$result) {
@@ -128,6 +128,8 @@ class CostprojectController extends Controller
                     Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.')
                 );
                 return $this->redirect(['checkout', 'id'=>$id]);
+            } else {
+                $model = $this->findModel($id);
             }
         }
 

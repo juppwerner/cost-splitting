@@ -64,17 +64,11 @@ return [
     'paypal.clientSecret' => 'CHANGE_ME',
 
     // Payment options
+
+    // URL to PayPal REST API:
+    'paypalBaseUrl' => 'https://api-m.sandbox.paypal.com',
+    
     // Currency Code to be used (3 char. code):
     'paymentCurrencyCode' => null,
-    // List of payment options:
-    'paymentOptions' => [
-        'CODE1' => [
-                'value' => 9.99,
-                'label' => '1 single cost project',
-                'type'  => 'quantity', // or 'time',
-                'description'
-        ],
-        // ...
-    ],
 
 ];

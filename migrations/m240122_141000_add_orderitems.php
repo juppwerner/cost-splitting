@@ -39,19 +39,64 @@ class m240122_141000_add_orderitems extends Migration
                     'description' => 'Die Kostenverteilung für fünf Kostenprojekte erwerben',
                 ],
             ],
-        ],        
+        ], 
+        [
+            'sku'           => 'CSP_Q10',
+            'name'          => 'Ten single cost projects',
+            'type'          => 'quantity',
+            'description'   => 'Get cost breakdown for ten single cost projects',
+            'amount'        => 8.90,
+            'rule'          => '10',
+            'translations' => [
+                [
+                    'language' => 'de',
+                    'name' => 'Zehn Kostenprojekte',
+                    'description' => 'Die Kostenverteilung für zehn Kostenprojekte erwerben',
+                ],
+            ],
+        ],           
         [
             'sku'           => 'CSP_T1D',
             'name'         => 'All cost projects on 1 day',
             'type'          => 'time',
-            'description'   => 'Get cost breakdown all cost projects on one day',
+            'description'   => 'Get cost breakdowns for all cost projects on one day',
             'amount'        => 9.90,
             'rule'          => '+1 day',
             'translations' => [
                 [
                     'language' => 'de',
                     'name' => 'Alle Kostenprojekte an einem Tag',
-                    'description' => 'Die Kostenverteilung für alle Kostenprojekte an eionem Tag erwerben',
+                    'description' => 'Die Kostenverteilung für alle Kostenprojekte an einem Tag erwerben',
+                ],
+            ],
+        ],        
+        [
+            'sku'           => 'CSP_T1W',
+            'name'         => 'All cost projects during 1 week',
+            'type'          => 'time',
+            'description'   => 'Get cost breakdowns for all cost projects during one week',
+            'amount'        => 14.90,
+            'rule'          => '+1 week',
+            'translations' => [
+                [
+                    'language' => 'de',
+                    'name' => 'Alle Kostenprojekte innerhalb einer Woche',
+                    'description' => 'Die Kostenverteilung für alle Kostenprojekte innerhalb einer Woche erwerben',
+                ],
+            ],
+        ],       
+        [
+            'sku'           => 'CSP_T1M',
+            'name'         => 'All cost projects during 1 month',
+            'type'          => 'time',
+            'description'   => 'Get cost breakdowns for all cost projects during one month',
+            'amount'        => 29.90,
+            'rule'          => '+1 month',
+            'translations' => [
+                [
+                    'language' => 'de',
+                    'name' => 'Alle Kostenprojekte innerhalb eines Monats',
+                    'description' => 'Die Kostenverteilung für alle Kostenprojekte innerhalb eines Monats erwerben',
                 ],
             ],
         ],

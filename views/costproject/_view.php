@@ -72,7 +72,7 @@ use app\dictionaries\CurrencyCodesDictEwf;
             }
         ],
         [
-            'attribute' => 'payment',
+            'attribute' => 'orderId',
             'format' => 'raw',
             'value' => function($data) {
                 if($data->isPaid)
@@ -152,7 +152,7 @@ use app\dictionaries\CurrencyCodesDictEwf;
                 }
             ],
             [
-                'attribute' => 'payment',
+                'attribute' => 'orderId',
                 'format' => 'raw',
                 'value' => function($data) {
                     if($data->isPaid)

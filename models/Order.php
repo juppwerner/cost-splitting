@@ -122,10 +122,7 @@ class Order extends BaseActiveRecord
                         continue;
                     }
                     // Not yet expired
-                    $payment = new \StdClass;
-                    $payment->status = 'COMPLETED';
-                    $payment->orderId = $order->id;
-                    $costproject->payment = json_encode($payment);
+                    $costproject->orderId = $order->id;
                     $costproject->save();
                     Yii::info('Set cost project to paid: order #'.$order->id.' - '.$order->purchaseType, __METHOD__);
                     return true;
