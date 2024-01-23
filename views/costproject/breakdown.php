@@ -35,6 +35,18 @@ $defaultParticipantDetails = [
     'sumExpensesByOthers'=>0
 ];
 ?>
+<?php if((int)Yii::$app->request->get('pay-ok')===1) : ?>
+    <?php // Show success message regarding PayPal payment ?>
+    <?= \yii\bootstrap4\Alert::widget([
+    'options' => [
+        'class' => 'alert-success',
+    ],
+    'body' => Html::tag('h4', Yii::t('app', 'Payment'))
+        .Yii::t('app', 'The payment via PayPal was completed successfully.').'<br>'
+        .Yii::t('app', 'Thank you!'),
+]); ?>
+<?php endif; ?>
+
 <div class="costproject-breakdown">
 
     <h1><?= Html::encode($this->title) ?></h1>

@@ -109,9 +109,9 @@ else
     $this->title .= ' :: '.Yii::$app->name;
 
 // Common user roles
-$isGuest = Yii::$app->user->isGuest;
-$isAdmin = !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin;
-$isDev = !Yii::$app->user->isGuest && strtolower(Yii::$app->user->identity->username)==='jwerner';
+$isGuest    = Yii::$app->user->isGuest;
+$isAdmin    = !Yii::$app->user->isGuest && Yii::$app->user->can('admin');
+$isDev      = !Yii::$app->user->isGuest && strtolower(Yii::$app->user->identity->username)==='jwerner';
 // {{{ *** SETUP MENU ITEMS ***
 $menuItems = [];
 // {{{ HOME
@@ -132,7 +132,7 @@ if ($isGuest) {
         // ['label' => '<i class="fas fa-filter"></i> '            .Yii::t('app','List Filters'),    'url' => ['/listfilter/index']],
     ]]; // }}} 
     // {{{ BLOG
-    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog']]; // }}}
+    $menuItems[] = ['label' => Html::icon('list').Yii::t('app', 'Blog'), 'url' => ['/blog'], 'visible' => $isAdmin]; // }}}
     // {{{ THEMES
     // $menuItems[$idx]['items'][] = '<li class="divider"></li>';
     // DEACTIVATED: $menuItems[$idx]['items'][] = ['label' => '<i class="fas fa-tint"></i> '.\Yii::t('app','Themes ({theme})', ['theme'=>ucfirst($theme)]), 'items' => $availableThemeItems];

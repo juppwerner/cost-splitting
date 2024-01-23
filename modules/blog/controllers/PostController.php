@@ -27,9 +27,9 @@ class PostController extends BaseController
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 // Only apply ACF to these actions:
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['admin', 'index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => false,
@@ -37,12 +37,12 @@ class PostController extends BaseController
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['index', 'view'],
+                        'actions' => ['admin', 'index', 'view'],
                         'roles' => ['@'],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['admin', 'create', 'update', 'delete'],
                         'roles' => ['blogAuthor'],
                     ],
                 ],
@@ -56,6 +56,21 @@ class PostController extends BaseController
             // For Clear Filters:
             // 'clearFilterState' => \thrieu\grid\ClearFilterStateBehavior::className(),
         ];
+    } // }}} 
+    // {{{ actionAdmin
+    /**
+     * Manage all Post models.
+     * @return mixed
+     */
+    public function actionAdmin()
+    {
+        $searchModel = new PostSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('admin', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     } // }}} 
     // {{{ actionIndex
     /**

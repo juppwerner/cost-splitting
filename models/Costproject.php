@@ -17,6 +17,7 @@ use app\components\BaseActiveRecord;
  * @property boolean $useCurrency
  * @property string $currency
  * @property string $description
+ * @property string $orderId
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -63,11 +64,11 @@ class Costproject extends BaseActiveRecord
     {
         return [
             [['title', 'participants', 'currency'], 'required'],
-            [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['orderId', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['useCurrency'], 'boolean'],
             [['currency'], 'string', 'min'=>3, 'max' => 255],
-            ['description', 'safe'],
+            [['description'], 'safe'],
             [['participants'], 'trim'],
             [['participants'], 'safe'],
         ];
@@ -84,6 +85,7 @@ class Costproject extends BaseActiveRecord
             'useCurrency' => Yii::t('app', 'Use Currency'),
             'currency' => Yii::t('app', 'Currency'),
             'description' => Yii::t('app', 'Description'), 
+            'orderId' => Yii::t('app', 'Payment'),
             'expensesAmount' => Yii::t('app', 'Expenses'), 
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
@@ -105,7 +107,7 @@ class Costproject extends BaseActiveRecord
 
     public function getExpensesAmount()
     {
-        return $this->hasMany(Expense::className(), ['costprojectId' => 'id'])->sum('amount');
+        return $this->hasMany(Expense::class, ['costprojectId' => 'id'])->sum('amount');
     }
 
     public function getParticipantsList()
@@ -171,7 +173,7 @@ class Costproject extends BaseActiveRecord
 
     public function getCreateUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'created_by']);
+        return $this->hasOne(User::class, ['id' => 'created_by']);
     } 
 
     /**
@@ -185,7 +187,7 @@ class Costproject extends BaseActiveRecord
 
     public function getUpdateUser()
     {
-       return $this->hasOne(User::className(), ['id' => 'updated_by']);
+       return $this->hasOne(User::class, ['id' => 'updated_by']);
     } 
 
     /**
@@ -197,4 +199,20 @@ class Costproject extends BaseActiveRecord
         return $this->updateUser ? $this->updateUser->username : '- no user -';
     } 
     // }}} End Blameable methods
+
+    public function getIsPaid()
+    {
+        if(empty($this->orderId))
+            return false;
+        try {
+            if((int)$this->orderId>0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch(\Exception $e) {
+            Yii::error($e->getMessage(), __METHOD__);
+            return false;
+        }
+    }
 }

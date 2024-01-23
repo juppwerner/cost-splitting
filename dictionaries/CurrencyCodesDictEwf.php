@@ -50,7 +50,7 @@ abstract class CurrencyCodesDictEwf
 
     public static function all()
     {
-        return [
+        $result = [
             self::AUD => Yii::t('app', 'Australian dollar') . ' (AUD)',
 			self::BGN => Yii::t('app', 'Bulgarian lev') . ' (BGN)',
 			self::BRL => Yii::t('app', 'Brazilian real') . ' (BRL)',
@@ -59,7 +59,7 @@ abstract class CurrencyCodesDictEwf
             self::CZK => Yii::t('app', 'Czech koruna') . ' (CZK)',
 			self::DKK => Yii::t('app', 'Danish krone') . ' (DKK)',
             self::EUR => Yii::t('app', 'Euro') . ' (EUR)',
-            self::GBP => Yii::t('app', 'Pound sterling') . ' (GBP)',
+            self::GBP => Yii::t('app', 'United Kingdom Pound sterling') . ' (GBP)',
             self::HKD => Yii::t('app', 'Hong Kong dollar') . ' (HKD)',
 			self::HRK => Yii::t('app', 'Croatian kuna') . ' (HRK)',
 			self::HUF => Yii::t('app', 'Hungarian forint') . ' (HUF)',
@@ -72,27 +72,22 @@ abstract class CurrencyCodesDictEwf
             self::MXN => Yii::t('app', 'Mexican peso') . ' (MXN)',
 			self::MYR => Yii::t('app', 'Malaysian ringgit') . ' (MYR)',
 			self::NOK => Yii::t('app', 'Norwegian krone') . ' (NOK)',
-			self::NZD => Yii::t('app', 'New Zealand dollar') . ' (NZD)',
-			self::PHP => Yii::t('app', 'Philippine peso') . ' (PHP)',
+			self::NZD => Yii::t('app', 'New Zealand Dollar') . ' (NZD)',
+			self::PHP => Yii::t('app', 'Philippines Peso') . ' (PHP)',
 			self::PLN => Yii::t('app', 'Polish złoty') . ' (PLN)',
-            self::RON => Yii::t('app', 'Romanian leu') . ' (RON)',
-            self::SEK => Yii::t('app', 'Swedish krona') . ' (SEK)',
+            self::RON => Yii::t('app', 'Romania Leu') . ' (RON)',
+            self::SEK => Yii::t('app', 'Sweden Krona') . ' (SEK)',
 			self::SGD => Yii::t('app', 'Singapore dollar') . ' (SGD)',
-            self::THB => Yii::t('app', 'Thai baht') . ' (THB)',
-			self::TRY => Yii::t('app', 'Turkish lira') . ' (TRY)',
+            self::THB => Yii::t('app', 'Thai Baht') . ' (THB)',
+			self::TRY => Yii::t('app', 'Turkey Lira') . ' (TRY)',
 			self::USD => Yii::t('app', 'United States dollar') . ' (USD)',
-			self::ZAR => Yii::t('app', 'South African rand') . ' (ZAR)',
-			self::CNY => Yii::t('app', 'CNY'),
-            self::CYP => Yii::t('app', 'CYP'),
-            self::EEK => Yii::t('app', 'EEK'),
-			self::LTL => Yii::t('app', 'LTL'),
-            self::LVL => Yii::t('app', 'LVL'),
-            self::MTL => Yii::t('app', 'MTL'),
-			self::ROL => Yii::t('app', 'ROL'),
-			self::RUB => Yii::t('app', 'RUB'),
-			self::SIT => Yii::t('app', 'SIT'),
-            self::SKK => Yii::t('app', 'SKK'),
+			self::ZAR => Yii::t('app', 'South Africa Rand') . ' (ZAR)',
+			self::CNY => Yii::t('app', 'China Yuan') . ' (CNY)',
+            self::LVL => Yii::t('app', 'Latvia Lati') . ' (LVL)',
+			self::RUB => Yii::t('app', 'Russia Ruble') . ' (RUB)',
         ];
+        asort($result);
+        return $result;
     }
     public static function get($key)
     {

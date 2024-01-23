@@ -1,11 +1,9 @@
 <?php
 
 use yii\bootstrap4\Nav;
-use app\components\Html;
-use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\web\View;
-// use app\widgets\GridView;
-use yii\widgets\ListView;
+use app\widgets\GridView;
 use app\modules\blog\models\Post;
     
 /* @var $this yii\web\View */
@@ -26,12 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ],
 ]; */ // }}} 
-
-$labels = [
-    Post::STATUS_DRAFT      => ['class'=>'warning', 'label' => Yii::t('app','Draft')],
-    Post::STATUS_PUBLISHED  => ['class'=>'success', 'label' => Yii::t('app','Published')],
-    Post::STATUS_ARCHIVED   => ['class'=>'default', 'label' => Yii::t('app','Archived')],
-];
 ?>
 <div class="post-index">
 
@@ -57,38 +49,48 @@ $labels = [
     <?php  $form .= Html::endForm(); ?>
     <?php  echo $form; /* }}} */ ?>
 
-    <?= ListView::widget([
+    <?= GridView::widget([ // {{{ 
         'dataProvider' => $dataProvider,
-        'options' => ['class' => 'list-group'],
-        'itemOptions' => function ($model, $key, $index, $widget) {
-            return [
-                'tag' => 'a',
-                'class' => 'list-group-item list-group-item-action', 
-                'href' => Url::to(['view', 'id' => $model->id])
-            ];
-        },
-        'itemView' => function($model, $key, $index, $widget) use($labels) {
-            return 
-                // \yii\helpers\VarDumper::dumpAsString($model->attributes, 10, true) .
-                Html::tag(
-                    'div',
-                    Html::tag('h5', Html::encode($model->title), ['class' => 'mb-1']) 
-                    . Html::tag('div', $model->creator->username.' | '.Yii::$app->formatter->asDate($model->updated_at, 'medium')) 
-                    // . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill pt-2']),
-                    ,
-                    ['class' => 'd-flex w-100 justify-content-between']
-                )
-                . Html::tag('div', Yii::$app->formatter->asMarkdown(Html::encode($model->intro)), ['class' => 'mb-1', 'style'=>'font-size: smaller'])
-                . Html::tag('span', $labels[$model->status]['label'], ['class' => 'badge badge-' . $labels[$model->status]['class']])
-                ;
-                /*
-                . Yii::$app->user->can('blogAuthor') 
-                    ? Html::a(Html::icon('edit'), ['/blog/post/update', 'id'=>$model['id']], ['class'=>'btn btn-success btn-xs'])
-                    : ''
-                ;
-                */
-        },
-    ]) ?>
+        // 'as filterBehavior' => \thrieu\grid\FilterStateBehavior::className(),
+        'filterModel' => $searchModel,
+        'columns' => [
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update}',
+                'contentOptions' => [ 'class' => 'text-center' ],
+            ],
+            'id',
+            [
+                'attribute' => 'title',
+                'format'    => 'html',
+                'value'     => function ($data) {
+                    return Html::tag('b', Html::a($data->title, ['view', 'id'=>$data->id], ['title' => Yii::t('app', 'View Post: {recordName}', ['recordName'=>$data->recordName])]));
+                },
+            ],
+            [
+                'attribute' => 'status',
+                'filter' => Post::getStatusOptions(),
+                'value' => function($data) {
+                    return Post::getStatusOptions()[$data->status];
+                }
+            ],
+            'intro:ntext',
+            'content:ntext',
+            [
+                'attribute' => 'created_at',
+                'format' => 'datetime',
+            ],
+            //'created_by',
+            //'updated_at',
+            //'updated_by',
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+                'contentOptions' => [ 'class' => 'text-center' ],
+            ],
+        ],
+    ]); /* }}} */?>
 </div>
 
 <?php $this->registerJs("

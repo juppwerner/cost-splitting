@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\components\Html;
 use app\models\Costproject;
+use app\models\Order;
+use app\models\Orderitem;
 use app\models\forms\AddUserForm;
 use app\models\search\CostprojectSearch;
 
@@ -34,7 +36,7 @@ class CostprojectController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index'],
+                            'actions' => ['index', 'checkout'],
                             'roles' => ['manageCostprojects'],
                         ],
                         [
@@ -116,6 +118,21 @@ class CostprojectController extends Controller
     public function actionBreakdown($id)
     {
         $model = $this->findModel($id);
+        // Was project payed already?
+        if(is_null($model->orderId)) {
+            // Check avalable deposit
+            $result = Order::pay($id);
+            if(!$result) {
+                Yii::$app->session->addFlash('warning', 
+                    Html::tag('h4', Yii::t('app', 'Payment Required') ) .
+                    Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.')
+                );
+                return $this->redirect(['checkout', 'id'=>$id]);
+            } else {
+                $model = $this->findModel($id);
+            }
+        }
+
         // Get expenses for grid
         $expensesDataProvider = new ArrayDataProvider([
             'allModels' => $model->expenses,
@@ -127,6 +144,72 @@ class CostprojectController extends Controller
         return $this->render('breakdown', [
             'model'                 => $model,
             'expensesDataProvider'  => $expensesDataProvider
+        ]);
+    }
+    /**
+     * Shows the checkout page.
+     * @return string|\yii\web\Response
+     */
+    public function actionCheckout($id)
+    {
+        $model = $this->findModel($id);
+        // Was project payed already?
+        if($model->isPaid) {
+            Yii::$app->session->addFlash('warning', 
+                Html::tag('h4', Yii::t('app', 'Payment Already Provided') ) .
+                Yii::t('app', 'This cost project has already been payed.')
+            );
+            return $this->redirect(['view', 'id'=>$id]);
+        }
+        // DEBUG \yii\helpers\VarDumper::dump(Yii::$app->params, 10, true);
+
+        // Get PayPal settings
+        // 1. client id
+        if(empty(Yii::$app->params['paypal.clientId'])) {
+            Yii::error('App Parameter paypal.clientId is not configured', '__METHOD__');
+            Yii::$app->session->addFlash(
+                'error', 
+                Html::tag('h4', Yii::t('app', 'Error')) .
+                Yii::t('app', 'PayPal is not configured')
+            );
+            return $this->redirect(['view', 'id'=>$id]);
+        } 
+        $paypalClientID = Yii::$app->params['paypal.clientId'];
+
+        // 2. client secret
+        if(empty(Yii::$app->params['paypal.clientSecret'])) {
+            Yii::error('App Parameter paypal.clientSecret is not configured', '__METHOD__');
+            Yii::$app->session->addFlash(
+                'error', 
+                Html::tag('h4', Yii::t('app', 'Error')) .
+                Yii::t('app', 'PayPal is not configured')
+            );
+            return $this->redirect(['view', 'id'=>$id]);
+        } 
+        $paypalClientSecret = Yii::$app->params['paypal.clientSecret'];
+
+        // Get vendor currency
+        if(empty(Yii::$app->params['paymentCurrencyCode'])) {
+            Yii::error('App Parameter paymentCurrencyCode is not configured', __METHOD__);
+            Yii::$app->session->addFlash(
+                'error', 
+                Html::tag('h4', Yii::t('app', 'Error')) .
+                Yii::t('app', 'Payment is not configured')
+            );
+            return $this->redirect(['view', 'id'=>$id]);
+        }
+        $currencyCode = Yii::$app->params['paymentCurrencyCode'];
+
+        // Get configured payment options
+        // $paymentOptions = Yii::$app->params['paymentOptions'];
+        $paymentOptions = Orderitem::find()->orderBy(['type' => SORT_ASC])->all();
+        
+        return $this->render('checkout', [
+            'model'                 => $model,
+            'paypalClientID'        => $paypalClientID,
+            // 'paypalClientSecret'    => $paypalClientSecret,
+            'paymentOptions'        => $paymentOptions,
+            'currencyCode'          => $currencyCode,
         ]);
     }
 

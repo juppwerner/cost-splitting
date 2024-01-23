@@ -56,4 +56,19 @@ return [
     // Maximum size per uploaded file / in Bytes:
     'uploadSingleFileMaxSize' => 70*1024,
     // }}} 
+
+    // PayPal payment settings
+    // Client ID:
+    'paypal.clientId' => 'CHANGE_ME',
+    // Client Secret:
+    'paypal.clientSecret' => 'CHANGE_ME',
+
+    // Payment options
+
+    // URL to PayPal REST API:
+    'paypalBaseUrl' => 'https://api-m.sandbox.paypal.com',
+    
+    // Currency Code to be used (3 char. code):
+    'paymentCurrencyCode' => null,
+
 ];

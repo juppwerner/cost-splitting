@@ -167,6 +167,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'POST paypal/orders' => 'paypal/orders',
+                'POST paypal/orders/<orderId:\w+>/capture' => 'paypal/capture-order',
             ],
         ], // }}} 
         /* 'user' => [ // {{{ 
