@@ -2,7 +2,7 @@
 
 This page lists changes for this application.
 
-## Rev. 0.7.1
+## Rev. 0.7.2
 
 2024-01-23
 
