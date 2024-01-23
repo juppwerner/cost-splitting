@@ -61,13 +61,12 @@ YiiAsset::register($this);
     </div>
 
     <div id="paypal-button-container"></div>
-    <p id="result-message"></p>
+    <div id="result-message"></div>
 </div>
 
 <script>
 var costproject_id=<?= $model->id ?>;
 var returnUrl = '<?= Url::toRoute(['breakdown', 'id'=>$model->id, 'pay-ok'=>1], $schema = true) ?>';
-var paymentOptions = JSON.parse('<?= json_encode($paymentOptions) ?>');
 var currencyCode = '<?= $currencyCode ?>';
 window.paypal.Buttons(
     {
@@ -108,7 +107,7 @@ window.paypal.Buttons(
                 }
             } catch (error) {
                 console.error(error);
-                resultMessage(`Could not initiate PayPal Checkout...<br><br>${error}`);
+                resultMessage(`<h4><?= Yii::t('app', 'Error') ?></h4><?= Yii::t('app', 'Could not initiate PayPal Checkout...') ?><br><br>${error}`, true);
             }
         },
         async onApprove(data, actions) {
@@ -162,9 +161,12 @@ window.paypal.Buttons(
     }
 ).render("#paypal-button-container");
 
-function resultMessage(message) {
+function resultMessage(message, error=false) {
     const container = document.querySelector("#result-message");
     container.innerHTML = message;
+    if(error==true) {
+        $("#result-message").addClass('alert').addClass('alert-warning');
+    }    
 }
 
 </script>

@@ -12,8 +12,8 @@ class m240118_130214_add_payment_column_to_costproject_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%costproject}}', 'payment', $this->text()->after('description'));
-        $this->addCommentOnColumn('{{%costproject}}', 'payment', 'PayPal payment information');
+        $this->addColumn('{{%costproject}}', 'orderId', $this->integer()->after('description'));
+        $this->addCommentOnColumn('{{%costproject}}', 'orderId', 'FK to order/PayPal payment information');
     }
 
     /**
@@ -21,6 +21,6 @@ class m240118_130214_add_payment_column_to_costproject_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('{{%costproject}}', 'payment');
+        $this->dropColumn('{{%costproject}}', 'orderId');
     }
 }
