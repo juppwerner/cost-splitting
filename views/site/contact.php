@@ -29,6 +29,7 @@ $this->context->fluid = false;
 
         <p><?= Html::a(Html::icon('arrow-left').Yii::t('contact', 'Return to home page'), ['/site/index'], ['class' => 'btn btn-primary']) ?></p>
 
+        <?php if(defined('YII_DEBUG') && YII_DEBUG===true) : ?>
         <p>
             Note that if you turn on the Yii debugger, you should be able to view the mail message on the mail panel of the debugger.
             <?php if (Yii::$app->mailer->useFileTransport): ?>
@@ -40,6 +41,7 @@ $this->context->fluid = false;
                 This file: <code>@views/site/contact</code>
             <?php endif; ?>
         </p>
+        <?php endif; ?>
 
     <?php else: ?>
 
