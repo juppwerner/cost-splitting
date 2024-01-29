@@ -516,6 +516,7 @@ return [
     'Venezuelan digital bolívar' => '',
     'Venezuelan sovereign bolívar' => '',
     'Vietnamese đồng' => '',
+    'You may now view the cost breakdown.' => 'Sie können sich nun die Kostenaufteilung ansehen.',
     'WIR euro (complementary currency)' => '',
     'WIR franc (complementary currency)' => '',
     'Yemeni rial' => '',

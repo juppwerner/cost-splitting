@@ -244,6 +244,7 @@ EOL;
             // Update cost project
             $costproject = $this->findModel($custom_id->costprojectId);
             $costproject->orderId = $order->id; // \yii\helpers\Json::encode($data);
+            $costproject->ordered_at = time();
             if(!$costproject->save()) {
                 Yii::error('Cannot update cost project'.\yii\helpers\VarDumper::dumpAsString($costproject->errors), __METHOD__);
                 throw new HttpException(500, 'Failed to capture order');
