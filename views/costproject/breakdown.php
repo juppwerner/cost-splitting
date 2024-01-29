@@ -43,6 +43,7 @@ $defaultParticipantDetails = [
     ],
     'body' => Html::tag('h4', Yii::t('app', 'Payment'))
         .Yii::t('app', 'The payment via PayPal was completed successfully.').'<br>'
+        .Yii::t('app', 'You may now view the cost breakdown.').'<br>'
         .Yii::t('app', 'Thank you!'),
 ]); ?>
 <?php endif; ?>
