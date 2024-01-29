@@ -80,7 +80,7 @@ class Expense extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['title', 'costprojectId', 'payedBy', 'amount', 'currency', 'splitting'], 'required'],
+            [['title', 'costprojectId', 'expenseType', 'payedBy', 'amount', 'currency', 'splitting'], 'required'],
             [['costprojectId'], 'integer'],
             ['costprojectId', 'validateCostproject'],
             [['expenseType'], 'in', 'range' => ['expense', 'transfer']],

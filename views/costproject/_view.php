@@ -76,9 +76,9 @@ use app\dictionaries\CurrencyCodesDictEwf;
             'format' => 'raw',
             'value' => function($data) {
                 if($data->isPaid)
-                    return '<span class="badge badge-success">'.Yii::t('app', 'Paid').'</span>';
+                    return Html::tag('span', Yii::t('app', 'Paid'), ['class' => 'badge badge-success']) . ' ' . Yii::$app->formatter->asDatetime($data->ordered_at, 'short');
                 else
-                    return '<span class="badge badge-success">'.Yii::t('app', 'Not Paid').'</span>';
+                    return Html::tag('span', Yii::t('app', 'Not Paid'), ['class' => 'badge badge-success']);
             },
         ],
         // 'id',
@@ -156,9 +156,9 @@ use app\dictionaries\CurrencyCodesDictEwf;
                 'format' => 'raw',
                 'value' => function($data) {
                     if($data->isPaid)
-                        return '<span class="badge badge-success">'.Yii::t('app', 'Paid').'</span>';
+                        return Html::tag('span', Yii::t('app', 'Paid'), ['class' => 'badge badge-success']) . ' ' . Yii::$app->formatter->asDatetime($data->ordered_at, 'short');
                     else
-                        return '<span class="badge badge-success">'.Yii::t('app', 'Not Paid').'</span>';
+                        return Html::tag('span', Yii::t('app', 'Not Paid'), ['class' => 'badge badge-success']);
                 },
             ],
         ],

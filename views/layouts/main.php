@@ -151,6 +151,7 @@ if ($isGuest) {
     // {{{ SETTINGS
     $menuItems[] = ['label' => Html::icon('tool') . Yii::t('app','Settings'), 'items' => [
         ['label' => Html::icon('user-check').Yii::t('app','Profile Settings (User)'), 'url' => ['/user/settings'], 'visible'=>!$isGuest],
+        ['label' => Html::icon('dollar-sign').Yii::t('app','Credits'), 'url' => ['/order'], 'visible'=>!$isGuest],
         ['label' => Html::icon('monitor') . Yii::t('app','Desktop View'), 'url' => Url::current(['showMobile'=>0]), 'visible'=>$showMobile],
         ['label' => Html::icon('smartphone') . Yii::t('app','Mobile View'), 'url' => Url::current(['showMobile'=>1]), 'visible'=>!$showMobile],
     ]]; // }}} 
