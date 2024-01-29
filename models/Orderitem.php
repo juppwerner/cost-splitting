@@ -63,9 +63,9 @@ class Orderitem extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'sku' => Yii::t('app', 'Sku'),
+            'sku' => Yii::t('app', 'SKU'),
             'name' => Yii::t('app', 'Name'),
-            'type' => Yii::t('app', 'Type'),
+            'type' => Yii::t('app', 'Category'),
             'description' => Yii::t('app', 'Description'),
             'amount' => Yii::t('app', 'Amount'),
             'rule' => Yii::t('app', 'Rule'),
