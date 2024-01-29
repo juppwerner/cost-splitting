@@ -12,7 +12,7 @@ This page lists changes for this application.
 
 2024-01-23
 
-* Added PayPal payment to see cost brekdown in projects
+* Added PayPal payment to see cost breakdown in projects
 
 ## Rev. 0.6.0
 
