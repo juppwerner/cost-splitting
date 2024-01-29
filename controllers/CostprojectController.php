@@ -125,7 +125,8 @@ class CostprojectController extends Controller
             if(!$result) {
                 Yii::$app->session->addFlash('warning', 
                     Html::tag('h4', Yii::t('app', 'Payment Required') ) .
-                    Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.')
+                    Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.') .
+                    '<br>' . Html::tag('div', Html::tag('span', 'Loading...', ['class'=>"sr-only"]), ['class' => "spinner-border text-primary", 'role' => "status"])
                 );
                 return $this->redirect(['checkout', 'id'=>$id]);
             } else {

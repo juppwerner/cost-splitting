@@ -55,10 +55,7 @@ YiiAsset::register($this);
         <?php $n++; endforeach; ?>
     </form>
     <p><?= Yii::t('app', 'Please select one of the following payment options:') ?></p>
-    
-    <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-    </div>
+
 
     <div id="paypal-button-container"></div>
     <div id="result-message"></div>
