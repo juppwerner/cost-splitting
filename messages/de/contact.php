@@ -20,7 +20,7 @@ return [
     'Click on the code to get another one' => 'Klicken Sie auf den Code, um einen anderen zu erhalten',
     'Contact' => 'Kontakt',
     'Email' => 'E-Mail',
-    'If you have business inquiries or other questions, please fill out the following form to contact us.' => 'Wenn Sie geschäftliche oder sonstige Anfragen haben, füllen Sie diese Formular aus, um un szu kontaktieren.',
+    'If you have business inquiries or other questions, please fill out the following form to contact us.' => 'Wenn Sie geschäftliche oder sonstige Anfragen haben, füllen Sie diese Formular aus, um uns zu kontaktieren.',
     'Message' => 'Nachricht',
     'Return to home page' => 'Zurück zur Home-Seite',
     'Subject' => 'Betreff',
