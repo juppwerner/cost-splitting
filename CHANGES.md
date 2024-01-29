@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.8.0
+
+2024-01-29
+
+* New module: [Credits](../order)
+
 ## Rev. 0.7.2
 
 2024-01-23
