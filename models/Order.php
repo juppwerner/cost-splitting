@@ -79,6 +79,7 @@ class Order extends BaseActiveRecord
             'ordered_at' => Yii::t('app', 'Ordered At'),
             'quantityRemaining' => Yii::t('app', 'Remaining Quantity'),
             'expiresAtTimestamp' => Yii::t('app', 'Expires at'),
+            'isConsumed' => Yii::t('app', 'Consumed'),
         ];
     }
 
@@ -151,4 +152,9 @@ class Order extends BaseActiveRecord
         }
         return false;
     }
+
+    public function getOrderitem()
+    {
+        return $this->hasOne(Orderitem::class, ['sku' => 'paymentOptionCode']);
+    } 
 }

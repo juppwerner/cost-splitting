@@ -147,6 +147,7 @@ class CostprojectController extends Controller
             'expensesDataProvider'  => $expensesDataProvider
         ]);
     }
+
     /**
      * Shows the checkout page.
      * @return string|\yii\web\Response
