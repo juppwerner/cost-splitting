@@ -8,6 +8,7 @@ use app\components\Html;
 
 use yii\bootstrap4\ActiveForm;
 use yii\captcha\Captcha;
+use yii\web\View;
 
 $this->title = Yii::t('contact', 'Contact');
 $this->params['breadcrumbs'][] = $this->title;
@@ -75,3 +76,5 @@ $this->context->fluid = false;
 
     <?php endif; ?>
 </div>
+
+<?php $this->registerJs('jQuery("img#contactform-verifycode-image").css("cursor", "pointer");', VIEW::POS_READY); ?>
