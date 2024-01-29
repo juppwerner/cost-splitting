@@ -76,13 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->AsCheckbox($data->isConsumed);
                 },
             ],
-            [
-                'class' => ActionColumn::class,
-                'template' => '{delete}',
-                'urlCreator' => function ($action, Order $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
         ],
     ]); ?>
 
