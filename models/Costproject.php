@@ -18,6 +18,7 @@ use app\components\BaseActiveRecord;
  * @property string $currency
  * @property string $description
  * @property string $orderId
+ * @property int $ordered_at
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -43,12 +44,12 @@ class Costproject extends BaseActiveRecord
     {
         return [
             'blameable' => [
-                'class' => BlameableBehavior::className(),
+                'class' => BlameableBehavior::class,
                 'createdByAttribute' => 'created_by',
                 'updatedByAttribute' => 'updated_by',
             ],
             'timestamp' => [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
@@ -64,7 +65,7 @@ class Costproject extends BaseActiveRecord
     {
         return [
             [['title', 'participants', 'currency'], 'required'],
-            [['orderId', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['orderId', 'ordered_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'string', 'max' => 255],
             [['useCurrency'], 'boolean'],
             [['currency'], 'string', 'min'=>3, 'max' => 255],
@@ -86,6 +87,7 @@ class Costproject extends BaseActiveRecord
             'currency' => Yii::t('app', 'Currency'),
             'description' => Yii::t('app', 'Description'), 
             'orderId' => Yii::t('app', 'Payment'),
+            'ordered_at' => Yii::t('app', 'Order Date Time'),
             'expensesAmount' => Yii::t('app', 'Expenses'), 
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
