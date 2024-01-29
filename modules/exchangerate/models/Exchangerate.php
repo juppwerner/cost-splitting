@@ -43,8 +43,8 @@ class Exchangerate extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'histDate' => Yii::t('app', 'Hist Date'),
-            'currencyCode' => Yii::t('app', 'Currenc Code'),
+            'histDate' => Yii::t('app', 'History Date'),
+            'currencyCode' => Yii::t('app', 'Currency Code'),
             'exchangeRate' => Yii::t('app', 'Exchange Rate'),
         ];
     }
