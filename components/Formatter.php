@@ -23,4 +23,12 @@ class Formatter extends \yii\i18n\Formatter
     {
         return Markdown::process($value, 'extra');
     }
+
+    public function asJson($value, $tag=null)
+    {
+        $result = json_encode(json_decode($value), JSON_PRETTY_PRINT);
+        if(!is_null($tag))
+            return \yii\helpers\Html::tag($tag, $result);
+        return $result;
+    }
 }
