@@ -37,10 +37,34 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => Yii::$app->formatter->asCurrency($model->amount,$model->currency),
             ],
             [
-                'attribute' => 'paymentInfo',
+                'label' => Yii::t('app', 'Payment Info'),
                 'format' => 'raw',
-                'value' => Yii::$app->formatter->asJson($model->paymentInfo, 'pre'),
+                'value' => DetailView::widget([
+                    'model' => $model->getDetailsAsArray(),
+                    'attributes' => [
+                        [
+                            'attribute' => 'paymentProvider',
+                            'label' => Yii::t('app', 'Payment Provider'),
+                        ],                        [
+                            'attribute' => 'status',
+                            'label' => Yii::t('app', 'Status'),
+                        ],
+                        [
+                            'attribute' => 'email',
+                            'label' => Yii::t('app', 'Email'),
+                        ],
+                        [
+                            'attribute' => 'fullName',
+                            'label' => Yii::t('app', 'Full Name'),
+                        ],
+                    ],
+                ]),
             ],
+            // [
+            //     'attribute' => 'paymentInfo',
+            //     'format' => 'raw',
+            //     'value' => Yii::$app->formatter->asJson($model->paymentInfo, 'pre'),
+            // ],
             'ordered_at:datetime',
             [
                 'attribute' => 'quantityRemaining',
