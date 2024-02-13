@@ -16,6 +16,7 @@ use app\models\Expense;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = Yii::t('app', 'Expenses');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['/costproject']];
 $this->params['breadcrumbs'][] = $this->title;
 
 // Get an array of all participants for the filter dropdown:

@@ -67,6 +67,7 @@ Url::remember('', 'cost-project');
             [
                 'attribute' => 'expensesAmount',
                 'contentOptions' => [ 'class' => 'text-right pr-4' ],
+                'format' => 'raw',
                 'value' => function($data) {
                     return Yii::$app->formatter->asCurrency($data->expensesAmount, $data->currency);
                 },
@@ -80,7 +81,14 @@ Url::remember('', 'cost-project');
                 },
             ],
             */
-            'createUserName',
+            [
+                'attribute' => 'searchCreatedUsername',
+                'label' => Yii::t('app', 'Created By'),
+                'value' => function($data) {
+                    return $data->createUserName;
+                },
+            ],
+            // 'createUserName',
             [
                 'attribute'=>'updated_at',
                 'format' => 'html',
@@ -117,12 +125,21 @@ Url::remember('', 'cost-project');
             return 
                 Html::tag(
                     'div',
-                    Html::tag('h5', Html::encode($model->title), ['class' => 'mb-1']) 
-                    . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill pt-2']),
+                    Html::tag('h5', Html::encode($model->title), ['class' => 'mb-0']) 
+                    . Html::tag('div', 
+                        Html::tag('span', Yii::$app->formatter->asCurrency($model->expensesAmount, $model->currency), ['class' => 'badge badge-info badge-pill p-2'])
+                        . ' '
+                        . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill p-2'])
+                    ),
                     ['class' => 'd-flex w-100 justify-content-between']
                 )
-                . Html::tag('div', Yii::$app->formatter->asMarkdown(Html::encode($model->description)), ['class' => 'mb-1', 'style'=>'font-size: smaller']) 
-                . Html::tag('small', Yii::t('app', 'Participants: {participants}', ['participants' => join(', ', $model->participantsList)]))
+                . Html::tag('div', Yii::$app->formatter->asMarkdown(Html::encode($model->description)), ['class' => 'mb-0', 'style'=>'font-size: smaller']) 
+                . Html::tag(
+                    'small', 
+                    Yii::t('app', 'Created by: <b>{createUserName}</b>', ['createUserName'=>$model->createUserName])
+                    . ' | '
+                    . Yii::t('app', 'Participants: <b>{participants}</b>', ['participants' => join(', ', $model->participantsList)])
+                )
                 ;
         },
     ]) /* }}} */ ?>

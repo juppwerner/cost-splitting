@@ -15,6 +15,8 @@ use app\models\Expense;
 class CostprojectSearch extends Costproject
 {
 
+    public $searchCreatedUsername;
+
     /**
      * {@inheritdoc}
      */
@@ -23,6 +25,7 @@ class CostprojectSearch extends Costproject
         return [
             [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title', 'participants', 'currency', 'expensesAmount'], 'safe'],
+            ['searchCreatedUsername', 'safe'],
         ];
     }
 
@@ -46,8 +49,10 @@ class CostprojectSearch extends Costproject
     {
         $query = Costproject::find()
             ->select(['costproject.*', 'expensesSum.expensesAmount'])
+            ->joinWith('createUser')
             ->innerJoinWith('users')
-            ->where(['user.id' => Yii::$app->user->id]);
+            ->where(['user_costproject.userId' => Yii::$app->user->id])
+            ;
         // add conditions that should always apply here
         $subQuery = Expense::find()
             ->select(new \yii\db\Expression('costprojectId, ROUND(SUM(amount * exchangeRate), 2) AS expensesAmount'))
@@ -62,6 +67,7 @@ class CostprojectSearch extends Costproject
                     'participants',
                     'currency',
                     'updated_at',
+                    
                     'expensesAmount' => [
                         'asc' => ['expensesSum.expensesAmount' => SORT_ASC],
                         'desc' => ['expensesSum.expensesAmount' => SORT_DESC],
@@ -70,6 +76,15 @@ class CostprojectSearch extends Costproject
                 ]
             ],
         ]);
+
+        // Appending new sortable column:
+        $sort = $dataProvider->getSort(); 
+        $sort->attributes['searchCreatedUsername'] = [
+            'asc' => ['user.username' => SORT_ASC],
+            'desc' => ['user.username' => SORT_DESC],
+            'label' => Yii::t('app', 'Created By'),
+            'default' => SORT_ASC            
+          ];
 
         $this->load($params);
 
@@ -95,6 +110,11 @@ class CostprojectSearch extends Costproject
         // filter by expenses amount
         if(!empty($this->expensesAmount))
             $query->andFilterCompare('expensesSum.expensesAmount', str_replace(',', '.', $this->expensesAmount));
+
+        // created by user
+        if(!empty($this->searchCreatedUsername)) {
+            $query->andFilterWhere(['like', 'user.username', $this->searchCreatedUsername]);
+        }
 
         return $dataProvider;
     }
