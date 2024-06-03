@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## Rev. 0.8.1
+
+2024-06-03
+
+* Removed unnecessary output
+
 ## Rev. 0.8.0
 
 2024-01-29
