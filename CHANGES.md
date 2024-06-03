@@ -2,11 +2,12 @@
 
 This page lists changes for this application.
 
-## Rev. 0.8.1
+## Rev. 0.8.1, 0.8.2
 
 2024-06-03
 
-* Removed unnecessary output
+* Cost Breakdown: Changed layout of participant info cards to _column_
+* Bugfix - Removed unnecessary output
 
 ## Rev. 0.8.0
 
