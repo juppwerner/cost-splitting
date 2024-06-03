@@ -292,7 +292,7 @@ $defaultParticipantDetails = [
     <?php // DEBUG VD::dump($personenKonten, 10, true); ?>
 
     <h3><?= Yii::t('app', 'Participants') ?></h3><!-- {{{ -->
-    <div class="card-deck">
+    <div class="card-column">
         <?php $persons = array_keys($personenKonten); sort($persons); ?>
         <?php foreach($persons as $person) : ?>
         <div class="card border-primary mb-3" style="max-width: 18rem;">
