@@ -96,7 +96,7 @@ class Expense extends \yii\db\ActiveRecord
             [['splitting_weights'], function($attribute, $params, $validator) {
                 $attributeValue = $this->$attribute;
                 if(is_array($attributeValue)) {
-                    var_dump($attributeValue);
+                    // var_dump($attributeValue);
                     $tmp = new \StdClass;
                     foreach($attributeValue as $n=>$participantWeight) {
                         $participant = $participantWeight['participant'];
