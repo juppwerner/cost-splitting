@@ -304,7 +304,7 @@ $defaultParticipantDetails = [
     <div class="card-columns">
         <?php $persons = array_keys($personenKonten); sort($persons); ?>
         <?php foreach($persons as $person) : ?>
-        <div class="card border-primary mb-3" style="max-width: 18rem;">
+        <div class="card border-primary">
             <div class="card-body">
                 <h5 class="card-title text-primary"><?= $person ?></h5>
                 <p class="card-text"><?= Yii::t('app', '{person} has payed {countExpenses} expenses with the total value of {sumExpenses} ({sumExpensesSelf} for himself, and {sumExpensesOthers} for others).', [
