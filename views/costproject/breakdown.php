@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\VarDumper as VD;
 use yii\web\YiiAsset;
 use yii\widgets\DetailView;
+use yii\web\JsExpression;
 
 use app\components\Html;
 use app\dictionaries\CurrencyCodesDictEwf;
@@ -24,6 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 Url::remember('', 'cost-project');
 YiiAsset::register($this);
 ChartJSAsset::register($this);
+
+// Show participants column?
+$showParticipants = false;
 
 $defaultParticipantDetails = [
     'sumExpenses'=>0, 
@@ -72,7 +76,7 @@ $defaultParticipantDetails = [
 
     <?php else : ?>
 
-    <table class="table table-striped table-responsive-sm table-hover" style="width:100%">
+    <table class="table table-striped table-responsive table-hover" style="font-size:0.7rem; width:100%">
 
         <thead>
             <?php ob_start(); ?>
@@ -80,7 +84,7 @@ $defaultParticipantDetails = [
                 <th><?= Yii::t('app', 'Date') ?></th>
                 <th><?= Yii::t('app', 'Title') ?></th>
                 <th><?= Yii::t('app', 'Payed By') ?></th>
-                <th><?= Yii::t('app', 'Recipients') ?></th>
+                <?php if($showParticipants) : ?><th><?= Yii::t('app', 'Recipients') ?></th><?php endif; ?>
                 <th><?= Yii::t('app', 'Amount') ?></th>
                 <?php if($model->useCurrency) : ?>
                 <th><?= Yii::t('app', 'Exchange Rate') ?></th>
@@ -111,9 +115,9 @@ $defaultParticipantDetails = [
                     <?= $row->payedBy ?>
                 </td>
 
-                <td class="text-center">
-                    <?= $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : $row->participants ?>
-                </td>
+                <?php if($showParticipants) : ?><td class="text-center">
+                    <?= $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : str_replace(';', ', ', $row->participants) ?>
+                </td><?php endif; ?>
                 
                 <td class="text-right">
                     <?= Yii::$app->formatter->asCurrency($row->amount, $row->currency) ?>
@@ -136,11 +140,11 @@ $defaultParticipantDetails = [
                 <?php if(!array_key_exists($participant, $participantDetails)) $participantDetails[$participant] = $defaultParticipantDetails; ?>
                 <td style="color:darkseagreen" class="text-right">
                     <?php if($participant==$row->payedBy) : ?>
-                    <?= Yii::$app->formatter->asDecimal($row->amount  * $row->exchangeRate, 2) ?>
-                    <?php $participantSums[$participant] += $row->amount  * $row->exchangeRate; ?>
-                    <?php if($row->expenseType !== ExpenseTypesDict::EXPENSETYPE_TRANSFER) : ?>
-                        <?php $participantDetails[$participant]['sumExpenses'] += $row->amount  * $row->exchangeRate; $participantDetails[$participant]['countExpenses']++; ?>
-                    <?php endif; // !money transfer ?>
+                        <?= Yii::$app->formatter->asDecimal($row->amount  * $row->exchangeRate, 2) ?>
+                        <?php $participantSums[$participant] += $row->amount  * $row->exchangeRate; ?>
+                        <?php if($row->expenseType !== ExpenseTypesDict::EXPENSETYPE_TRANSFER) : ?>
+                            <?php $participantDetails[$participant]['sumExpenses'] += $row->amount  * $row->exchangeRate; $participantDetails[$participant]['countExpenses']++; ?>
+                        <?php endif; // !money transfer ?>
                     <?php endif; // part. == payedBy ?>
                 </td>
                 <td style="color: red" class="text-right">
@@ -171,7 +175,7 @@ $defaultParticipantDetails = [
 
             <!-- Participants Sums Row -->
             <tr>
-                <td colspan="<?= 5 + (int)$model->useCurrency*2 ?>">&nbsp;</td>
+                <td colspan="<?= ($showParticipants ? 5 : 4 ) + (int)$model->useCurrency*2 ?>">&nbsp;</td>
                 <?php foreach($participants as $participant) : ?>
                 <?php $sum += $participantSums[$participant]; ?>
                 <td colspan="2" class="text-right"><?= Yii::$app->formatter->asCurrency($participantSums[$participant], 'EUR') ?></td>
@@ -259,40 +263,45 @@ $defaultParticipantDetails = [
     <?php if(count(array_filter($personenKonten, function($var) { return abs($var)>0; }))>0) : ?>
     <h3><?= Yii::t('app', 'Balance Sheet') ?></h3>
         <?= Chart::widget([
-        'type' => Chart::TYPE_BAR,
-        'datasets' => [
-            [
-                'data' => array_filter($personenKonten, function($var) { return abs($var)>0; })
-            ],
-        ],
-        'clientOptions' => [
-            'responsive' => true,
-            'indexAxis' => 'y',
-            // Elements options apply to all of the options unless overridden in a dataset
-            // In this case, we are setting the border of each horizontal bar to be 2px wide
-            'elements' => [
-                'bar' => [
-                    'borderWidth' => 2,
+            'id' => 'Ch1',
+            'type' => Chart::TYPE_BAR,
+            'datasets' => [
+                [
+                    'data' => array_filter($personenKonten, function($var) { return abs($var)>0; })
                 ],
             ],
-            'plugins' => [
-                'legend' => [
-                    'display' => false,
-                    'position' => 'right',
+            // 'jsEvents' => [
+            //     'onAnimationComplete' => new JsExpression('function () { alert("hi"); }')
+            // ],
+            'clientOptions' => [
+                'responsive' => true,
+                'indexAxis' => 'y',
+                // Elements options apply to all of the options unless overridden in a dataset
+                // In this case, we are setting the border of each horizontal bar to be 2px wide
+                'elements' => [
+                    'bar' => [
+                        'borderWidth' => 2,
+                    ],
                 ],
-                'title' => [
-                    'display' => false,
-                    'text' => 'Chart.js Horizontal Bar Chart'
-                ]
+
+                'plugins' => [
+                    'legend' => [
+                        'display' => false,
+                        'position' => 'right',
+                    ],
+                    'title' => [
+                        'display' => false,
+                        'text' => 'Chart.js Horizontal Bar Chart'
+                    ],
+                ],
             ],
-        ],
-    ]); ?>
+        ]); ?>
     <?php endif; ?>
     <?php endif; ?>
     <?php // DEBUG VD::dump($personenKonten, 10, true); ?>
 
     <h3><?= Yii::t('app', 'Participants') ?></h3><!-- {{{ -->
-    <div class="card-column">
+    <div class="card-columns">
         <?php $persons = array_keys($personenKonten); sort($persons); ?>
         <?php foreach($persons as $person) : ?>
         <div class="card border-primary mb-3" style="max-width: 18rem;">
