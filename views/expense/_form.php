@@ -117,7 +117,7 @@ $costproject = $model->costproject;
                 <?php $n=0; foreach($weights as $participant=>$weight) : ?>
                 <tr class="participant_row_<?= $n ?>">
                     <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][participant]" class="form-control participantCell" value="<?= $participant ?>" readonly placeholder="<?= Yii::t('app', '(add participant)') ?>"></td>
-                    <td><input type="text" name="Expense[splitting_weights][<?= $n ?>][weight]" class="form-control text-center" value="<?= $weight ?>"></td>
+                    <td><input type="number" name="Expense[splitting_weights][<?= $n ?>][weight]" class="form-control text-center" value="<?= $weight ?>"></td>
                 </tr>
                 <?php $n++; endforeach; ?>
             </tbody>
@@ -255,7 +255,7 @@ function addParticipantRow(idx, name, share)
 
     var markup = '<tr class=\"participant_row_' + idx + '\">';
     markup += '<td><input type=\"text\" name=\"Expense[splitting_weights][' + idx + '][participant]\" class=\"form-control participantCell\" value=\"' + name + '\" readonly placeholder=\"" . Yii::t('app', '(add participant)') . "\"></td>';
-    markup += '<td><input type=\"text\" name=\"Expense[splitting_weights][' + idx + '][weight]\" class=\"form-control text-center\" value=\"' + share + '\"></td>';
+    markup += '<td><input type=\"number\" name=\"Expense[splitting_weights][' + idx + '][weight]\" class=\"form-control text-center\" value=\"' + share + '\"></td>';
     markup += '</tr>';
     tableBody.append(markup);
 }

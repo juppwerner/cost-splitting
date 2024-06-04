@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 0.8.3, 0.8.4
+
+2024-06-04
+
+* Splitted Expense: allow comma as decimal separator
+
 ## Rev. 0.8.1, 0.8.2
 
 2024-06-03
