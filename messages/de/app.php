@@ -294,7 +294,7 @@ return [
     'The cost project <em>{name}</em> has been created.' => 'Das Kostenprojekt <em>{name}</em> wurde angelegt.',
     'The cost project must be one of your assigned cost projects.' => 'Das Kostenprojekt muss eins Ihrer zugeordneten Projekte sein.',
     'The cost project {name} has been deleted.' => 'Das Kostenprojekt {name} wurde gelöscht.',
-    'The expense <b>{title}</b> has been created.' => 'Die Ausgabe <b>{title}</b> wurde angelegt.',
+    'The expense <b>{record}</b> has been created.' => 'Die Ausgabe <b>{record}</b> wurde angelegt.',
     'The expense <em>{title}</em> has been deleted.' => 'Die Ausgabe <em>{title}</em> wurde gelöscht.',
     'The expense <em>{title}</em> has been updated.' => 'Die Ausgabe <em>{title}</em> wurde geändert.',
     'The payment via PayPal was completed successfully.' => 'Die Bezahlung durch PayPal wurde erfolgreich abgeschlossen.',
