@@ -158,8 +158,9 @@ class Chart extends \yii\base\Widget
         $js  = "window.{$this->jsVar}_el = document.getElementById('{$this->id}');";
         $js .= "window.{$this->jsVar} = new Chart({$this->jsVar}_el, {$json});";
 
+        $js .= "\n";
         foreach ($this->jsEvents as $eventName => $handler) {
-            $js .= "window.{$this->jsVar}_el.{$eventName} = $handler;";
+            $js .= "window.{$this->jsVar}_el.{$eventName} = ".str_replace('__ID__', $this->id, $handler).";";
         }
 
         $this->getView()->registerJs($js);
