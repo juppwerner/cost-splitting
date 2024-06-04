@@ -157,4 +157,24 @@ class Order extends BaseActiveRecord
     {
         return $this->hasOne(Orderitem::class, ['sku' => 'paymentOptionCode']);
     } 
+
+    /**
+     * Returns certain details from PayPal order JSOn as array
+     * 
+     * @return mixed
+     */
+    public function getDetailsAsArray()
+    {
+        $details = \yii\helpers\Json::decode($this->paymentInfo, true);
+        $result = [
+            'status' => $details['status'],
+        ];
+        $payment_source = $details['payment_source'];
+        foreach($payment_source as $provider => $source) {
+            $result['paymentProvider'] = ucfirst($provider);
+            $result['email'] = $source['email_address'];
+            $result['fullName'] = $source['name']['given_name'].' '.$source['name']['surname'];
+        }
+        return $result;
+    }
 }

@@ -100,6 +100,11 @@ return [
     'We have generated a password for you' => 'Wir haben für Sie ein Kennwort generiert',
     'We have received a request to reset the password for your account on {0}' => 'Wir haben auf {0} eine Anfrage zum Zurücksetzen des Kennwortes für Ihr Benutzerkonto erthalten',
     'You can assign multiple roles or permissions to user by using the form below' => 'Sie können mehrere Rollen oder Berechtigungen zuweisen',
-    'Your account on {0} has been created' => 'Ihr Benutzerkonto auf {0] wurde angelegt',
+    'Your account on {0} has been created' => 'Ihr Benutzerkonto auf {0} wurde angelegt',
     '{0, date, MMM dd, YYYY HH:mm}' => '{0, date, dd. MMM YYYY, HH:mm}',
+    'If you haven\'t received a password, you can reset it at' => 'Falls Sie noch kein Kennwort erhalten haben, können Sie es hier zurücksetzen',
+    'In order to complete your request, please click the link below' => 'Zum Abschließen Ihrer Anfrage klicken Sie den folgenden Link',
+    'This is the code to insert to enable two factor authentication' => '',
+    'We have received a request to change the email address for your account on {0}' => 'Wir haben eine Anfrage erhalten zum Ändern der E-Mail-Adresse Ihres Kontos bei {0}',
+    'You received this email because someone, possibly you or someone on your behalf, have created an account at {app_name}' => 'Sie erhalten diese E-Mail, weil jemand, vermutlich Sie selbst, ein Konto bei {app_name} erstellt hat',
 ];

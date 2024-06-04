@@ -45,6 +45,9 @@ class OrderSearch extends Order
     public function search($params)
     {
         $query = Order::find()
+            ->leftJoin('orderitem', 'order.paymentOptionCode=orderitem.sku')
+            ->leftJoin('orderitem_lang', 'orderitem.id=orderitem_lang.orderitemId')
+            ->with('orderitem')
             ->where(['userId' => Yii::$app->user->id]);
 
         // add conditions that should always apply here
@@ -78,9 +81,12 @@ class OrderSearch extends Order
         
 
         $query->andFilterWhere(['like', 'purchaseType', $this->purchaseType])
-            ->andFilterWhere(['like', 'paymentOptionCode', $this->paymentOptionCode])
             ->andFilterWhere(['like', 'currency', $this->currency])
             ->andFilterWhere(['like', 'paymentInfo', $this->paymentInfo]);
+
+        // paymentOptionCode could also be a product name
+        $query->andWhere('paymentOptionCode LIKE :codeOrProduct OR orderitem_lang.name LIKE :codeOrProduct')
+            ->addParams([':codeOrProduct' => '%'.$this->paymentOptionCode.'%']);
 
         $query->andFilterCompare('quantityRemaining', $this->quantityRemaining);
 

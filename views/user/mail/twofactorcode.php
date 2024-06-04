@@ -12,7 +12,7 @@
 use yii\helpers\Html;
 
 /**
- * @var \Da\User\Model\User  $user
+ * @var String  $code
  * @var \Da\User\Model\Token $token
  */
 ?>
@@ -20,15 +20,11 @@ use yii\helpers\Html;
     <?= Yii::t('usuario', 'Hello') ?>,
 </p>
 <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
-    <?= Yii::t('usuario', 'Thank you for signing up on {0}', Yii::$app->name) ?>.
-    <?= Yii::t('usuario', 'In order to complete your registration, please click the link below') ?>.
+    <?= Yii::t('usuario', 'This is the code to insert to enable two factor authentication') ?>:
 </p>
 <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
-    <?= Html::a(Html::encode($token->url), $token->url) ?>
+    <b><?= $code ?></b>
 </p>
 <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
-    <?= Yii::t('usuario', 'If you cannot click the link, please try pasting the text into your browser') ?>.
-</p>
-<p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
-    <?= Yii::t('usuario', 'You received this email because someone, possibly you or someone on your behalf, have created an account at {app_name}', ['app_name' => Yii::$app->name]) ?>.
+    <?= Yii::t('usuario', 'If you did not make this request you can ignore this email') ?>.
 </p>
