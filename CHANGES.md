@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 0.8.6
+
+2024-06-04
+
+* New Expense added: improved success message
+
 ## 0.8.5
 
 2024-06-04
