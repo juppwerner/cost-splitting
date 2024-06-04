@@ -22,6 +22,8 @@ use yii\filters\VerbFilter;
  */
 class CostprojectController extends Controller
 {
+    public $fluid = false;
+
     /**
      * @inheritDoc
      */
@@ -117,6 +119,7 @@ class CostprojectController extends Controller
      */
     public function actionBreakdown($id)
     {
+        $this->fluid = true;
         $model = $this->findModel($id);
         // Was project payed already?
         if(is_null($model->orderId)) {
