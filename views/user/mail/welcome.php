@@ -1,58 +1,59 @@
 <?php
-use yii\helpers\Url;
 
 /*
- * This file is part of the Dektrium project.
+ * This file is part of the 2amigos/yii2-usuario project.
  *
- * (c) Dektrium project <http://github.com/dektrium>
+ * (c) 2amigOS! <http://2amigos.us/>
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
- * @var dektrium\user\Module $module
- * @var dektrium\user\models\User $user
- * @var dektrium\user\models\Token $token
- * @var bool $showPassword
+ * @var \Da\User\Module      $module
+ * @var \Da\User\Model\User  $user
+ * @var \Da\User\Model\Token $token
+ * @var bool                 $showPassword
  */
-$p_style = "font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;";
+
 ?>
-    <p style="<?= $p_style ?>">
+<p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
     <?= Yii::t('usuario', 'Hello') ?>,
 </p>
 
-<p style="<?= $p_style ?>">
-    <?= Yii::t('usuario', 'Your account on {0} has been created', Yii::$app->name) ?>.<br /><br />
-
+<p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
+    <?= Yii::t('usuario', 'Your account on {0} has been created', Yii::$app->name) ?>.
     <?= Yii::t('usuario', 'To login, use this email address') ?>: <strong><?= $user->email ?></strong><br />
     <?= Yii::t('usuario', 'Or, use this username') ?>: <strong><?= $user->username ?></strong><br />
-
-    <?php if ($showPassword || $module->enableGeneratingPassword): ?>
-        <?= Yii::t('usuario', 'We have generated a password for you') ?>: <strong><?= $user->password ?></strong><br />
+    <?php if ($showPassword || $module->generatePasswords): ?>
+        <?= Yii::t('usuario', 'We have generated a password for you') ?>: <strong><?= $user->password ?></strong>
+    <?php endif ?>
+    <?php if ($module->allowPasswordRecovery): ?>
+        <?= Yii::t('usuario', 'If you haven\'t received a password, you can reset it at') ?>: <strong><?= Html::a(Html::encode(Url::to(['/user/recovery/request'], true)), Url::to(['/user/recovery/request'], true)) ?></strong>
     <?php endif ?>
 
 </p>
 
 <?php if ($token !== null): ?>
-    <p style="<?= $p_style ?>">
+    <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
         <?= Yii::t('usuario', 'In order to complete your registration, please click the link below') ?>.
     </p>
-    <p style="<?= $p_style ?>">
+    <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
         <?= Html::a(Html::encode($token->url), $token->url); ?>
     </p>
-    <p style="<?= $p_style ?>">
+    <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
         <?= Yii::t('usuario', 'If you cannot click the link, please try pasting the text into your browser') ?>.
     </p>
 <?php endif ?>
 
-<p style="<?= $p_style ?>">
+<p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
     <?= Yii::t('app', 'This is the login URL:') ?><br />
     <?= Html::a( Url::to(['/user/login'], true), Url::to(['/user/login'], true) ); ?>
 </p>
 
-<p style="<?= $p_style ?>">
-    <?= Yii::t('usuario', 'If you did not make this request you can ignore this email') ?>.
+<p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
+    <?= Yii::t('usuario', 'You received this email because someone, possibly you or someone on your behalf, have created an account at {app_name}', ['app_name' => Yii::$app->name]) ?>.
 </p>

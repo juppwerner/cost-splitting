@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 0.8.5
+
+2024-06-04
+
+* Improved email templates
+
 ## 0.8.3, 0.8.4
 
 2024-06-04
