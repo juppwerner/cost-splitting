@@ -281,6 +281,7 @@ return [
     'Singapore dollar' => 'Singapur Dollar',
     'Site Maintenance' => 'Webseite Wartung',
     'Sort Order' => 'Sortierreihenfolge',
+    'Sort Participants' => 'Teilnehmer sortieren',
     'South Africa Rand' => 'Südafrika Rand',
     'South Korean won' => 'Südkorea Won',
     'Splitting' => 'Aufteilung',

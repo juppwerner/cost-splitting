@@ -18,7 +18,7 @@ use app\dictionaries\CurrencyCodesDictEwf;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus'=>'autofocus']) ?>
-    <?= $form->field($model, 'participants')->textArea(['rows' => 3])->hint(Yii::t('app', 'Enter one participant per line')) ?>
+    <?= $form->field($model, 'participants')->textArea(['rows' => 3])->hint(Yii::t('app', 'Enter one participant per line') . ' | ' . Html::a(Yii::t('app', 'Sort Participants'), '#', ['id' => 'sort-participants-btn', /* 'class' => 'btn btn-primary btn-sm' */ ])) ?>
     <?= $form->field($model, 'currency')->widget(Select2::class, [
         'data' => CurrencyCodesDictEwf::allByLabel(),
         // 'language' => 'de',
@@ -53,6 +53,13 @@ $('#costproject-usecurrency').on('change', function() {
 
 });
 */
+$('#sort-participants-btn').on('click', function (ev) {
+    ev.preventDefault();
+    var str = document.getElementById('costproject-participants').value; 
+    str = str.replace(/\\r?\\n/g, '\\r').replace(/\\r/g, '\\n').split('\\n').sort().join('\\n');
+    document.getElementById('costproject-participants').value = str; 
+    return false;
+});
 ",
     yii\web\View::POS_READY,
     'usecurrency-change'
