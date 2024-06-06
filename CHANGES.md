@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## 0.8.7
+
+2024-06-06
+
+* [Cost Project Form](../costproject/create): Added link to sort participants
+* User Module: Updated German translations
+ 
 ## 0.8.6
 
 2024-06-04

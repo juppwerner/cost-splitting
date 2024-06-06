@@ -39,7 +39,7 @@ class ExpenseController extends Controller
                     ],
                 ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -149,7 +149,7 @@ class ExpenseController extends Controller
 
         // Get a list of all participants, if a cost project is already selected
         $participants = null;
-        if(!empty($model->costprojectId))
+        if(!empty($model->costprojectId)) 
             $participants = Costproject::findOne(['id' => $model->costprojectId])->getParticipantsList();
         if(!is_array($model->participants)) {
             if(empty($model->participants))
@@ -157,6 +157,7 @@ class ExpenseController extends Controller
             else
                 $model->participants = explode(';', $model->participants);
         }
+        sort($participants);
 
         // Get all titles
         $costprojectIDs = Costproject::find()

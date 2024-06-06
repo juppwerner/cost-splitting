@@ -3,11 +3,11 @@ usage() {
 	echo "usage: bump-version <version-id>"
 }
 
-echo OBSOLET!
-echo Nicht mehr benutzen.
-echo Version erhöhen laeuft jetzt über git-flow-hooks
-exit 1
-
+# echo OBSOLET!
+# echo Nicht mehr benutzen.
+# echo Version erhöhen laeuft jetzt über git-flow-hooks
+# exit 1
+#
 
 if [ $# -ne 1 ]; then
 	usage

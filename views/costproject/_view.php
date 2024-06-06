@@ -6,9 +6,18 @@ use app\dictionaries\CurrencyCodesDictEwf;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
+
+$participants = $model->participants;
+if($model->sortParticipants) {
+    $participants = preg_replace('~\r\n?~', "\n", $participants); 
+    $participants = explode("\n", $participants);
+    sort($participants);
+    $participants = join("\n", $participants);
+}
 ?>
 
 <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
+
 
 <?= DetailView::widget([
     'model' => $model,
@@ -23,7 +32,11 @@ use app\dictionaries\CurrencyCodesDictEwf;
         [
             'attribute' => 'participants',
             'format' => 'html',
-            'value' => nl2br($model->participants),
+            'value' => nl2br($participants),
+        ],
+        [
+            'attribute' => 'sortParticipants',
+            'format' => 'checkbox',
         ],
         [
             'attribute' => 'currency',
