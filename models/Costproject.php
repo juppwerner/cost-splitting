@@ -14,6 +14,7 @@ use app\components\BaseActiveRecord;
  * @property int $id
  * @property string|null $title
  * @property string $participants
+ * @property bool $sortParticipants
  * @property boolean $useCurrency
  * @property string $currency
  * @property string $description
@@ -67,7 +68,7 @@ class Costproject extends BaseActiveRecord
             [['title', 'participants', 'currency'], 'required'],
             [['orderId', 'ordered_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'string', 'max' => 255],
-            [['useCurrency'], 'boolean'],
+            [['sortParticipants', 'useCurrency'], 'boolean'],
             [['currency'], 'string', 'min'=>3, 'max' => 255],
             [['description'], 'safe'],
             [['participants'], 'trim'],
@@ -83,6 +84,7 @@ class Costproject extends BaseActiveRecord
             'id' => Yii::t('app', 'ID'),
             'title' => Yii::t('app', 'Title'),
             'participants' => Yii::t('app', 'Participants'),
+            'sortParticipants' => Yii::t('app', 'Sort Participants'),
             'useCurrency' => Yii::t('app', 'Use Currency'),
             'currency' => Yii::t('app', 'Currency'),
             'description' => Yii::t('app', 'Description'), 
@@ -118,6 +120,8 @@ class Costproject extends BaseActiveRecord
         $result = [];
         foreach($participants as $participant)
             $result[$participant] = $participant;
+        if($this->sortParticipants)
+            asort($result);
         return $result;
     }
 
