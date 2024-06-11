@@ -1,5 +1,7 @@
 <?php
 $csvSep = "\t";
+$projectCurrency = 'EUR';
+
 $participants = [ // {{{ 
     'Anna',
     'Ben',
@@ -188,7 +190,7 @@ function array2table($array)
 
         <h2>Settlements</h2>
         <?php for($i=1; $i<count($compensation); $i++) : ?>
-        <strong><?= sprintf('%s zahlt %s %0.2f.', $participants[$compensation[$i]['Debitor']-1], $participants[$compensation[$i]['Recipient']-1], $compensation[$i]['Amount']) ?></strong><br>
+        <strong><?= sprintf('%s pays to %s %0.2f %s.', $participants[$compensation[$i]['Debitor']-1], $participants[$compensation[$i]['Recipient']-1], $compensation[$i]['Amount'], $projectCurrency) ?></strong><br>
         <?php endfor; ?>
     </body>
 </html>
