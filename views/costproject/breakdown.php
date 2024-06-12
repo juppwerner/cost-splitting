@@ -128,9 +128,9 @@ $defaultParticipantDetails = [
                 <td class="text-right">
                     <?= $row->exchangeRate ?>
                 </td>
-                <?php endif; ?>
+                <!-- <?php // endif; ?>
 
-                <?php if($model->useCurrency) : ?>
+                <?php // if($model->useCurrency) : ?> -->
                 <td class="text-right">
                     <?= Yii::$app->formatter->asCurrency($row->amount * $row->exchangeRate, $model->currency) ?>
                 </td>
@@ -242,8 +242,7 @@ $defaultParticipantDetails = [
         $saldo = $partnerStaende[$partners[0]] - $partnerStaende[$partners[1]];
         if(abs($saldo)<0.009)
             continue;
-        // DEBUG
-        echo $bilanzKey.': '.$saldo.'<br>';
+        // DEBUG echo $bilanzKey.': '.$saldo.'<br>';
         if($saldo>0) {
             $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[1], 'participantRight' => $partners[0], 'amount' => Yii::$app->formatter->asCurrency($saldo, $model->currency)]);
             $personenKonten[$partners[0]] += round($saldo, 2);

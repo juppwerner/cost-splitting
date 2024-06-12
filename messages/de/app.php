@@ -103,6 +103,7 @@ return [
     'Created At' => 'Angelegt am',
     'Created By' => 'Angelegt von',
     'Created by: <b>{createUserName}</b>' => 'Angelegt von: <b>{createUserName}</b>',
+    'Created with <{appName}>' => 'Erstellt mit <{appName}>',
     'Credit Purchase #{id}' => 'Guthaben Kauf #{id}',
     'Credits' => 'Guthaben',
     'Croatian kuna' => 'Kroatien Kuna',
