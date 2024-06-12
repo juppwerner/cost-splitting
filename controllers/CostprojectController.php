@@ -3,11 +3,15 @@
 namespace app\controllers;
 
 use app\components\Html;
+use app\dictionaries\CurrencyCodesDictEwf;
 use app\models\Costproject;
 use app\models\Order;
 use app\models\Orderitem;
 use app\models\forms\AddUserForm;
 use app\models\search\CostprojectSearch;
+
+// use rudissaar\fpdf\FPDFPlus;
+use app\components\MyFPDFPlus;
 
 use Yii;
 use yii\data\ArrayDataProvider;
@@ -43,7 +47,7 @@ class CostprojectController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['view', 'breakdown'],
+                            'actions' => ['view', 'breakdown', 'breakdown-pdf'],
                             'roles' => ['viewCostproject'],
                         ],
                         [
@@ -149,6 +153,101 @@ class CostprojectController extends Controller
             'model'                 => $model,
             'expensesDataProvider'  => $expensesDataProvider
         ]);
+    }
+
+    /**
+     * Displays the cost breakdown for a single Costproject model as PDF
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionBreakdownPdf($id)
+    {
+
+
+        $this->layout = false;
+        $model = $this->findModel($id);
+        // Was project payed already?
+        if(is_null($model->orderId)) {
+            // Check avalable deposit
+            $result = Order::pay($id);
+            if(!$result) {
+                Yii::$app->session->addFlash('warning', 
+                    Html::tag('h4', Yii::t('app', 'Payment Required') ) .
+                    Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.') .
+                    '<br>' . Html::tag('div', Html::tag('span', 'Loading...', ['class'=>"sr-only"]), ['class' => "spinner-border text-primary", 'role' => "status"])
+                );
+                return $this->redirect(['checkout', 'id'=>$id]);
+            } else {
+                $model = $this->findModel($id);
+            }
+        }
+
+        // Get expenses for grid
+        $expensesDataProvider = new ArrayDataProvider([
+            'allModels' => $model->expenses,
+            'key' => 'id',
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        $pdf = new MyFPDFPlus();
+        $pdf->AliasNbPages();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', '{title} / Cost Breakdown', ['title' => $model->title]));
+
+        $header = ['', ''];
+        $data = [];
+        $data[] = [
+            $model->getAttributeLabel('title'),
+            $model->title
+        ];
+        $data[] = [
+            $model->getAttributeLabel('participants'),
+            $model->participants
+        ];
+        $data[] = [
+            $model->getAttributeLabel('sortParticipants'),
+            $model->sortParticipants ? '[x]' : '[-]'
+        ];
+        $data[] = [
+            $model->getAttributeLabel('currency'),
+            CurrencyCodesDictEwf::get($model->currency),
+        ];
+        $data[] = [
+            $model->getAttributeLabel('useCurrency'),
+            $model->useCurrency ? '[x]' : '[-]'
+        ];
+        $data[] = [
+            $model->getAttributeLabel('description'),
+            $model->description
+        ];
+        $tmp = [];
+        foreach($model->users as $user) {
+            $item =  $user->displayName.' (#'.$user->id.')';
+            $tmp[] = $item;
+        }
+        $data[] = [
+            Yii::t('app', 'Users'),
+            join('; ', $tmp)
+        ];
+        $data[] = [
+            $model->getAttributeLabel('orderId'),
+            $model->isPaid ? Yii::t('app', 'Paid') : Yii::t('app', 'Not Paid')
+        ];
+        $pdf->FancyTable($header, $data, [70, 100]);
+        $pdf->Ln();
+
+        // Total Project Costs
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', 'Total Project Costs'));
+        $pdf->SetFont('Arial', '', 14);
+        $pdf->WriteLnEncoded(10, Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency));
+
+        $pdf->Output('I', Yii::t('app', 'Cost Breakdown').'.pdf');
+        exit;
     }
 
     /**

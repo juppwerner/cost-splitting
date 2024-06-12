@@ -9,4 +9,5 @@ Feather Icons in cost-splitting
 | View              | eye         |
 [ Save              | save        |
 | Cancel            | x-square    |
+| PDF               | file-text   |
 
