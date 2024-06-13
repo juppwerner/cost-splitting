@@ -213,8 +213,8 @@ class CostprojectController extends Controller
         $pdf = new MyFPDFPlus();
         // Set document metadata
         $pdf->SetCreator(Yii::$app->name.' V'.Yii::$app->version);
-        $pdf->SetAuthor(Yii::$app->user->identity->profile->name);
-        $pdf->SetTitle($model->title);
+        $pdf->SetAuthor(utf8_decode(Yii::$app->user->identity->displayName));
+        $pdf->SetTitle(utf8_decode($model->title));
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 14);
@@ -274,13 +274,13 @@ class CostprojectController extends Controller
         $aligns[] = 'R';
         if($model->useCurrency) {
             $headerRow[] = Yii::t('app', 'Exchange Rate');
+            $widths[] = 20;
+            $alignsH[] = 'L';
+            $aligns[] = 'R';
             $headerRow[] = Yii::t('app', 'Amount {currency}', ['currency'=>$model->currency]);
             $widths[] = 20;
             $alignsH[] = 'L';
             $aligns[] = 'R';
-            $widths[] = 20;
-            $alignsH[] = 'L';
-            $aligns[] = 'C';
         }
         $numBaseColumns = count($widths);
         // BIS HIER BASISTABELLE
@@ -289,10 +289,10 @@ class CostprojectController extends Controller
             if(!array_key_exists($participant, $participantSums)) $participantSums[$participant] = 0;
             $headerRow[] = $participant;
             $headerRow[] = '';
-            $widths[] = 20;
+            $widths[] = 18;
             $alignsH[] = 'L';
             $aligns[] = 'R';
-            $widths[] = 20;
+            $widths[] = 18;
             $alignsH[] = 'L';
             $aligns[] = 'R';
         }
@@ -313,10 +313,10 @@ class CostprojectController extends Controller
             if($showParticipants) {
                 $data[] = $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : str_replace(';', ', ', $row->participants);
             }
-            $data[] = Yii::$app->formatter->asCurrency($row->amount, $row->currency);
+            $data[] = Yii::$app->formatter->asDecimal($row->amount, 2).' '.$row->currency;
             if($model->useCurrency) {
-                $data[] = $row->exchangeRate;
-                $data[] = Yii::$app->formatter->asCurrency($row->amount * $row->exchangeRate, $model->currency);
+                $data[] = Yii::$app->formatter->asDecimal($row->exchangeRate, 5);
+                $data[] = Yii::$app->formatter->asDecimal($row->amount * $row->exchangeRate, 2);
             }
             foreach($participants as $participant)  {
                 if(!array_key_exists($participant, $participantDetails))
