@@ -3,11 +3,16 @@
 namespace app\controllers;
 
 use app\components\Html;
+use app\dictionaries\CurrencyCodesDictEwf;
+use app\dictionaries\ExpenseTypesDict;
 use app\models\Costproject;
 use app\models\Order;
 use app\models\Orderitem;
 use app\models\forms\AddUserForm;
 use app\models\search\CostprojectSearch;
+
+// use rudissaar\fpdf\FPDFPlus;
+use app\components\MyFPDFPlus;
 
 use Yii;
 use yii\data\ArrayDataProvider;
@@ -16,6 +21,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper as VD;
 
 /**
  * CostprojectController implements the CRUD actions for Costproject model.
@@ -43,7 +49,7 @@ class CostprojectController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['view', 'breakdown'],
+                            'actions' => ['view', 'breakdown', 'breakdown-pdf'],
                             'roles' => ['viewCostproject'],
                         ],
                         [
@@ -149,6 +155,397 @@ class CostprojectController extends Controller
             'model'                 => $model,
             'expensesDataProvider'  => $expensesDataProvider
         ]);
+    }
+
+    /**
+     * Displays the cost breakdown for a single Costproject model as PDF
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionBreakdownPdf($id)
+    {
+        $this->layout = false;
+        $model = $this->findModel($id);
+        // Was project payed already?
+        if(is_null($model->orderId)) {
+            // Check avalable deposit
+            $result = Order::pay($id);
+            if(!$result) {
+                Yii::$app->session->addFlash('warning', 
+                    Html::tag('h4', Yii::t('app', 'Payment Required') ) .
+                    Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.') .
+                    '<br>' . Html::tag('div', Html::tag('span', 'Loading...', ['class'=>"sr-only"]), ['class' => "spinner-border text-primary", 'role' => "status"])
+                );
+                return $this->redirect(['checkout', 'id'=>$id]);
+            } else {
+                $model = $this->findModel($id);
+            }
+        }
+
+        // Get expenses for grid
+        $expensesDataProvider = new ArrayDataProvider([
+            'allModels' => $model->expenses,
+            'key' => 'id',
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+
+        $showParticipants = false;
+
+        $totalProjectCost = 0; 
+        $participantDetails = []; 
+        $participantSums = []; 
+        $sum = 0; 
+        $participants = array_values($model->participantsList);
+        $defaultParticipantDetails = [
+            'sumExpenses'           => 0, 
+            'countExpenses'         => 0, 
+            'sumExpensesSelf'       => 0, 
+            'sumExpensesOthers'     => 0, 
+            'totalProjectValue'     => 0, 
+            'countExpensesByOthers' => 0, 
+            'sumExpensesByOthers'   => 0
+        ];
+
+        $pdf = new MyFPDFPlus();
+        // Set document metadata
+        $pdf->SetCreator(Yii::$app->name.' V'.Yii::$app->version);
+        $pdf->SetAuthor(utf8_decode(Yii::$app->user->identity->displayName));
+        $pdf->SetTitle(utf8_decode($model->title));
+        $pdf->AliasNbPages();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', '{title} / Cost Breakdown', ['title' => $model->title]));
+
+        // Table with project metadata
+        $pdf->SetFont('Arial', '', 14);
+        $pdf->WriteLnEncoded(10, $model->description);
+        $pdf->SetWidths([70, 100]);
+        $pdf->SetFillColor(224,235,255);
+        $pdf->row([
+            $model->getAttributeLabel('participants'),
+            $model->participants
+        ]);
+        $pdf->row([
+            $model->getAttributeLabel('sortParticipants'),
+            $model->sortParticipants ? '[x]' : '[-]'
+        ]);
+        $pdf->row([
+            $model->getAttributeLabel('currency'),
+            CurrencyCodesDictEwf::get($model->currency),
+        ]);
+        $pdf->row([
+            $model->getAttributeLabel('useCurrency'),
+            $model->useCurrency ? '[x]' : '[-]'
+        ]);
+        $pdf->Ln();
+
+        // Total Project Costs
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', 'Total Project Costs'));
+        $pdf->SetFont('Arial', '', 14);
+        $pdf->WriteLnEncoded(10, Yii::$app->formatter->asCurrency($model->totalExpenses, $model->currency));
+
+        // Expenses Table
+        $pdf->AddPage('L');
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', 'Expenses'));
+        
+        $headerRow = [
+            Yii::t('app', 'Date'),
+            Yii::t('app', 'Title'),
+            Yii::t('app', 'Payed By'), 
+        ];
+        $dataRows = [];
+        $widths     = [20, 30, 20];
+        $alignsH    =  ['L', 'L', 'L'];
+        $aligns     = ['L', 'L', 'L'];
+        if($showParticipants) {
+            $headerRow[] = Yii::t('app', 'Recipients');
+            $widths[] = 20;
+            $aligns[] = 'L';
+        }
+        $headerRow[] = Yii::t('app', 'Amount');
+        $widths[] = 20;
+        $alignsH[] = 'L';
+        $aligns[] = 'R';
+        if($model->useCurrency) {
+            $headerRow[] = Yii::t('app', 'Exchange Rate');
+            $widths[] = 20;
+            $alignsH[] = 'L';
+            $aligns[] = 'R';
+            $headerRow[] = Yii::t('app', 'Amount {currency}', ['currency'=>$model->currency]);
+            $widths[] = 20;
+            $alignsH[] = 'L';
+            $aligns[] = 'R';
+        }
+        $numBaseColumns = count($widths);
+        // BIS HIER BASISTABELLE
+
+        foreach($participants as $participant) {
+            if(!array_key_exists($participant, $participantSums)) $participantSums[$participant] = 0;
+            $headerRow[] = $participant;
+            $headerRow[] = '';
+            $widths[] = 18;
+            $alignsH[] = 'L';
+            $aligns[] = 'R';
+            $widths[] = 18;
+            $alignsH[] = 'L';
+            $aligns[] = 'R';
+        }
+        $pdf->SetWidths($widths);
+        $pdf->SetAligns($alignsH);
+        $dataRows[] = $headerRow;
+        // $pdf->Row($headerRow);
+
+        $pdf->SetAligns($aligns);
+        $breakdown = $model->getBreakdown();
+        foreach($breakdown as $row) {
+            $data = [];
+            if(!array_key_exists($row->payedBy, $participantDetails))
+                $participantDetails[$row->payedBy] = $defaultParticipantDetails;
+            $data[] = Yii::$app->formatter->asDate($row->itemDate, 'php:'.Yii::t('app', 'Y-m-d')) ;
+            $data[] = $row->title;
+            $data[] = $row->payedBy;
+            if($showParticipants) {
+                $data[] = $row->splitting==Expense::SPLITTING_EQUAL ? join(', ', $model->participantsList) : str_replace(';', ', ', $row->participants);
+            }
+            $data[] = Yii::$app->formatter->asDecimal($row->amount, 2).' '.$row->currency;
+            if($model->useCurrency) {
+                $data[] = Yii::$app->formatter->asDecimal($row->exchangeRate, 5);
+                $data[] = Yii::$app->formatter->asDecimal($row->amount * $row->exchangeRate, 2);
+            }
+            foreach($participants as $participant)  {
+                if(!array_key_exists($participant, $participantDetails))
+                    $participantDetails[$participant] = $defaultParticipantDetails;
+                if($participant==$row->payedBy) {
+                    $data[] = Yii::$app->formatter->asDecimal($row->amount  * $row->exchangeRate, 2);
+                    $participantSums[$participant] += $row->amount  * $row->exchangeRate;
+                    if($row->expenseType !== ExpenseTypesDict::EXPENSETYPE_TRANSFER) {
+                        $participantDetails[$participant]['sumExpenses'] += $row->amount  * $row->exchangeRate; $participantDetails[$participant]['countExpenses']++;
+                    }
+                } else {
+                    $data[] = '';
+                }
+                foreach($row->costitems as $costitem) {
+                    if($costitem->participant==$participant) {
+                        $data[] = Yii::$app->formatter->asDecimal($costitem->amount * $costitem->exchangeRate, 2);
+                        $participantSums[$participant] -= $costitem->amount * $costitem->exchangeRate;
+                        if($row->expenseType !== ExpenseTypesDict::EXPENSETYPE_TRANSFER) {
+                            $totalProjectCost += $costitem->amount * $costitem->exchangeRate;
+                            if($row->payedBy===$participant) {
+                                $participantDetails[$participant]['sumExpensesSelf'] += $costitem->amount * $costitem->exchangeRate;
+                            } else {
+                                $participantDetails[$participant]['sumExpensesByOthers'] += $costitem->amount * $costitem->exchangeRate;
+                                $participantDetails[$participant]['countExpensesByOthers'] ++;
+                            }
+                            $participantDetails[$participant]['totalProjectValue'] += $costitem->amount * $costitem->exchangeRate;
+                    } else {
+                        $data[] = '';
+                        if($row->payedBy===$participant and $row->expenseType !== ExpenseTypesDict::EXPENSETYPE_TRANSFER) {}
+                            $participantDetails[$row->payedBy]['sumExpensesOthers'] += $costitem->amount * $costitem->exchangeRate;
+                        }
+                    }
+                } // costitems loop
+            } // participants col. loop
+            $delta = count($widths) - count($data);
+            for($i=1; $i <= $delta; $i++)
+                $data[] = '';
+            $dataRows[] = $data;
+            // $pdf->Row($data);
+        } // breakdown rows loop
+
+        // Participants Sums Row
+        $data = [];
+        for($i=1; $i<= (($showParticipants ? 5 : 4 ) + (int)$model->useCurrency*2); $i++)
+            $data[] = '';
+        foreach($participants as $participant) {
+            $sum += $participantSums[$participant];
+            $data[] = '';
+            $data[] = Yii::$app->formatter->asDecimal($participantSums[$participant], 2);
+        }
+        $dataRows[] = $data;
+        // $pdf->Row($data);
+
+        // Repeat header row
+        $pdf->SetAligns($alignsH);
+        $dataRows[] = $headerRow;
+        // $pdf->Row($headerRow);
+
+        // Print table in chunks of 4 participants
+
+        for($i=0; $i<=floor(count($participants)/4); $i++) {
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->WriteLnEncoded(10, Yii::t('app', 'Table {0} of {1}', [($i+1), round(count($participants)/4)]));
+            $idx = range(0, $numBaseColumns-1);
+            $i2 = $numBaseColumns+$i*4*2;
+            for($j=0;$j<4; $j++) { 
+                if(isset($participants[$i*4+$j])) {
+                    $idx[] = $i2++;
+                    $idx[] = $i2++;
+                }
+            }
+
+            $aligns2 = [];
+            $alignsH2 = [];
+            foreach($idx as $i3) {
+                $aligns2[] = $aligns[$i3]; 
+                $alignsH2[] = $alignsH[$i3]; 
+            }
+            for($l=0; $l<count($dataRows); $l++) {
+                $dataRow2 = [];
+                foreach($idx as $i3) {
+                    $dataRow2[] = $dataRows[$l][$i3]; 
+                }
+                if($l==0 || $l==count($dataRows)-1)
+                    $pdf->setAligns($alignsH2);
+                else
+                    $pdf->setAligns($aligns2);
+
+                $pdf->SetFont('Arial', '', 8);
+                $pdf->Row($dataRow2);
+            }
+            if($i<floor(count($participants)/4))
+                $pdf->AddPage('L');
+        }
+        $pdf->Ln();
+        // END OF EXPENSES TABLE
+
+
+        // Summary by Participants 
+        $pdf->AddPage('P');
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', 'Participants'));
+
+        /**
+         * Calculate participants balances, final money transfers
+         */
+        $headers            = [];
+        $bilanzen           = [];
+        $schlusszahlungen   = [];
+        $personenKonten     = [];
+        foreach($breakdown as $expense)
+        {
+            // VD::dump($row, 10, true);
+            if(!array_key_exists($expense->payedBy, $personenKonten))
+                $personenKonten[$expense->payedBy] = 0;
+            foreach($expense->costitems as $costitem) {
+                // VD::dump($costitem->attributes, 10, true);
+                if(!array_key_exists($costitem->participant, $personenKonten))
+                    $personenKonten[$costitem->participant] = 0;
+                if($expense->payedBy<>$costitem->participant) {
+                    $partners = [$expense->payedBy, $costitem->participant];
+                    sort($partners);
+                    $bilanzKey = join('|', $partners);
+                    if(!array_key_exists($bilanzKey, $bilanzen)) {
+                        $bilanzen[$bilanzKey] = [];
+                        foreach($partners as $partner)
+                            $bilanzen[$bilanzKey][$partner] = 0;
+                    }
+                    $bilanzen[$bilanzKey][$expense->payedBy] += $costitem->amount / $costitem->exchangeRate;
+                }
+            }
+        }
+        // DEBUG echo Html::tag('h3', 'bilanzen');
+        // DEBUG VD::dump($bilanzen, 10, true);
+
+        $numBilanzenGt0 = 0;
+        foreach($bilanzen as $bilanzKey=>$partnerStaende) {
+            $partners = explode('|', $bilanzKey);
+            $saldo = $partnerStaende[$partners[0]] - $partnerStaende[$partners[1]];
+            if(abs($saldo)<0.009)
+                continue;
+            // DEBUG            echo $bilanzKey.': '.$saldo.'<br>';
+            if($saldo>0) {
+                $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[1], 'participantRight' => $partners[0], 'amount' => Yii::$app->formatter->asCurrency($saldo, $model->currency)]);
+                $personenKonten[$partners[0]] += round($saldo, 2);
+                $personenKonten[$partners[1]] -= round($saldo, 2);
+            } elseif($saldo<0) {
+                $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[0], 'participantRight' => $partners[1], 'amount' => Yii::$app->formatter->asCurrency(abs($saldo), $model->currency)]);
+                $personenKonten[$partners[0]] -= abs(round($saldo,2));
+                $personenKonten[$partners[1]] += abs(round($saldo, 2));
+            }
+        }
+        sort($schlusszahlungen);
+        ksort($personenKonten);
+        $amounts = array_values($personenKonten);
+        foreach($personenKonten as $partner=>$saldo) {
+            if($saldo !==0)
+                $numBilanzenGt0++;
+        }
+
+        $persons = $participants; 
+        if($model->sortParticipants)
+            sort($persons);
+        foreach($persons as $person) {
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->WriteLnEncoded(10, $person);
+
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->WriteLnEncoded(6, 
+                Yii::t('app', '{person} has payed {countExpenses} expenses with the total value of {sumExpenses} ({sumExpensesSelf} for himself, and {sumExpensesOthers} for others).', [
+                    'person'=>$person, 
+                    'countExpenses'=>$participantDetails[$person]['countExpenses'], 
+                    'sumExpenses'=>Yii::$app->formatter->asCurrency($participantDetails[$person]['sumExpenses'], $model->currency),
+                    'sumExpensesSelf'=>Yii::$app->formatter->asCurrency($participantDetails[$person]['sumExpensesSelf'], $model->currency),
+                    'sumExpensesOthers'=>Yii::$app->formatter->asCurrency($participantDetails[$person]['sumExpensesOthers'], $model->currency),
+                ])
+                . ' ' . Yii::t('app', 'Other participants have payed {countExpensesByOthers}x for {person}.', [
+                    'person'=>$person, 
+                    'countExpensesByOthers'=>$participantDetails[$person]['countExpensesByOthers'], 
+                    'sumExpensesByOthers'=>Yii::$app->formatter->asCurrency($participantDetails[$person]['sumExpensesByOthers'], $model->currency)
+                ])
+            );
+            if($personenKonten[$person]<0) {
+                $pdf->WriteLnEncoded(6, Yii::t('app', '{person} has, after billing of all payments and money transfers, debts with th eamount of {saldo}.', [
+                    'person' => $person,
+                    'saldo' => Yii::$app->formatter->asCurrency(abs($saldo), $model->currency)
+                ]));
+            } else {
+                $pdf->WriteLnEncoded(6, Yii::t('app', '{person} has, after billing of all payments and money transfers, currently no debts.', [
+                    'person' => $person,
+                ]));
+            }
+        }
+
+        /**
+         * Simplified Final Money Transfers
+         */
+        $schlusszahlungen2  = [];
+        $empfaenger         = '';
+        foreach($personenKonten as $person=>$saldo) {
+            // DEBUG echo $person . ' Saldo: '.$saldo;
+            // if($saldo - round($saldo, 5)<0.0001) continue;
+            if($saldo>0) {
+                $empfaenger = $person;
+            } elseif($saldo<0) {
+                $schlusszahlungen2[] = [
+                    'amount'=>abs($saldo), 
+                    'person'=>$person, 
+                    'text'=> Yii::t('app', '{person} owes __recipient__ {amount}', [
+                        'person' => $person, 
+                        'amount' => Yii::$app->formatter->asCurrency(abs($saldo), $model->currency)
+                    ])
+                ];
+            }
+        }
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->WriteLnEncoded(10, Yii::t('app', 'Compensation Payments'));
+        $pdf->SetFont('Arial', '', 12);
+        if(count($schlusszahlungen2)===0) {
+            $pdf->WriteLnEncoded(6, Yii::t('app', 'You are balanced!'));
+            $pdf->WriteLnEncoded(6, Yii::t('app', 'Nobody owes somebody some money.'));
+        } else {
+            foreach($schlusszahlungen2 as $schlusszahlung) {
+                $pdf->WriteLnEncoded(6, str_replace('__recipient__', $empfaenger, $schlusszahlung['text']));
+            }
+        }
+
+        $pdf->Output('I', Yii::t('app', 'Cost Breakdown').'.pdf');
+        exit;
     }
 
     /**

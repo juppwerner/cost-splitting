@@ -59,6 +59,7 @@ $defaultParticipantDetails = [
     <div class="btn-group mb-3" role="group" aria-label="Buttons">
         <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm d-print-none']) ?>
         <?= Html::a(Html::icon('eye') . Yii::t('app', 'View'), ['view', 'id' => $model->id], ['class' => 'btn btn-info btn-sm d-print-none']) ?>
+        <?= Html::a(Html::icon('file-text') . Yii::t('app', 'PDF'), ['breakdown-pdf', 'id' => $model->id], ['target' => '_blank', 'class' => 'btn btn-info btn-sm d-print-none']) ?>
     </div>
 
     <!-- Cost Project Detail View -->
@@ -127,9 +128,9 @@ $defaultParticipantDetails = [
                 <td class="text-right">
                     <?= $row->exchangeRate ?>
                 </td>
-                <?php endif; ?>
+                <!-- <?php // endif; ?>
 
-                <?php if($model->useCurrency) : ?>
+                <?php // if($model->useCurrency) : ?> -->
                 <td class="text-right">
                     <?= Yii::$app->formatter->asCurrency($row->amount * $row->exchangeRate, $model->currency) ?>
                 </td>
@@ -239,6 +240,8 @@ $defaultParticipantDetails = [
     foreach($bilanzen as $bilanzKey=>$partnerStaende) {
         $partners = explode('|', $bilanzKey);
         $saldo = $partnerStaende[$partners[0]] - $partnerStaende[$partners[1]];
+        if(abs($saldo)<0.009)
+            continue;
         // DEBUG echo $bilanzKey.': '.$saldo.'<br>';
         if($saldo>0) {
             $schlusszahlungen[$bilanzKey] = Yii::t('app', '{participantLeft} owes {participantRight} {amount}', ['participantLeft' => $partners[1], 'participantRight' => $partners[0], 'amount' => Yii::$app->formatter->asCurrency($saldo, $model->currency)]);
@@ -342,7 +345,7 @@ $defaultParticipantDetails = [
     </div><!-- }}} -->
 
     <h3><?= Yii::t('app', 'Compensation Payments') ?></h3>
-    <?php // VD::dump($schlusszahlungen, 10, true); ?>
+    <?php // DEBUG VD::dump($schlusszahlungen, 10, true); ?>
     <div class="card-deck">
 
         <div class="card border-primary mb-3" style="max-width: 18rem;">
