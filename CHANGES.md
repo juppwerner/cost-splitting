@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 0.9.0
+
+2024-06-13
+
+* [Cost Breakdown](../costproject): Added export as PDF. Open the PDF from the _breakdown_ view
+
 ## 0.8.7
 
 2024-06-06
