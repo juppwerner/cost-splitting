@@ -36,6 +36,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
 
     <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
 
+    <?php $dataProvider->pagination->pageSize = 10; ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
