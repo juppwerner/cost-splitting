@@ -67,6 +67,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        // Coming from user login? Show welcome alert
+        $r = null;
+        if(!empty(Yii::$app->request->getReferrer()))
+            $r = str_replace(\yii\helpers\Url::home(true), '', Yii::$app->request->getReferrer());
+        if($r=='user/login') {
+            $msg = Yii::t('app', 'Welcome, {displayName}!', ['displayName'=>Yii::$app->user->identity->displayName]);
+            if(empty(Yii::$app->user->identity->profile->name))
+                $msg .= '<br>' . Html::a(Yii::t('app', 'Configure your profile'), ['/user/settings']);
+            Yii::$app->session->setFlash(
+                'success', 
+                $msg
+            );
+        }
+
         $userCostprojects = \app\models\Costproject::find()
             ->select(['costproject.*'])
             ->innerJoinWith('users')
