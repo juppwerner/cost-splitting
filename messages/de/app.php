@@ -217,6 +217,7 @@ return [
     'Orders' => 'Bestellungen',
     'Other Infos' => 'Andere Infos',
     'Other participants have payed {countExpensesByOthers}x for {person}.' => 'Andere Teilnehmer haben {countExpensesByOthers}x etwas für {person} bezahlt ({sumExpensesByOthers}).',
+    'Overview' => 'Übersicht', 
     'Page {page} of {nb}' => 'Seite {page} von {nb}',
     'Paid' => 'bezahlt',
     'Participant' => 'Teilnehmer',
