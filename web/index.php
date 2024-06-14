@@ -26,6 +26,12 @@ $config_web = $config->web();
 $app = new yii\web\Application($config_web);
 $app->name = Yii::t('app', '_appName_');
 
+// Set some default values via DI
+\Yii::$container->set('yii\grid\GridView', [
+    'pager' => [ 
+        'class' => 'yii\bootstrap4\LinkPager' 
+]]);
+
 // Merge mail parameters
 $mailParams = [
     'welcomeMailSubject'        => Yii::t('app', 'Welcome to {0}', $app->name),
