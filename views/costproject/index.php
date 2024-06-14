@@ -30,7 +30,8 @@ Url::remember('', 'cost-project');
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php if(!Yii::$app->mobileSwitcher->showMobile) : ?>
-
+        
+    <?php $dataProvider->pagination->pageSize = 10; ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
