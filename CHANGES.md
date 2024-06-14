@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## 0.9.1
+
+2024-06-14
+
+* [Home Page](../site/index): Added welcome message after login, and eventually a link to confugre the user's profile
+* [Home Page](../site/index): Fixed site title and breadcrumbs title
+* Improved styling of grid view pagination buttons
+
 ## 0.9.0
 
 2024-06-13
