@@ -294,6 +294,7 @@ return [
     'Submit' => 'Senden',
     'Sweden Krona' => 'Schweden Krone',
     'Swiss franc' => 'Schweiz Franken',
+    'Table {0} of {1}' => 'Tabelle {0} von {1}',
     'Thai Baht' => 'Thailand Baht',
     'Thank you!' => 'Vielen Dank!',
     'The cost project <em>{name}</em> has been created.' => 'Das Kostenprojekt <em>{name}</em> wurde angelegt.',
