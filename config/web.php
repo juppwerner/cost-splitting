@@ -23,6 +23,7 @@ $config = [
     'sourceLanguage' => 'en-US',
     'bootstrap' => [ // {{{ 
         'log',
+        'devicedetect',
         'app\components\MaintenanceMode',
         'languageSwitcher',
     ], // }}} 
@@ -38,6 +39,9 @@ $config = [
         'cache' => [ // {{{ 
             'class' => 'yii\caching\FileCache',
         ], // }}} 
+        'devicedetect' => [
+            'class' => 'alexandernst\devicedetect\DeviceDetect'
+        ],
         'db' => [
             'class'     => 'yii\db\Connection',
             'dsn'       => self::env('DB_DSN', 'mysql:host=db;dbname=web'),
@@ -163,13 +167,13 @@ $config = [
         'request' => [ // {{{ 
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'y8350FxbcGgREnAVHTDhyYPTD2YdoqR8',
-            'csrfParam' => '_csrf-MYTINYTODOS',
+            'csrfParam' => '_csrf-costspl',
             'parsers' => [
                 'application/json' => \yii\web\JsonParser::class
             ],
         ], // }}} 
         'session' => [ // {{{ 
-            'name' => 'sess-pfea',
+            'name' => 'sess-costspl',
         ], // }}} 
         'urlManager' => [ // {{{ 
             'enablePrettyUrl' => true,

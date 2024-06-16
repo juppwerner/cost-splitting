@@ -57,7 +57,7 @@ class User extends BaseUser
     {
         $name = $this->username;
         if(!empty($this->profile->name))
-            return $this->profile->name . ' ('.$name.')';
+            return $this->profile->name; // . ' ('.$name.')';
         return $name;
     } // }}} 
     // {{{ getFull_name
