@@ -343,6 +343,7 @@ return [
     'Updated At' => 'Geändert am',
     'Updated By' => 'Geändert von',
     'Use Currency' => 'Währung benutzen',
+    'Use foreign currencies' => 'Fremdwährungen benutzen',
     'User ID' => 'Benutzer-ID',
     'Username' => 'Benutzername',
     'Users' => 'Benutzer',
