@@ -128,9 +128,9 @@ Url::remember('', 'cost-project');
                     'div',
                     Html::tag('h5', Html::encode($model->title), ['class' => 'mb-0']) 
                     . Html::tag('div', 
-                        Html::tag('span', Yii::$app->formatter->asCurrency($model->expensesAmount, $model->currency), ['class' => 'badge badge-info badge-pill p-2'])
+                        Html::tag('span', /* Html::icon('dollar-sign') . */ Yii::$app->formatter->asCurrency($model->expensesAmount, $model->currency), ['class' => 'badge badge-info badge-pill p-2'])
                         . ' '
-                        . Html::tag('span', Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]), ['class' => 'badge badge-primary badge-pill p-2'])
+                        . Html::tag('span', /* Html::icon('file') . */ count($model->expenses) /*Yii::t('app', '{n,plural,=0{No expenses} =1{one expense} other{# expenses}}', ['n' => count($model->expenses)]) */, ['class' => 'badge badge-primary badge-pill p-2'])
                     ),
                     ['class' => 'd-flex w-100 justify-content-between']
                 )
