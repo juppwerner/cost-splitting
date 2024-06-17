@@ -266,6 +266,9 @@ if(isset($this->params['breadcrumbs'])) {
             By <?= Html::a("Diggin' Data", 'https://www.diggin-data.de', ['target'=>'_blank']) ?> <?= $cTxt ?> | 
             <?= Html::a(Yii::t('app', 'Rev. {version}', ['version'=>Yii::$app->version]), ['/site/page', 'view'=>'changes']) ?> | 
             <?= Html::a(Yii::t('app', 'Contact'), ['/site/contact']) ?> |
+            <?= !$showMobile 
+                ? Html::a(Html::icon('smartphone') . Yii::t('app','Mobile View'), Url::current(['showMobile'=>1])) 
+                : Html::a(Html::icon('monitor') . Yii::t('app','Desktop View'), Url::current(['showMobile'=>0])) ?> | 
             <?= Html::a(Yii::t('app', 'About'), ['/site/page', 'view'=>'about']) ?>
         </p>
     </div>

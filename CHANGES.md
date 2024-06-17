@@ -2,6 +2,14 @@
 
 This page lists changes for this application.
 
+## 0.9.2
+
+2024-06-17
+
+* [Expenses](../expense/index) Search: added title
+* [Cost Project](../costproject) mobile view: reduced some fields
+* Added automatic detection of mobile/tablet device in order to select appropriate device view (mobile/desktop)
+
 ## 0.9.1
 
 2024-06-14

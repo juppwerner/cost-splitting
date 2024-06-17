@@ -34,7 +34,8 @@
         "2amigos/qrcode-library": "^2.0",
         "floor12/yii2-module-files": "dev-custom",
         "codemix/yii2-configloader": "dev-master",
-        "rudissaar/yii2-fpdf": "dev-master"
+        "rudissaar/yii2-fpdf": "dev-master",
+        "alexandernst/yii2-device-detect": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

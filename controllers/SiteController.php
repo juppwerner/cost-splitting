@@ -6,6 +6,7 @@ use Yii;
 use yii\bootstrap4\Html;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Response;
 
 use app\components\BaseController as Controller;
@@ -60,6 +61,43 @@ class SiteController extends Controller
         ];
     } // }}} 
 
+    public function beforeAction($action)
+    {
+        // your custom code here, if you want the code to run before action filters,
+        // which are triggered on the [[EVENT_BEFORE_ACTION]] event, e.g. PageCache or AccessControl
+
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+
+        // other custom code here
+        // Coming from user login? Show welcome alert
+        $r = null;
+        if(!empty(Yii::$app->request->getReferrer())) {
+            $r = str_replace(\yii\helpers\Url::home(true), '', Yii::$app->request->getReferrer());
+        }
+        if($r=='user/login') {
+            $msg = Yii::t('app', 'Welcome, {displayName}!', ['displayName'=>Yii::$app->user->identity->displayName]);
+            if(empty(Yii::$app->user->identity->profile->name))
+                $msg .= '<br>' . Html::a(Yii::t('app', 'Configure your profile'), ['/user/settings']);
+            Yii::$app->session->setFlash(
+                'success', 
+                $msg
+            );
+            /*Detect a mobile or tablet device*/
+            if(
+                (Yii::$app->devicedetect->isMobile() || Yii::$app->devicedetect->isTablet()) 
+                && 
+                (!isset($_GET['showMobile']))
+            ) {
+                $this->redirect(Url::current(['showMobile'=>1]));
+                return false;
+            }
+        }
+        return true; // or false to not run the action
+
+    }
+
     /**
      * Displays homepage.
      *
@@ -67,10 +105,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
         // Coming from user login? Show welcome alert
         $r = null;
-        if(!empty(Yii::$app->request->getReferrer()))
+        if(!empty(Yii::$app->request->getReferrer())) {
             $r = str_replace(\yii\helpers\Url::home(true), '', Yii::$app->request->getReferrer());
+        }
         if($r=='user/login') {
             $msg = Yii::t('app', 'Welcome, {displayName}!', ['displayName'=>Yii::$app->user->identity->displayName]);
             if(empty(Yii::$app->user->identity->profile->name))
