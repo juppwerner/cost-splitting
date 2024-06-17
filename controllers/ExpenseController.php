@@ -125,7 +125,7 @@ class ExpenseController extends Controller
         }
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) && $model->save()) { 
                 Yii::$app->session->setFlash(
                     'success',
                     Html::tag('h4', Yii::t('app', 'Create New Expense'))
@@ -157,7 +157,7 @@ class ExpenseController extends Controller
             else
                 $model->participants = explode(';', $model->participants);
         }
-        sort($participants);
+        asort($participants);
 
         // Get all titles
         $costprojectIDs = Costproject::find()
@@ -247,6 +247,7 @@ class ExpenseController extends Controller
             else
                 $model->participants = explode(';', $model->participants);
         }
+        asort($participants);
 
         $defaultTitles = [
             Yii::t('app', 'Accomodation'),

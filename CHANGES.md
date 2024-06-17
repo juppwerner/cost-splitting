@@ -2,6 +2,34 @@
 
 This page lists changes for this application.
 
+## 0.9.3
+
+2024-06-17
+
+* Expense: Fixed sorting participants
+
+## 0.9.2
+
+2024-06-17
+
+* [Expenses](../expense/index) Search: added title
+* [Cost Project](../costproject) mobile view: reduced some fields
+* Added automatic detection of mobile/tablet device in order to select appropriate device view (mobile/desktop)
+
+## 0.9.1
+
+2024-06-14
+
+* [Home Page](../site/index): Added welcome message after login, and eventually a link to confugre the user's profile
+* [Home Page](../site/index): Fixed site title and breadcrumbs title
+* Improved styling of grid view pagination buttons
+
+## 0.9.0
+
+2024-06-13
+
+* [Cost Breakdown](../costproject): Added export as PDF. Open the PDF from the _breakdown_ view
+
 ## 0.8.7
 
 2024-06-06

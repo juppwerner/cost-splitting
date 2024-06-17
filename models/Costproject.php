@@ -206,6 +206,11 @@ class Costproject extends BaseActiveRecord
     } 
     // }}} End Blameable methods
 
+    /**
+     * Returns if the cost project was paid or not
+     * 
+     * @return bool
+     */
     public function getIsPaid()
     {
         if(empty($this->orderId))

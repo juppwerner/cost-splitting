@@ -13,8 +13,8 @@ ChartJSAsset::register($this);
 
 /** @var yii\web\View $this */
 
-$this->title = Yii::t('app', 'Home') . ' :: ' . Yii::$app->name;
-
+$this->title = $title = Yii::t('app', 'Overview');
+$this->params['breadcrumbs'][] = $this->title;
 $this->context->fluid = false;
 
 Url::remember('', 'cost-project');
@@ -76,7 +76,7 @@ Url::remember('', 'cost-project');
         </div><!-- }}} end 1st row -->
         <div class="row mt-5"><!-- {{{ 2nd row -->
             <div class="col-lg-8 pr-2">
-                <?= $this->render('pages/about') ?>
+                <?php echo $this->render('pages/about'); $this->title=$title; array_pop($this->params['breadcrumbs']); ?>
             </div>
             <div class="col-lg-4">
                  <h2><?= Yii::t('app', 'News') ?></h2>

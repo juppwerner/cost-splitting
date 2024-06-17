@@ -21,9 +21,9 @@ use yii\bootstrap4\ActiveForm;
 
     <?= '' // $form->field($model, 'id') ?>
 
-    <?= '' // $form->field($model, 'title') ?>
-
     <?= $form->field($model, 'costprojectId')->dropDownList(ArrayHelper::map($costprojects, 'id', 'title'), ['autofocus'=>'autofocus', 'prompt'=>Yii::t('app', '--- Select ---')]) ?>
+
+    <?= $form->field($model, 'title') ?>
 
     <?= '' // $form->field($model, 'itemDate') ?>
 
