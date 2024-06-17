@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 0.9.3
+
+2024-06-17
+
+* Expense: Fixed sorting participants
+
 ## 0.9.2
 
 2024-06-17
