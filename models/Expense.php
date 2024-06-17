@@ -174,7 +174,10 @@ class Expense extends \yii\db\ActiveRecord
      */ 
     public function getCostitems() 
     { 
-        return $this->hasMany(Costitem::class, ['expenseId' => 'id']); 
+        $items = $this->hasMany(Costitem::class, ['expenseId' => 'id']); 
+        if($this->costproject->sortParticipants)
+            $items = $items->orderBy('participant');
+        return $items;
     }
     /**
      * Returns an array of participant names
