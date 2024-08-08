@@ -344,6 +344,7 @@ return [
     'Updated By' => 'Geändert von',
     'Use Currency' => 'Währung benutzen',
     'Use foreign currencies' => 'Fremdwährungen benutzen',
+    'User {0,number}' => 'Benutzer {0,number}',
     'User ID' => 'Benutzer-ID',
     'Username' => 'Benutzername',
     'Users' => 'Benutzer',
