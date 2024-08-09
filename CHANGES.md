@@ -2,6 +2,13 @@
 
 This page lists changes for this application.
 
+## 0.9.4
+
+2024-08-09
+
+* Cost Project View: Added button Add Expense] on top of view
+* Improved mobile views
+
 ## 0.9.3
 
 2024-06-17
