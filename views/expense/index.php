@@ -17,6 +17,11 @@ use app\models\Expense;
 
 $this->title = Yii::t('app', 'Expenses');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cost Projects'), 'url' => ['/costproject']];
+if(!empty($_GET['ExpenseSearch']['costprojectId'])) {
+    $costproject = Costproject::findOne((int)$_GET['ExpenseSearch']['costprojectId']);
+    if(!empty($costproject))
+        $this->params['breadcrumbs'][] = ['label' => $costproject->recordName, 'url' => ['costproject/view', 'id'=>$costproject->id]];
+}
 $this->params['breadcrumbs'][] = $this->title;
 
 // Get an array of all participants for the filter dropdown:
@@ -28,7 +33,7 @@ $splittingOptions = \app\models\Expense::getSplittingOptions();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Create Expense'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Create Expense'), ['create'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

@@ -51,6 +51,7 @@ $expensesDataProvider = new ActiveDataProvider([
 
     <div class="btn-group mb-3" role="group" aria-label="Buttons">
         <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
+        <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
         <?= Html::a(Html::icon('file-text') . Yii::t('app', 'Cost Breakdown'), ['breakdown', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']) ?>
         <?= Html::a(Html::icon('trash-2') . Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger btn-sm',
@@ -67,7 +68,6 @@ $expensesDataProvider = new ActiveDataProvider([
 
     <h3><?= Yii::t('app', 'Expenses') ?></h3>
     <p><?= Yii::t('app', 'This is the list of all expenses in this project.') ?></p>
-    <p><?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?></p>
     <?= GridView::widget([
         'id' => 'expenses-grid',
         'dataProvider' => $expensesDataProvider,

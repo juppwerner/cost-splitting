@@ -13,7 +13,6 @@ if(!empty($model->costprojectId)) {
         $this->params['breadcrumbs'][] = ['label' => $costproject->recordName, 'url' => ['costproject/view', 'id' => $model->costprojectId]];
     }
 }
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Expenses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="expense-create">
