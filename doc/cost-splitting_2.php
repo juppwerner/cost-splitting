@@ -7,27 +7,19 @@
 $csvSep = "\t";
 $projectCurrency = 'EUR';
 
+
+
+
+
+
+// {{{ $expensesTSV
+/*
 $participants = [ // {{{ 
     'Anna',
     'Ben',
     'Clara'
 ]; // }}} 
-
-$participants = [ // {{{ 
-    'Rainer',
-    'Joachim',
-    // 'Susanne',
-    // 'Sabine'
-]; // }}} 
-
-// Rerplace Payed By withe these names:
-$replaceNames = [
-    'Susanne' => 'Rainer',
-    'Sabine' => 'Joachim',
-];
-
-
-// {{{ $expensesTSV
+*/
 /*
 $expensesTSV = <<< EOL
 Datum	Name	Ausgabe	Währung	Kurs	Betrag	für was	Aufteilung	Gewichtung
@@ -42,6 +34,19 @@ EOL; // }}}
  */
 
 // {{{ $expensesTSV
+$participants = [ // {{{ 
+    'Rainer',
+    'Joachim',
+    // 'Susanne',
+    // 'Sabine'
+]; // }}} 
+
+// Replace Payed By with these names:
+$replaceNames = [
+    'Susanne' => 'Rainer',
+    'Sabine' => 'Joachim',
+];
+
 $expensesTSV = <<< EOL
 Date	Name	Expense	Currency	exchangeRate	Amount	What	Method	Weights
 2024-08-02	Joachim	18.86	EUR	1	18.86	Bier und Chips	EQUAL	1/1/1/1
@@ -139,7 +144,7 @@ foreach($expensesLines as $n=>$line) {
         $participantParticipation[$participant] = $participantParticipation[$participant] ?? 0;
         switch($method){
             case 'EQUAL';
-                // $flags doesn't matter
+                // $weights doesn't matter
                 $participantParticipation[$participant] += $amount / count($participants);
                 break;
             case 'PERCENTAGE':
@@ -189,6 +194,7 @@ while(max($t1[$r-1])>0.01) {
     $r++;
 }
 
+
 // Helper functions
 // print_r an array surounded with <pre>
 function par($array)
@@ -226,6 +232,20 @@ function array2table($array,$headers = null)
     return ob_get_clean();
 }
 
+$merged = $compensation;
+foreach($merged as $rowIdx=>$cells) {
+    foreach($cells as $col=>$value) {
+        if($col=='Recipient' and trim($value)!=='' and array_key_exists((int)($value-1), $participants))
+            $merged[$rowIdx]['Recipient'] = $participants[$value-1];
+        if($col=='Debitor' and trim($value)!=='' and array_key_exists((int)($value-1), $participants))
+            $merged[$rowIdx]['Debitor'] = $participants[$value-1];
+    }
+}
+foreach($t1 as $rowIdx=>$cells) {
+    foreach($cells as $colIdx=>$cell) {
+        $merged[$rowIdx][$participants[$colIdx]] = $cell;
+    }
+}
 ?>
 <!doctype html>
 <html>
@@ -250,14 +270,10 @@ function array2table($array,$headers = null)
         <h2>Balance:</h2>
         <?= array2table(array($participantBalance)); ?>
 
-        <h2>t1:</h2>
-        <?php par($t1); par($participants); ?>
-        <?= array2table($t1, $participants) // array_combine(array_merge($t1, $participants), $t1)); ?>
-
         <h2>Compensation:</h2>
-        <?= array2table($compensation); ?>
+        <?= array2table($merged); ?>
 
-        <h2>Settlements</h2>
+        <h2>Settlements:</h2>
         <?php for($i=1; $i<count($compensation); $i++) : ?>
         <strong><?= sprintf('%s pays to %s %0.2f %s.', $participants[$compensation[$i]['Debitor']-1], $participants[$compensation[$i]['Recipient']-1], $compensation[$i]['Amount'], $projectCurrency) ?></strong><br>
         <?php endfor; ?>
