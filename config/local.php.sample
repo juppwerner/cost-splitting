@@ -7,6 +7,15 @@ return [
     'timeZone' => 'Europe/Berlin', //time zone affect the formatter datetime format
     'language' => 'en',
     'components' => [
+        // 'db' => [
+        //     'class'     => 'yii\db\Connection',
+        //
+        //     // Whether to enable schema caching:
+        //     'enableSchemaCache' => true,
+        //
+        //     // Number of seconds that table metadata can remain valid in cache
+        //     'schemaCacheDuration' => 3600,
+        // ],
         'mailer' => [ // {{{ 
             'class' => 'yii\symfonymailer\Mailer',
             // send all mails to a file by default. You have to set
