@@ -6,6 +6,10 @@ use app\dictionaries\CurrencyCodesDictEwf;
 
 /** @var yii\web\View $this */
 /** @var app\models\Costproject $model */
+/** @var string $showUserBtns */
+
+if(!isset($showUserBtns))
+    $showUserBtns = true;
 
 $participants = $model->participants;
 if($model->sortParticipants) {
@@ -65,11 +69,11 @@ if($model->sortParticipants) {
             [
                 'label' => Yii::t('app', 'Users'),
                 'format' => 'raw',
-                'value' => function($data) {
+                'value' => function($data) use($showUserBtns) {
                     $tmp = [];
                     foreach($data->users as $user) {
                         $item =  $user->displayName.' (#'.$user->id.')';
-                        if((int)$user->id!==(int)Yii::$app->user->id && Yii::$app->user->can('updateCostproject', ['costproject'=>$data]))
+                        if($showUserBtns && (int)$user->id!==(int)Yii::$app->user->id && Yii::$app->user->can('updateCostproject', ['costproject'=>$data]))
                             $item .= ' ' . Html::a(Html::icon('trash-2'), ['remove-user', 'AddUserForm[costprojectId]'=>$data->id, 'AddUserForm[username]' => $user->username], [
                                 'class' => 'btn btn-primary btn-sm',
                                 'data' => [
@@ -79,7 +83,7 @@ if($model->sortParticipants) {
                             ]);
                         $tmp[] = $item;
                     }
-                    if($this->context->action->id!=='manage-users' && Yii::$app->user->can('updateCostproject', ['costproject'=>$data]))
+                    if($showUserBtns && $this->context->action->id!=='manage-users' && Yii::$app->user->can('updateCostproject', ['costproject'=>$data]))
                         $tmp[] = Html::a(Html::icon('plus-square') . Yii::t('app', 'Manage Users'), ['manage-users', 'id'=>$data->id], ['class' => 'btn btn-sm btn-primary mt-2']);
                     return join('<br>', $tmp);
                 }
@@ -134,9 +138,13 @@ $attributes = [
         },
     ],
 ];
+/* @var \yii\db\ActiveQuery $model->users */
 foreach($model->users as $n => $user) {
     $item =  $user->displayName.' (#'.$user->id.')';
-    if((int)$user->id!==(int)Yii::$app->user->id && Yii::$app->user->can('updateCostproject', ['costproject'=>$model])) {
+    if($showUserBtns 
+        && (int)$user->id!==(int)Yii::$app->user->id 
+        && Yii::$app->user->can('updateCostproject', ['costproject'=>$model])
+    ) {
         $item .= ' ' . Html::a(Html::icon('trash-2') /* . Yii::t('app', 'Delete') */, ['remove-user', 'AddUserForm[costprojectId]'=>$model->id, 'AddUserForm[username]' => $user->username], [
             'class' => 'btn btn-primary btn-sm',
             'data' => [
@@ -169,7 +177,7 @@ $attributes[] = [
         'template' => '<li class="list-group-item /* list-group-item-action */"{contentOptions}><div class="d-flex w-100 justify-content-between"><h5>{label}</h4></div><p>{value}</p></li>',
         'attributes' => $attributes,
     ]) ?>
-    <?php if($this->context->action->id!=='manage-users') : ?>
+    <?php if($showUserBtns && $this->context->action->id!=='manage-users') : ?>
     <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Manage Users'), ['manage-users', 'id'=>$model->id], ['class' => 'btn btn-sm btn-primary mt-2']) ?>
     <?php endif; ?>
 
