@@ -90,6 +90,7 @@ if($model->sortParticipants) {
             ],
             [
                 'attribute' => 'orderId',
+                'label' => Yii::t('app', 'Cost Splitting visible'),
                 'format' => 'raw',
                 'value' => function($data) {
                     if($data->isPaid)

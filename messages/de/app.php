@@ -93,6 +93,7 @@ return [
     'Cost Project: {title}' => 'Kostenprojekt: {title}',
     'Cost Projects' => 'Kostenprojekte',
     'Cost Splitting' => 'Kostenaufteilung',
+    'Cost Splitting visible' => 'Kostenaufteilung abrufbar',
     'Could not delete the cost project with ID #{id}.' => 'Konnte das Kostenprojekt mit ID #{id} nicht löschen.',
     'Could not initiate PayPal Checkout...' => 'Konnte PayPal Checkout nicht starten...',
     'Create' => 'Anlegen',
