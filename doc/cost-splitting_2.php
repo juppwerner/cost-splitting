@@ -140,7 +140,7 @@ foreach($expensesLines as $n=>$line) {
     ];
     // echo 'name: '.$name.', expense: '.$expense.', what: '.$what.'<br>';
     $participantExpenses[$name] += $expense * $exchangeRate;
-    foreach($participants as$n=> $participant) {
+    foreach($participants as $n=> $participant) {
         $participantParticipation[$participant] = $participantParticipation[$participant] ?? 0;
         switch($method){
             case 'EQUAL';
