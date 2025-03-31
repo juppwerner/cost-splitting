@@ -24,6 +24,7 @@ Url::remember('', 'cost-project');
 
     <p>
         <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'New Cost Project'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Html::icon('upload') . Yii::t('app', 'Import Cost Project'), ['import'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

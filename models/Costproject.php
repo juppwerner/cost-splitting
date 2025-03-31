@@ -208,6 +208,11 @@ class Costproject extends BaseActiveRecord
     } 
     // }}} End Blameable methods
 
+    public function getOrder()
+    {
+        return $this->hasOne(Order::class, ['id' => 'orderId']);
+    } 
+
     /**
      * Returns if the cost project was paid or not
      * 

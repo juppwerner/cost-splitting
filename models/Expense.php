@@ -122,7 +122,7 @@ class Expense extends \yii\db\ActiveRecord
             }],
             // ['pdf', 'file', 'extensions' => ['pdf']],
             // Documens allows to upload a few files with this extensions: docx, xlsx
-            ['documents', 'file', 'extensions' => ['docx', 'pdf', 'jpg', 'png'], 'maxFiles' => 5],
+            ['documents', 'file', 'extensions' => ['docx', 'pdf', 'jpg', 'jpeg', 'png'], 'maxFiles' => 5],
         ];
     }
     /**
