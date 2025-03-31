@@ -156,6 +156,7 @@ return [
     'Expense Type' => 'Ausgabenart',
     'Expense: {title}' => 'Ausgabe: {title}',
     'Expenses' => 'Ausgaben',
+    'Export' => 'Exportieren',
     'Total Expenses' => 'Gesamtausgaben',
     'Expires at' => 'Läuft ab am',
     'Filter State' => 'Filter-Status',
