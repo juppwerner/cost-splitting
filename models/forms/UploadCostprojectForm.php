@@ -21,7 +21,7 @@ class UploadCostprojectForm extends Model
     public function rules()
     {
         return [
-            [['exportFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'json'],
+            [['exportFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'json', 'checkExtensionByMimeType' => false],
         ];
     }
     
