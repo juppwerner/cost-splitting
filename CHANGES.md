@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 1.0.0
+
+2025-03-31
+
+* Lots of fixes
+
 ## 0.9.4
 
 2024-08-09
