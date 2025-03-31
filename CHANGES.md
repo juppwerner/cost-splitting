@@ -2,7 +2,7 @@
 
 This page lists changes for this application.
 
-## 1.1.0
+## 1.1.0, 1.1.1
 
 2025-03-31
 
