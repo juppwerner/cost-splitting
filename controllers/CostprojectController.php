@@ -184,15 +184,17 @@ class CostprojectController extends Controller
             }
         }
 
-        #// Replace Payed By with these names:
-        $replaceNames = [
-            'Susanne' => 'Rainer',
-            'Sabine' => 'Joachim',
-        ];
-
-
         $participants = array_values($model->getParticipantsList());
-        $participants = array_values($replaceNames);
+        $replaceNames = [];
+        if(!empty($model->replaceNames)) {
+            $replaceNames = \yii\helpers\Json::decode($model->replaceNames, true);
+            $participants = array_values($replaceNames);
+        } else {
+            foreach ($participants as $participant)
+                $replaceNames[$participant] = $participant;
+        }
+        // $participants = array_values($replaceNames);
+
         $expensesLines = [];
         $expensesLines[] = [
             Yii::t('app', 'Date'),
@@ -222,6 +224,12 @@ class CostprojectController extends Controller
                 case Expense::SPLITTING_EQUAL:
                     $expensesLines[count($expensesLines)-1][] = join('/', str_split(str_repeat('1', count($participants))));
                     break;
+                case Expense::SPLITTING_SELECTED_PARTICIPANTS:
+                    $expensesLines[count($expensesLines) - 1][] = $expense->participants;
+                    break;
+                case Expense::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM:
+                    $expensesLines[count($expensesLines) - 1][] = '(CUSTOM: TODO)';
+                    break;
             }
         }
         $display = [];
@@ -236,7 +244,6 @@ class CostprojectController extends Controller
         foreach($expensesLines as $n=>$line) {
             if($n==0)
                 continue;
-            // echo 'line: '.$line.'<br />';
             list($date, $name, $expense, $currency, $exchangeRate, $amount, $what, $method, $weights) = $line;
             $expense = str_replace([',', ' €'], ['.', ''], $expense);
             $amount =  $expense * $exchangeRate;
@@ -269,6 +276,8 @@ class CostprojectController extends Controller
                 'validation' => $validation,
             ];
             // echo 'name: '.$name.', expense: '.$expense.', what: '.$what.'<br>';
+            if (!isset($participantExpenses[$name]))
+                $participantExpenses[$name] = 0;
             $participantExpenses[$name] += $expense * $exchangeRate;
             foreach($participants as $n=> $participant) {
                 $participantParticipation[$participant] = $participantParticipation[$participant] ?? 0;
@@ -337,20 +346,33 @@ class CostprojectController extends Controller
         foreach($t1 as $rowIdx=>$cells) {
             foreach($cells as $colIdx=>$cell) {
                 $merged[$rowIdx][$participants[$colIdx]] = $cell;
+                if (abs((float)$cell) < 0.01)
+                    $merged[$rowIdx][$participants[$colIdx]] = '';
             }
         }
-
+        $expensesDataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $display,
+            'pagination' => false,
+            'sort' => [
+                'defaultOrder' => [
+                    'date' => SORT_ASC,
+                    'what' => SORT_ASC,
+                ],
+                'attributes' => ['date', 'name', 'what','amount', 'expense'],
+            ],
+        ]);
         return $this->render('breakdown-alt', [
-            'model'     => $model,
-            'totalExpenses' => $totalExpenses,
-            'participants' => $participants,
-            'display' => $display,
-            'replaceNames' => $replaceNames,
-            'participantExpenses'  => $participantExpenses,
-            'participantParticipation' => $participantParticipation,
-            'participantBalance' => $participantBalance,
-            'compensation' => $compensation,
-            'merged' => $merged,
+            'model'                     => $model,
+            'totalExpenses'             => $totalExpenses,
+            'participants'              => $participants,
+            'display'                   => $display,
+            'expensesDataProvider'       => $expensesDataProvider,
+            'replaceNames'              => $replaceNames,
+            'participantExpenses'       => $participantExpenses,
+            'participantParticipation'  => $participantParticipation,
+            'participantBalance'        => $participantBalance,
+            'compensation'              => $compensation,
+            'merged'                    => $merged,
         ]);
     }
 
