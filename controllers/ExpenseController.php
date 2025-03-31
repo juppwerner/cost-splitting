@@ -132,7 +132,7 @@ class ExpenseController extends Controller
                     . Html::tag('div', Yii::t('app', 'The expense <b>{record}</b> has been created.', ['record'=>sprintf('%s - %s - %s - %s', $model->title, Yii::$app->formatter->asDate($model->itemDate, 'short'), $model->payedBy, Yii::$app->formatter->asCurrency($model->amount, $model->currency))])) . '<br>'
                     . Html::a(Html::icon('eye') . Yii::t('app', 'View Expense'), ['view', 'id'=>$model->id], ['class'=>'btn btn-primary btn-sm']) . ' '
                     . Html::a(Html::icon('file-text') . Yii::t('app', 'View Project'), ['costproject/view', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm']) . ' '
-                    . Html::a(Html::icon('file-text') . Yii::t('app', 'View Cost Breakdown'), ['costproject/breakdown', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm'])
+                    . Html::a(Html::icon('file-text') . Yii::t('app', 'View Cost Breakdown'), ['costproject/breakdown-alt', 'id'=>$model->costprojectId], ['class'=>'btn btn-primary btn-sm'])
                 );
                 return $this->redirect(['create', 'Expense[costprojectId]' => $model->costprojectId, 'lastId' => $model->id]);
             }

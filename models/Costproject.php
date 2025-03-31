@@ -15,6 +15,7 @@ use app\components\BaseActiveRecord;
  * @property string|null $title
  * @property string $participants
  * @property bool $sortParticipants
+ * @property string $replaceNames
  * @property boolean $useCurrency
  * @property string $currency
  * @property string $description
@@ -71,8 +72,8 @@ class Costproject extends BaseActiveRecord
             [['sortParticipants', 'useCurrency'], 'boolean'],
             [['currency'], 'string', 'min'=>3, 'max' => 255],
             [['description'], 'safe'],
-            [['participants'], 'trim'],
-            [['participants'], 'safe'],
+            [['participants', 'replaceNames'], 'trim'],
+            [['participants', 'replaceNames'], 'safe'],
         ];
     }
     /**
@@ -85,7 +86,8 @@ class Costproject extends BaseActiveRecord
             'title' => Yii::t('app', 'Title'),
             'participants' => Yii::t('app', 'Participants'),
             'sortParticipants' => Yii::t('app', 'Sort Participants'),
-            'useCurrency' => Yii::t('app', 'Use Currency'),
+            'replaceNames' => Yii::t('app', 'Teilnehmer zusammenfassen'),
+            'useCurrency' => Yii::t('app', 'Use Foreign Currency'),
             'currency' => Yii::t('app', 'Currency'),
             'description' => Yii::t('app', 'Description'), 
             'orderId' => Yii::t('app', 'Payment'),
@@ -225,5 +227,16 @@ class Costproject extends BaseActiveRecord
             Yii::error($e->getMessage(), __METHOD__);
             return false;
         }
+    }
+
+    public function getReplaceNamesDisplay()
+    {
+        if (empty($this->replaceNames))
+            return [];
+        $data = \yii\helpers\Json::decode($this->replaceNames, false);
+        $result = [];
+        foreach ($data as $k => $v)
+            $result[] = sprintf('%s => %s', $k, $v);
+        return $result;
     }
 }

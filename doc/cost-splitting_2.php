@@ -1,28 +1,95 @@
 <?php
+/**
+ * Berechnung siehe:
+ * https://www.exceltactics.com/how-to-split-bills-and-share-expenses-using-a-free-excel-spreadsheet/
+ */
+
 $csvSep = "\t";
 $projectCurrency = 'EUR';
 
+
+
+
+
+
+// {{{ $expensesTSV
+/*
 $participants = [ // {{{ 
     'Anna',
     'Ben',
     'Clara'
 ]; // }}} 
-// {{{ $expensesTSV
+*/
+/*
 $expensesTSV = <<< EOL
 Datum	Name	Ausgabe	Währung	Kurs	Betrag	für was	Aufteilung	Gewichtung
 01.08.2022	Anna	39,95	USD	1	0	Internet 7/2022	EQUAL	1/1/1
-03.08.2022	Ben	365,00	€	1	0	Miete 8/2022	PERCENTAGE	0.333333/0/0.333333
+03.08.2022	Ben	365,00	€	1	0	Miete 8/2022	EQUAL	1/1/1
 04.08.2022	Clara	96,00	€	1	0	Abschlag Stadtwerke	EQUAL	1/1/1
 11.08.2022	Anna	13,79	€	1	0	Putzmittel	EQUAL	1/1/1
 13.08.2022	Clara	14,50	€	1	0	Obst und Gemüse	EQUAL	1/1/1
 13.08.2022	Ben	77,60	€	1	0	Getränke Party	EQUAL	1/1/1
--	Ben	28,56	€	1	0	Lebensmittel Rewe	PERCENTAGE	0/1/1
+-	Ben	28,56	€	1	0	Lebensmittel Rewe	EQUAL	1/1/1
+EOL; // }}} 
+ */
+
+// {{{ $expensesTSV
+$participants = [ // {{{ 
+    'Rainer',
+    'Joachim',
+    // 'Susanne',
+    // 'Sabine'
+]; // }}} 
+
+// Replace Payed By with these names:
+$replaceNames = [
+    'Susanne' => 'Rainer',
+    'Sabine' => 'Joachim',
+];
+
+$expensesTSV = <<< EOL
+Date	Name	Expense	Currency	exchangeRate	Amount	What	Method	Weights
+2024-08-02	Joachim	18.86	EUR	1	18.86	Bier und Chips	EQUAL	1/1/1/1
+2024-08-02	Susanne	150.00	EUR	1	150	Essen	EQUAL	1/1/1/1
+2024-08-03	Joachim	60.00	EUR	1	60	Stadtrundfahrt 	EQUAL	1/1/1/1
+2024-08-03	Sabine	47.00	EUR	1	47	Currywurst und Bier am Pier 7	EQUAL	1/1/1/1
+2024-08-03	Joachim	46.54	EUR	1	46.54	Einkauf Norma	EQUAL	1/1/1/1
+2024-08-03	Rainer	35.00	EUR	1	35	Eiscafé 	EQUAL	1/1/1/1
+2024-08-04	Rainer	20.00	EUR	1	20	Eintritt Freilichtmuseum	EQUAL	1/1/1/1
+2024-08-04	Rainer	16.00	EUR	1	16	Rhabarberschorle	EQUAL	1/1/1/1
+2024-08-04	Joachim	17.30	EUR	1	17.3	Frühstück Tankstelle	EQUAL	1/1/1/1
+2024-08-04	Joachim	33.60	EUR	1	33.6	Kuchen Café Prag	EQUAL	1/1/1/1
+2024-08-04	Rainer	15.00	EUR	1	15	Getränke/Tanke Schwerin	EQUAL	1/1/1/1
+2024-08-05	Rainer	26.00	EUR	1	26	Bäckerei Lübz	EQUAL	1/1/1/1
+2024-08-05	Joachim	6.52	EUR	1	6.52	Brötchen Frühstück 	EQUAL	1/1/1/1
+2024-08-05	Joachim	12.10	EUR	1	12.1	Wurst Käse Butter Norma	EQUAL	1/1/1/1
+2024-08-05	Susanne	111.91	EUR	1	111.91	NETTO 	EQUAL	1/1/1/1
+2024-08-05	Susanne	15.00	EUR	1	15	Getränke/Abfahrt Lübz	EQUAL	1/1/1/1
+2024-08-05	Susanne	10.00	EUR	1	10	Trinkgeld Einweiser	EQUAL	1/1/1/1
+2024-08-06	Joachim	38.14	EUR	1	38.14	Bier Olivenöl Wasser REWE	EQUAL	1/1/1/1
+2024-08-06	Joachim	28.00	EUR	1	28	Hafengebühr Plau am See	EQUAL	1/1/1/1
+2024-08-06	Joachim	4.00	EUR	1	4	Kurtaxe Plau am See	EQUAL	1/1/1/1
+2024-08-07	Sabine	9.15	EUR	1	9.15	Bäckerei Plau	EQUAL	1/1/1/1
+2024-08-07	Susanne	14.00	EUR	1	14	Einkauf in Waren	EQUAL	1/1/1/1
+2024-08-07	Joachim	68.80	EUR	1	68.8	Hafengebühr Waren	EQUAL	1/1/1/1
+2024-08-08	Sabine	9.53	EUR	1	9.53	Brötchen Waren	EQUAL	1/1/1/1
+2024-08-08	Joachim	41.00	EUR	1	41	Hafengebühr Plau am See inkl. Dusch/Strom/Kurtaxe	EQUAL	1/1/1/1
+2024-08-08	Joachim	43.61	EUR	1	43.61	Einkauf REWE Plau am See	EQUAL	1/1/1/1
+2024-08-09	Susanne	12.55	EUR	1	12.55	Bäckerei Plau 2	EQUAL	1/1/1/1
+2024-08-09	Joachim	40.00	EUR	1	40	Hafengebühr Plau am See inkl. Dusch/Strom/Kurtaxe	EQUAL	1/1/1/1
+2024-08-09	Susanne	19.60	EUR	1	19.6	Lebensmittel REWE Plau	EQUAL	1/1/1/1
+2024-08-10	Sabine	9.82	EUR	1	9.82	Bäckerei Plau 3	EQUAL	1/1/1/1
+2024-08-10	Susanne	30.68	EUR	1	30.68	NETTO Markt in Parchim	EQUAL	1/1/1/1
+2024-08-10	Sabine	18.00	EUR	1	18	Hafengebühr Parchim	EQUAL	1/1/1/1
+2024-08-10	Joachim	109.00	EUR	1	109	Pizzeria Parchim inkl. Trinkgeld	EQUAL	1/1/1/1
 EOL; // }}} 
 
+/*
 $expensesTSV = <<< EOL
 Datum	Name	Ausgabe	Währung	Kurs	Betrag	für was	Aufteilung	Gewichtung
 01.08.2022	Anna	40	USD	1	0	Internet 7/2022	PERCENTAGE	0.33/0.33/0.33
 EOL;
+ */
 
 $expensesLines = explode("\n", str_replace("\r\n", "\n", $expensesTSV));
 // print_r($expensesLines);
@@ -44,6 +111,9 @@ foreach($expensesLines as $n=>$line) {
     $expense = str_replace([',', ' €'], ['.', ''], $expense);
     $amount =  $expense * $exchangeRate;
     $weights = explode('/', $weights);
+    if(array_key_exists($name, $replaceNames)) {
+        $name = $replaceNames[$name];
+    }
     // Validate row
     $validation = 'OK';
     switch($method){
@@ -70,11 +140,11 @@ foreach($expensesLines as $n=>$line) {
     ];
     // echo 'name: '.$name.', expense: '.$expense.', what: '.$what.'<br>';
     $participantExpenses[$name] += $expense * $exchangeRate;
-    foreach($participants as$n=> $participant) {
+    foreach($participants as $n=> $participant) {
         $participantParticipation[$participant] = $participantParticipation[$participant] ?? 0;
         switch($method){
             case 'EQUAL';
-                // $flags doesn't matter
+                // $weights doesn't matter
                 $participantParticipation[$participant] += $amount / count($participants);
                 break;
             case 'PERCENTAGE':
@@ -124,6 +194,7 @@ while(max($t1[$r-1])>0.01) {
     $r++;
 }
 
+
 // Helper functions
 // print_r an array surounded with <pre>
 function par($array)
@@ -134,15 +205,18 @@ function par($array)
 }
 
 // Print an array as HTML table
-function array2table($array)
+function array2table($array,$headers = null)
 {
+    if(is_null($headers))
+        $headers = array_keys(current($array));
+
     ob_start();
 ?>
 <?php if (count($array) > 0): ?>
 <table border="1">
   <thead>
     <tr>
-      <th><?php echo implode('</th><th>', array_keys(current($array))); ?></th>
+      <th><?php echo implode('</th><th>',$headers); ?></th>
     </tr>
   </thead>
   <tbody>
@@ -158,6 +232,20 @@ function array2table($array)
     return ob_get_clean();
 }
 
+$merged = $compensation;
+foreach($merged as $rowIdx=>$cells) {
+    foreach($cells as $col=>$value) {
+        if($col=='Recipient' and trim($value)!=='' and array_key_exists((int)($value-1), $participants))
+            $merged[$rowIdx]['Recipient'] = $participants[$value-1];
+        if($col=='Debitor' and trim($value)!=='' and array_key_exists((int)($value-1), $participants))
+            $merged[$rowIdx]['Debitor'] = $participants[$value-1];
+    }
+}
+foreach($t1 as $rowIdx=>$cells) {
+    foreach($cells as $colIdx=>$cell) {
+        $merged[$rowIdx][$participants[$colIdx]] = $cell;
+    }
+}
 ?>
 <!doctype html>
 <html>
@@ -182,13 +270,10 @@ function array2table($array)
         <h2>Balance:</h2>
         <?= array2table(array($participantBalance)); ?>
 
-        <h2>t1:</h2>
-        <?= array2table($t1); ?>
-
         <h2>Compensation:</h2>
-        <?= array2table($compensation); ?>
+        <?= array2table($merged); ?>
 
-        <h2>Settlements</h2>
+        <h2>Settlements:</h2>
         <?php for($i=1; $i<count($compensation); $i++) : ?>
         <strong><?= sprintf('%s pays to %s %0.2f %s.', $participants[$compensation[$i]['Debitor']-1], $participants[$compensation[$i]['Recipient']-1], $compensation[$i]['Amount'], $projectCurrency) ?></strong><br>
         <?php endfor; ?>

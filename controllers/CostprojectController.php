@@ -6,6 +6,7 @@ use app\components\Html;
 use app\dictionaries\CurrencyCodesDictEwf;
 use app\dictionaries\ExpenseTypesDict;
 use app\models\Costproject;
+use app\models\Expense;
 use app\models\Order;
 use app\models\Orderitem;
 use app\models\forms\AddUserForm;
@@ -49,7 +50,7 @@ class CostprojectController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['view', 'breakdown', 'breakdown-pdf'],
+                            'actions' => ['view', 'breakdown', 'breakdown-alt', 'breakdown-pdf'],
                             'roles' => ['viewCostproject'],
                         ],
                         [
@@ -156,6 +157,225 @@ class CostprojectController extends Controller
             'expensesDataProvider'  => $expensesDataProvider
         ]);
     }
+
+    /**
+     * Displays the cost breakdown for a single Costproject model.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionBreakdownAlt($id)
+    {
+        $this->fluid = true;
+        $model = $this->findModel($id);
+        // Was project payed already?
+        if(is_null($model->orderId)) {
+            // Check avalable deposit
+            $result = Order::pay($id);
+            if(!$result) {
+                Yii::$app->session->addFlash('warning', 
+                    Html::tag('h4', Yii::t('app', 'Payment Required') ) .
+                    Yii::t('app', 'Please pay a small fee in order to view the cost breakdown.') .
+                    '<br>' . Html::tag('div', Html::tag('span', 'Loading...', ['class'=>"sr-only"]), ['class' => "spinner-border text-primary", 'role' => "status"])
+                );
+                return $this->redirect(['checkout', 'id'=>$id]);
+            } else {
+                $model = $this->findModel($id);
+            }
+        }
+
+        $participants = array_values($model->getParticipantsList());
+        $replaceNames = [];
+        if(!empty($model->replaceNames)) {
+            $replaceNames = \yii\helpers\Json::decode($model->replaceNames, true);
+            $participants = array_values($replaceNames);
+        } else {
+            foreach ($participants as $participant)
+                $replaceNames[$participant] = $participant;
+        }
+        // $participants = array_values($replaceNames);
+
+        $expensesLines = [];
+        $expensesLines[] = [
+            Yii::t('app', 'Date'),
+            Yii::t('app', 'Name'),
+            Yii::t('app', 'Expense'),
+            Yii::t('app', 'Currency'),
+            Yii::t('app', 'ExchangeRate'),
+            Yii::t('app', 'Amount'),
+            Yii::t('app', 'What'),
+            Yii::t('app', 'Splitting'),
+            Yii::t('app', 'Weights')
+        ];
+        $totalExpenses = 0;
+        foreach($model->expenses as $expense) {
+            $expensesLines[] = [
+                $expense->itemDate,
+                $expense->payedBy,
+                (float) $expense->amount,
+                $expense->currency,
+                $expense->exchangeRate,
+                $expense->exchangeRate * $expense->amount,
+                $expense->title,
+                $expense->splitting,
+            ];
+            $totalExpenses += $expense->exchangeRate * $expense->amount;
+            switch($expense->splitting) {
+                case Expense::SPLITTING_EQUAL:
+                    $expensesLines[count($expensesLines)-1][] = join('/', str_split(str_repeat('1', count($participants))));
+                    break;
+                case Expense::SPLITTING_SELECTED_PARTICIPANTS:
+                    $expensesLines[count($expensesLines) - 1][] = $expense->participants;
+                    break;
+                case Expense::SPLITTING_SELECTED_PARTICIPANTS_CUSTOM:
+                    $expensesLines[count($expensesLines) - 1][] = '(CUSTOM: TODO)';
+                    break;
+            }
+        }
+        $display = [];
+
+        $participantExpenses = [];
+        $participantParticipation = [];
+        $participantBalance = [];
+
+        foreach($participants as $participant) 
+            $participantExpenses[$participant] = 0;
+
+        foreach($expensesLines as $n=>$line) {
+            if($n==0)
+                continue;
+            list($date, $name, $expense, $currency, $exchangeRate, $amount, $what, $method, $weights) = $line;
+            $expense = str_replace([',', ' €'], ['.', ''], $expense);
+            $amount =  $expense * $exchangeRate;
+            $weights = explode('/', $weights);
+            if(array_key_exists($name, $replaceNames)) {
+                $name = $replaceNames[$name];
+            }
+            // Validate row
+            $validation = 'OK';
+            switch($method){
+                case 'PERCENTAGE':
+                    if(abs(1-array_sum($weights))>0.009)
+                        $validation = sprintf('Sum of weights %s is not equal to 1', array_sum($weights));
+                    break;
+                case 'AMOUNT':
+                    if(array_sum($weights)!=$expense)
+                        $validation = sprintf('Sum of weights %0.2f is not equal to expense %0.2f', array_sum($weights), $expense);
+                    break;
+            }
+            $display[] = [
+                'date' => $date,
+                'name' => $name,
+                'expense' => $expense,
+                'currency' => $currency,
+                'exchangeRate' => $exchangeRate,
+                'amount' => sprintf('%0.2f', $amount),
+                'what' => $what,
+                'method' => $method,
+                'weights' => join(' / ', $weights),
+                'validation' => $validation,
+            ];
+            // echo 'name: '.$name.', expense: '.$expense.', what: '.$what.'<br>';
+            if (!isset($participantExpenses[$name]))
+                $participantExpenses[$name] = 0;
+            $participantExpenses[$name] += $expense * $exchangeRate;
+            foreach($participants as $n=> $participant) {
+                $participantParticipation[$participant] = $participantParticipation[$participant] ?? 0;
+                switch($method){
+                    case 'EQUAL';
+                        // $weights doesn't matter
+                        $participantParticipation[$participant] += $amount / count($participants);
+                        break;
+                    case 'PERCENTAGE':
+                        $participantParticipation[$participant] += $weights[$n] * $amount / array_sum($weights);
+                        break;
+                    case 'AMOUNT':
+                        $participantParticipation[$participant] += $weights[$n] * $exchangeRate;
+                        break;
+                }
+            }
+        }
+
+        // Fore ach participant, calculate balance of expense and participation
+        foreach($participants as $participant)
+            $participantBalance[$participant] = -($participantExpenses[$participant] - $participantParticipation[$participant]);
+        
+        // Initialise array with settlement transactions
+        $t1 = [];
+        foreach($participants as $n=>$participant)
+            $t1[0][$n] = $participantBalance[$participant];
+        
+        // Initialise array with compensation payments
+        $compensation = [
+            0 => [
+                Yii::t('app', 'Recipient') => '',
+                Yii::t('app', 'Debitor') => '', 
+                Yii::t('app', 'Amount') => '',
+            ],
+        ];
+        
+        // Calculate compensations and settlement transactions
+        $r=1;
+        // only continue if there are any amounts in previous row which are bigger than 0.01
+        while(max($t1[$r-1])>0.01) {
+            $min = min($t1[$r-1]);
+            $max = max($t1[$r-1]);
+            // Get Index of participant who paid most (amount is most negative one)
+            $compensation[$r][Yii::t('app', Yii::t('app', 'Recipient'))] = array_search($min, $t1[$r-1])+1;
+            // Get Index of participant who received most ( amount is most positive one)
+            $compensation[$r][Yii::t('app', 'Debitor')] = array_search($max, $t1[$r-1])+1;
+            // Get amount as minimum of absolute amounts of recipient or debitor
+            $compensation[$r][Yii::t('app', 'Amount')] = min(abs($t1[$r-1][$compensation[$r][Yii::t('app', 'Recipient')]-1]), abs($t1[$r-1][$compensation[$r][Yii::t('app', 'Debitor')]-1]));
+            // add t1 row;
+            $t1[$r] = $t1[$r-1];
+            // Reduce Amount at Debitor 
+            $t1[$r][$compensation[$r][Yii::t('app', 'Debitor')]-1] -= $compensation[$r][Yii::t('app', 'Amount')];
+            // Add Amount to Recipient
+            $t1[$r][$compensation[$r][Yii::t('app', 'Recipient')]-1] += $compensation[$r][Yii::t('app', 'Amount')];
+            $r++;
+        }
+        $merged = $compensation;
+        foreach($merged as $rowIdx=>$cells) {
+            foreach($cells as $col=>$value) {
+                if($col==Yii::t('app', 'Recipient') and trim($value)!=='' and array_key_exists((int)($value-1), $participants))
+                    $merged[$rowIdx][Yii::t('app', 'Recipient')] = $participants[$value-1];
+                if($col==Yii::t('app', 'Debitor') and trim($value)!=='' and array_key_exists((int)($value-1), $participants))
+                    $merged[$rowIdx][Yii::t('app', 'Debitor')] = $participants[$value-1];
+            }
+        }
+        foreach($t1 as $rowIdx=>$cells) {
+            foreach($cells as $colIdx=>$cell) {
+                $merged[$rowIdx][$participants[$colIdx]] = $cell;
+                if (abs((float)$cell) < 0.01)
+                    $merged[$rowIdx][$participants[$colIdx]] = '';
+            }
+        }
+        $expensesDataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $display,
+            'pagination' => false,
+            'sort' => [
+                'defaultOrder' => [
+                    'date' => SORT_ASC,
+                    'what' => SORT_ASC,
+                ],
+                'attributes' => ['date', 'name', 'what','amount', 'expense'],
+            ],
+        ]);
+        return $this->render('breakdown-alt', [
+            'model'                     => $model,
+            'totalExpenses'             => $totalExpenses,
+            'participants'              => $participants,
+            'display'                   => $display,
+            'expensesDataProvider'       => $expensesDataProvider,
+            'replaceNames'              => $replaceNames,
+            'participantExpenses'       => $participantExpenses,
+            'participantParticipation'  => $participantParticipation,
+            'participantBalance'        => $participantBalance,
+            'compensation'              => $compensation,
+            'merged'                    => $merged,
+        ]);
+    }
+
 
     /**
      * Displays the cost breakdown for a single Costproject model as PDF
@@ -795,3 +1015,5 @@ class CostprojectController extends Controller
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }
+
+

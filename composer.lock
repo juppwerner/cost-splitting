@@ -8106,21 +8106,22 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "kartik-v/yii2-grid": 20,
-        "kartik-v/yii2-bootstrap4-dropdown": 20,
-        "kartik-v/yii2-widget-select2": 20,
-        "thrieu/yii2-grid-view-state": 20,
-        "kartik-v/yii2-widget-typeahead": 20,
-        "floor12/yii2-module-files": 20,
+        "alexandernst/yii2-device-detect": 20,
+        "bizley/migration": 20,
         "codemix/yii2-configloader": 20,
+        "floor12/yii2-module-files": 20,
+        "kartik-v/yii2-bootstrap4-dropdown": 20,
+        "kartik-v/yii2-grid": 20,
+        "kartik-v/yii2-widget-select2": 20,
+        "kartik-v/yii2-widget-typeahead": 20,
         "rudissaar/yii2-fpdf": 20,
-        "bizley/migration": 20
+        "thrieu/yii2-grid-view-state": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6.0"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

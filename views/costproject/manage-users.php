@@ -31,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2><?= Yii::t('app', 'Add New User') ?></h2>
 
     <p><?= Yii::t('app', 'Add new users to this project.') ?><br>
-        <?= Yii::t('app', 'After having saved, the new user will receive an email containing the link to this project.') ?></p>	
+        <?= Yii::t('app', 'The user must be already registered within this application.') ?><br>
+        <?= Yii::t('app', 'After having saved, the newly assigned user will receive an email containing the link to this project.') ?></p>	
 
     <?php $form = ActiveForm::begin(); ?>
 
