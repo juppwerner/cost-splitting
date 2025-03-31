@@ -2,6 +2,12 @@
 
 This page lists changes for this application.
 
+## 1.1.0
+
+2025-03-31
+
+* Added exporting and [importing](../costproject/import) a cost project
+
 ## 1.0.0
 
 2025-03-31

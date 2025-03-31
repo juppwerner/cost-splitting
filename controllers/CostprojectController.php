@@ -10,6 +10,7 @@ use app\models\Expense;
 use app\models\Order;
 use app\models\Orderitem;
 use app\models\forms\AddUserForm;
+use app\models\forms\UploadCostprojectForm;
 use app\models\search\CostprojectSearch;
 
 // use rudissaar\fpdf\FPDFPlus;
@@ -23,6 +24,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\VarDumper as VD;
+use yii\web\UploadedFile;
 
 /**
  * CostprojectController implements the CRUD actions for Costproject model.
@@ -50,12 +52,12 @@ class CostprojectController extends Controller
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['view', 'breakdown', 'breakdown-alt', 'breakdown-pdf'],
+                            'actions' => ['view', 'breakdown', 'breakdown-alt', 'breakdown-pdf', 'export'],
                             'roles' => ['viewCostproject'],
                         ],
                         [
                             'allow' => true,
-                            'actions' => ['create'],
+                            'actions' => ['create', 'import'],
                             'roles' => ['createCostproject'],
                         ],
                         [
@@ -117,6 +119,61 @@ class CostprojectController extends Controller
             'model' => $this->findModel($id),
         ]);
     } 
+
+    /**
+     * Exports a cost project as JSON
+     * @param mixed $id Costproject ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionExport($id) 
+    {
+        $result = [
+            'date_exported' => date('Y-m-d H:i:s'),
+            'Costproject' => [],
+            'Users' => [],
+        ];
+
+        $model = $this->findModel($id);
+        $result['Costproject']['attributes'] = $model->attributes;
+        $result['Costproject']['totalExpenses'] = $model->getTotalExpenses();
+        // Order
+        $order = $model->order;
+        if(!empty($order))
+            $result['Costproject']['Order'] = $order->attributes;
+        else
+            $result['Costproject']['Order'] = null;
+        // Expenses
+        $result['Costproject']['Expenses'] = [];
+        foreach($model->expenses as $n=>$expense)
+        {
+            $attributes = $expense->attributes;
+            // unset($attributes['password_hash'], $attributes['auth_key']);
+            $result['Costproject']['Expenses'][] = $attributes;
+            $result['Costproject']['Expenses'][$n]['Attachments'] = [];
+            foreach($expense->documents as $m=>$document) {
+                $result['Costproject']['Expenses'][$n]['Documents'][] = [
+                    'attributes' => $document->attributes,
+                ];
+                $path = $document->getRootPath();
+                $result['Costproject']['Expenses'][$n]['Documents'][$m]['file'] = base64_encode(file_get_contents($path));
+            }
+        }
+        // Users
+        foreach($model->users as $n=>$user)
+        {
+            $attributes = $user->attributes;
+            unset($attributes['password_hash'], $attributes['auth_key']);
+            $result['Users'][] = $attributes;
+        }
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return Yii::$app->response->sendContentAsFile(
+            \yii\helpers\Json::encode($result, JSON_PRETTY_PRINT ), 
+            'Costproject_'.$id.'.json', 
+            ['mimeType' => 'application/json']
+        );
+    }
 
     /**
      * Displays the cost breakdown for a single Costproject model.
@@ -884,6 +941,29 @@ class CostprojectController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Imports a previously exported costproject
+     * @return string|Yii\web\Response
+     */
+    public function actionImport() 
+    {
+        $model = new UploadCostprojectForm();
+        if (Yii::$app->request->isPost) {
+            $model->exportFile = UploadedFile::getInstance($model, 'exportFile');
+            if ($model->upload() && $new_id = $model->import()) {
+                // file is uploaded successfully
+                Yii::$app->session->addFlash(
+                    'success',
+                    Html::tag('h4', 'Cost Project Upload')
+                    . Yii::t('app', 'The cost project has beeen uploaded successfully.')
+                );
+                return $this->redirect(['view', 'id'=>$new_id]);
+            }
+        }
+
+        return $this->render('import', ['model' => $model]);
     }
 
     /**

@@ -53,6 +53,7 @@ $expensesDataProvider = new ActiveDataProvider([
         <?= Html::a(Html::icon('edit') . Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
         <?= Html::a(Html::icon('plus-square') . Yii::t('app', 'Add Expense'), ['/expense/create', 'Expense[costprojectId]'=>$model->id], ['class' =>  'btn btn-primary btn-sm']) ?>
         <?= Html::a(Html::icon('file-text') . Yii::t('app', 'Cost Breakdown'), ['breakdown-alt', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']) ?>
+        <?= Html::a(Html::icon('download') . Yii::t('app', 'Export'), ['export', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']) ?>
         <?= Html::a(Html::icon('trash-2') . Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger btn-sm',
             'data' => [
