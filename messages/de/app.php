@@ -182,6 +182,7 @@ return [
     'Import' => 'Import',
     'Import File' => 'Import-Datei',
     'Import Cost Project' => 'Kostenprojekt importieren',
+    'Import a costproject including expenses and documents.' => 'Ein Kostenprojekt inlusive Ausgaben und Belegen importieren',
     'Import EZB Historic Currency Exchange Rates' => 'Historische EZB-Währumgs-Umtauschkutse importieren',
     'In order to see the cost breakdown, a small payment ist required.' => 'Um die Kosteaufteilung sehen zu können, wird eine kleine Gebühr fällig.',
     'Indian rupee' => 'Indische Rupie',
