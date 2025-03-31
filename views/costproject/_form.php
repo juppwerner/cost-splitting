@@ -20,7 +20,8 @@ use app\dictionaries\CurrencyCodesDictEwf;
     <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'autofocus'=>'autofocus']) ?>
     <?= $form->field($model, 'participants')->textArea(['rows' => 3])->hint(Yii::t('app', 'Enter one participant per line') . ' | ' . Html::a(Yii::t('app', 'Sort Participants'), '#', ['id' => 'sort-participants-btn', /* 'class' => 'btn btn-primary btn-sm' */ ])) ?>
     <?= $form->field($model, 'sortParticipants')->checkbox()->hint(Yii::t('app', 'Sort participants in select lists by name')) ?>
-    <?= $form->field($model, 'currency')->widget(Select2::class, [
+    <?= $form->field($model, 'replaceNames')->textArea(['rows' => 3])->hint(Yii::t('app', 'Enter an object of names to be rolled up to another name')) ?>
+        <?= $form->field($model, 'currency')->widget(Select2::class, [
         'data' => CurrencyCodesDictEwf::allByLabel(),
         // 'language' => 'de',
         'options' => ['placeholder' => Yii::t('app', 'Select a currency ...')],

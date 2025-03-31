@@ -34,26 +34,9 @@ if($model->sortParticipants) {
                 'visible' => false,
             ],
             [
-                'attribute' => 'participants',
-                'format' => 'html',
-                'value' => nl2br($participants),
-            ],
-            [
-                'attribute' => 'sortParticipants',
-                'format' => 'checkbox',
-            ],
-            [
-                'attribute' => 'currency',
-                'value' => CurrencyCodesDictEwf::get($model->currency),
-                // 'visible' => $model->useCurrency,
-            ],
-            [
-                'attribute' => 'useCurrency',
-                'format' => 'checkbox',
-            ],
-            [
                 'attribute' => 'description',
                 'format' => 'html',
+                'visible' => !empty($model->description),
                 'value' => function($model) {
                     if(!empty($model->description)) {
                         return Html::tag(
@@ -65,6 +48,30 @@ if($model->sortParticipants) {
                         return null;
                     }
                 },
+            ],
+            [
+                'attribute' => 'participants',
+                'format' => 'html',
+                'value' => nl2br($participants),
+            ],
+            [
+                'attribute' => 'sortParticipants',
+                'format' => 'checkbox',
+            ],
+            [
+                'attribute' => 'replaceNames',
+                'format' => 'html',
+                'visible' => $model->replaceNamesDisplay!==[],
+                'value' => nl2br(join("\n", $model->replaceNamesDisplay)),
+            ],
+            [
+                'attribute' => 'currency',
+                'value' => CurrencyCodesDictEwf::get($model->currency),
+                // 'visible' => $model->useCurrency,
+            ],
+            [
+                'attribute' => 'useCurrency',
+                'format' => 'checkbox',
             ],
             [
                 'label' => Yii::t('app', 'Users'),
@@ -93,10 +100,12 @@ if($model->sortParticipants) {
                 'label' => Yii::t('app', 'Cost Splitting visible'),
                 'format' => 'raw',
                 'value' => function($data) {
-                    if($data->isPaid)
-                        return Html::tag('span', Yii::t('app', 'Paid'), ['class' => 'badge badge-success']) . ' ' . Yii::$app->formatter->asDatetime($data->ordered_at, 'short');
-                    else
+                    if($data->isPaid) {
+                        // return Html::tag('span', Yii::t('app', 'Paid'), ['class' => 'badge badge-success']) . ' ' . Yii::$app->formatter->asDatetime($data->ordered_at, 'short');
+                        return Html::tag('span', Yii::t('app', 'Yes'), ['class' => 'badge badge-success', 'title' => Yii::t('app', 'Paid at: {date}', ['date' => Yii::$app->formatter->asDatetime($data->ordered_at, 'short')])]);
+                    } else {
                         return Html::tag('span', Yii::t('app', 'Not Paid'), ['class' => 'badge badge-success']);
+                    }
                 },
             ],
             // 'id',
@@ -113,16 +122,6 @@ $attributes = [
         'value' => Html::tag('h4', $model->title),
         'visible' => false,
     ],
-    [
-        'attribute' => 'participants',
-        'format' => 'html',
-        'value' => preg_replace('~\R~u', ", ", $model->participants),
-    ],
-    [
-        'attribute' => 'currency',
-        'value' => CurrencyCodesDictEwf::get($model->currency) . ($model->useCurrency ? ' / ' . Yii::t('app', 'Use foreign currencies') : ''),
-        // 'visible' => $model->useCurrency,
-    ],
     [ // description
         'attribute' => 'description',
         'format' => 'html',
@@ -137,6 +136,16 @@ $attributes = [
                 return null;
             }
         },
+    ],
+    [
+        'attribute' => 'participants',
+        'format' => 'html',
+        'value' => preg_replace('~\R~u', ", ", $model->participants),
+    ],
+    [
+        'attribute' => 'currency',
+        'value' => CurrencyCodesDictEwf::get($model->currency) . ($model->useCurrency ? ' / ' . Yii::t('app', 'Use foreign currencies') : ''),
+        // 'visible' => $model->useCurrency,
     ],
 ];
 /* @var \yii\db\ActiveQuery $model->users */
